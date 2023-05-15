@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import requests
 from fastapi import APIRouter
+from keys import SPOONACULAR_API_KEY
+from routers import users
 
 app = FastAPI()
 router = APIRouter()
@@ -33,34 +35,36 @@ def launch_details():
 
 @router.get('/recipes')
 async def search_recipes(query: str):
-    api_url = 'https://api.edamam.com/search'
-    api_key = '38cffb7fafa2f827a7426b8beb6970c3'
-    api_id = '7e9a5bb7'
-    params = {
-        'q': query,
-        'app_id': api_id,
-        'app_key': api_key,
+    api_url = 'https://api.spoonacular.com/recipes/complexSearch'
+    api_key = SPOONACULAR_API_KEY
+    headers = {
+        'Content-Type': 'application/json'
     }
-    response = requests.get(api_url, params=params)
+    params = {
+        'apiKey': api_key,
+        'query': query
+    }
+    response = requests.get(api_url, params=params, headers=headers)
     data = response.json()
-    recipes = data.get('hits')
+    recipes = data.get('results')
     return {'recipes': recipes}
 
 
 @router.get('/recipes/{id}')
-async def get_recipe(id: str):
-    api_url = f'https://api.edamam.com/api/recipes/v2/{id}'
-    api_key = '38cffb7fafa2f827a7426b8beb6970c3'
-    api_id = '7e9a5bb7'
-    params = {
-        'type': 'public',
-        'app_id': api_id,
-        'app_key': api_key,
+async def get_recipe_info(id: str):
+    api_url = f'https://api.spoonacular.com/recipes/{id}/information'
+    api_key = SPOONACULAR_API_KEY
+    headers = {
+        'Content-Type': 'application/json'
     }
-    response = requests.get(api_url, params=params)
+    params = {
+        'apiKey': api_key,
+        'includeNutrition': False,
+    }
+    response = requests.get(api_url, params=params, headers=headers)
     data = response.json()
-    recipe = data.get('recipe')
-    return {'recipe': recipe}
+    return {'recipe': data}
 
 
 app.include_router(router)
+app.include_router(users.router)
