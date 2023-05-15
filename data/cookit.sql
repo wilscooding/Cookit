@@ -1,4 +1,6 @@
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS recipes;
+DROP TABLE IF EXISTS recipe;
 
 CREATE TABLE users (
     id SERIAL NOT NULL UNIQUE,
@@ -9,6 +11,16 @@ CREATE TABLE users (
     username TEXT NOT NULL UNIQUE,
     referrer_id INTEGER REFERENCES users("id") ON DELETE CASCADE
 );
+
+CREATE TABLE recipes (
+  id SERIAL NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  image TEXT,
+)
+
+CREATE TABLE recipe (
+  category TEXT check(category = 'vegetarian' or category = 'vegan' or category = 'glutenFree' or category = 'dairyFree' or category = 'veryHealthy' or category = 'cheap' or category = 'veryPopular' or category = 'sustainable' or category = 'lowFodmap')
+)
 
 INSERT INTO users VALUES
   (1, 'John', 'Smith', '1780000.jpeg', 'John@gmail.com', 'Jsmith', null),
