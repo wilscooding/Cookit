@@ -121,3 +121,26 @@ class UserQueries:
                     """,
                     [user_id],
                 )
+
+
+class RecipeQueries:
+    def get_all_recipes(self, user_id):
+        with pool.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT *
+                    FROM recipes
+                    WHERE creator_id = %s
+                    """,
+                    [user_id],
+                )
+
+                results = []
+                for row in cur.fetchall():
+                    record = {}
+                    for i, column in enumerate(cur.description):
+                        record[column.name] = row[i]
+                    results.append(record)
+
+                return results
