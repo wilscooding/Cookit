@@ -23,6 +23,10 @@ class UserOut(BaseModel):
     username: str
 
 
+class UserOutWithPassword(UserOut):
+    hashed_password: str
+
+
 class UsersOut(BaseModel):
     users: list[UserOut]
 

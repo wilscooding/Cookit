@@ -5,9 +5,12 @@ import requests
 from fastapi import APIRouter
 from keys import SPOONACULAR_API_KEY
 from routers import users
+from authenticator import authenticator
+
 
 app = FastAPI()
 router = APIRouter()
+app.include_router(authenticator.router)
 
 app.add_middleware(
     CORSMiddleware,
