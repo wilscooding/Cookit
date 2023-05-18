@@ -1,16 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
-import requests
 from fastapi import APIRouter
 from keys import SPOONACULAR_API_KEY
+from routers import (
+    recipes,
+    users
+    )
+import requests
 from authenticator import authenticator
-from routers import users, recipes
 
 
 app = FastAPI()
 router = APIRouter()
-app.include_router(authenticator.router)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -63,3 +66,4 @@ async def get_recipe_info(id: str):
 app.include_router(router)
 app.include_router(users.router)
 app.include_router(recipes.router)
+app.include_router(authenticator.router)

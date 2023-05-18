@@ -14,6 +14,7 @@ services:
       - ./sample_service:/app
     environment:
       DATABASE_URL: postgresql://cookit:cookit@db/cookit
+      SIGNING_KEY: 87fe4a3fcfb60092dbaeb854a196bc3d9b190aed7930c734749e85245de698420c25f8e6899c421b4494e99459e01058de5daa9d49584cd62ec975da9aea33da
   ghi:
     image: node:lts-bullseye
     command: /bin/bash run.sh

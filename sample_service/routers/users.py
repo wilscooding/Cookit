@@ -1,34 +1,37 @@
-from db import UserQueries
-from fastapi import APIRouter, Depends, Response
+from fastapi import (
+    APIRouter,
+    Depends,
+    Response,
+    Request,
+    HTTPException,
+    status
+    )
+from db import (
+    UserIn,
+    UserOut,
+    UserQueries,
+    DuplicateUserError,
+    UsersOut
+)
+from authenticator import authenticator
+from jwtdown_fastapi.authentication import Token
 from pydantic import BaseModel
 
 
-router = APIRouter()
+class UserToken(Token):
+    user: UserOut
 
 
-class UserIn(BaseModel):
-    first: str
-    last: str
-    avatar: str
-    email: str
-    username: str
-
-
-class UserOut(BaseModel):
+class UserForm(BaseModel):
     id: int
-    first: str
-    last: str
-    avatar: str
-    email: str
-    username: str
+    password: str
 
 
-class UserOutWithPassword(UserOut):
-    hashed_password: str
+class HttpError(BaseModel):
+    detail: str
 
 
-class UsersOut(BaseModel):
-    users: list[UserOut]
+router = APIRouter()
 
 
 @router.get("/api/users", response_model=UsersOut)
@@ -51,9 +54,28 @@ def get_user(
         return record
 
 
-@router.post("/api/users/", response_model=UserOut)
-def create_user(user_in: UserIn, queries: UserQueries = Depends()):
-    return queries.create_user(user_in)
+@router.post("/api/users/", response_model=UserToken | HttpError)
+async def create_user(
+    user: UserIn,
+    request: Request,
+    response: Response,
+    queries: UserQueries = Depends(),
+):
+    hashed_password = authenticator.hash_password(user.password)
+    try:
+        u = queries.create_user(user, hashed_password)
+        print(u)
+        form = UserForm(
+            id=u.id,
+            password=u.password
+        )
+        token = await authenticator.login(response, request, form, queries)
+        return UserToken(user=u, **token.dict())
+    except DuplicateUserError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot create an account with those credentials."
+        )
 
 
 @router.put("/api/users/{user_id}", response_model=UserOut)
@@ -74,3 +96,16 @@ def update_user(
 def delete_user(user_id: int, queries: UserQueries = Depends()):
     queries.delete_user(user_id)
     return True
+
+
+@router.get("/token", response_model=UserToken | None)
+async def get_token(
+    request: Request,
+    user: UserOut = Depends(authenticator.try_get_current_account_data)
+) -> UserToken | None:
+    if authenticator.cookie_name in request.cookies:
+        return {
+            "access_token": request.cookies[authenticator.cookie_name],
+            "type": "Bearer",
+            "user": user,
+        }
