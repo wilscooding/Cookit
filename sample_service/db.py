@@ -12,13 +12,13 @@ class UserIn(BaseModel):
     password: str
 
 
-# class User(BaseModel):
-#     id: int
-#     first: str | None
-#     last: str | None
-#     avatar: str | None
-#     email: str
-#     username: str | None
+class User(BaseModel):
+    id: int
+    first: str | None
+    last: str | None
+    avatar: str | None
+    email: str
+    username: str | None
 
 
 class UserOut(BaseModel):
@@ -79,7 +79,7 @@ class UserQueries:
     #                 except Exception as e:
     #                     raise Exception("Error:", e)
 
-    def get_user(self, id):
+    def get_user(self, email):
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -87,9 +87,9 @@ class UserQueries:
                     SELECT id, first, last, avatar,
                         email, username
                     FROM users
-                    WHERE id = %s
+                    WHERE email = %s
                 """,
-                    [id],
+                    [email],
                 )
 
                 record = None
@@ -101,17 +101,18 @@ class UserQueries:
 
                 return record
 
-    def create_user(self, data, hashed_password):
+    def create_user(self, data, hashed_password: str):
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [
                     data.email,
                     data.password,
+                    hashed_password
                 ]
                 cur.execute(
                     """
-                    INSERT INTO users (email, password)
-                    VALUES (%s, %s)
+                    INSERT INTO users (email, password, hashed_password)
+                    VALUES (%s, %s, %s)
                     RETURNING id, email, password
                     """,
                     params,
