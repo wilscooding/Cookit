@@ -49,12 +49,15 @@ def get_user(
 ):
     record = queries.get_user(user_id)
     if record is None:
-        response.status_code = 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Could not find user with that id."
+        )
     else:
         return record
 
 
-@router.post("/api/users/", response_model=UserToken | HttpError)
+@router.post("/api/users", response_model=UserToken | HttpError)
 async def create_user(
     info: UserIn,
     request: Request,
@@ -73,6 +76,7 @@ async def create_user(
         username=info.email,
         password=info.password
     )
+
     token = await authenticator.login(response, request, form, queries)
     return UserToken(user=user, **token.dict())
 
@@ -86,7 +90,10 @@ def update_user(
 ):
     record = queries.update_user(user_id, user_in)
     if record is None:
-        response.status_code = 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Could not find user with that id."
+        )
     else:
         return record
 
