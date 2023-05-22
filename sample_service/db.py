@@ -57,35 +57,37 @@ class UserQueries:
                     results.append(record)
 
                 return results
-    # def get_all_users(self) -> UserOut | None:
-    #     with pool.connection() as conn:
-    #         with conn.cursor() as cur:
-    #             cur.execute(
-    #                 """
-    #                 SELECT id, email
-    #                 FROM users
-    #                 """,
-    #                 [],
-    #             )
-    #             ac = cur.fetchone()
-    #             if ac is None:
-    #                 raise Exception("No account found")
-    #             else:
-    #                 try:
-    #                     return UserOut(
-    #                         id=ac[0],
-    #                         email=ac[1]
-    #                     )
-    #                 except Exception as e:
-    #                     raise Exception("Error:", e)
 
-    def get_user(self, email):
+
+    def get_user(self, user_id):
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
                     """
                     SELECT id, first, last, avatar,
                         email, username
+                    FROM users
+                    WHERE id = %s
+                """,
+                    [user_id],
+                )
+
+                record = None
+                row = cur.fetchone()
+                if row is not None:
+                    record = {}
+                    for i, column in enumerate(cur.description):
+                        record[column.name] = row[i]
+
+                return record
+
+    def get_user_by_email(self, email):
+        with pool.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                    SELECT id, first, last, avatar,
+                        email, username, hashed_password
                     FROM users
                     WHERE email = %s
                 """,
@@ -100,6 +102,7 @@ class UserQueries:
                         record[column.name] = row[i]
 
                 return record
+
 
     def create_user(self, data, hashed_password: str):
         with pool.connection() as conn:

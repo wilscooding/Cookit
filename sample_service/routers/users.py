@@ -7,6 +7,7 @@ from fastapi import (
     status
     )
 from db import (
+    User,
     UserIn,
     UserOut,
     UserQueries,
@@ -39,7 +40,7 @@ def users_list(queries: UserQueries = Depends()):
     return {
         "users": queries.get_all_users(),
     }
-
+# comment
 
 @router.get("/api/users/{user_id}", response_model=UserOut)
 def get_user(
@@ -49,12 +50,15 @@ def get_user(
 ):
     record = queries.get_user(user_id)
     if record is None:
-        response.status_code = 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Could not find user with that id."
+        )
     else:
         return record
 
 
-@router.post("/api/users/", response_model=UserToken | HttpError)
+@router.post("/api/users", response_model=UserToken | HttpError)
 async def create_user(
     info: UserIn,
     request: Request,
@@ -73,6 +77,7 @@ async def create_user(
         username=info.email,
         password=info.password
     )
+
     token = await authenticator.login(response, request, form, queries)
     return UserToken(user=user, **token.dict())
 
@@ -80,13 +85,15 @@ async def create_user(
 @router.put("/api/users/{user_id}", response_model=UserOut)
 def update_user(
     user_id: int,
-    user_in: UserIn,
-    response: Response,
+    user: User,
     queries: UserQueries = Depends(),
 ):
-    record = queries.update_user(user_id, user_in)
+    record = queries.update_user(user_id, user)
     if record is None:
-        response.status_code = 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Could not find user with that id."
+        )
     else:
         return record
 
