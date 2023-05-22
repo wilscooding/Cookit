@@ -7,6 +7,7 @@ from fastapi import (
     status
     )
 from db import (
+    User,
     UserIn,
     UserOut,
     UserQueries,
@@ -84,11 +85,10 @@ async def create_user(
 @router.put("/api/users/{user_id}", response_model=UserOut)
 def update_user(
     user_id: int,
-    user_in: UserIn,
-    response: Response,
+    user: User,
     queries: UserQueries = Depends(),
 ):
-    record = queries.update_user(user_id, user_in)
+    record = queries.update_user(user_id, user)
     if record is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
