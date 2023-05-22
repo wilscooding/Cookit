@@ -23,7 +23,7 @@ class UserToken(Token):
 
 
 class UserForm(BaseModel):
-    id: int
+    username: str
     password: str
 
 
@@ -43,7 +43,7 @@ def users_list(queries: UserQueries = Depends()):
 
 @router.get("/api/users/{user_id}", response_model=UserOut)
 def get_user(
-    user_id: int,
+    user_id: str,
     response: Response,
     queries: UserQueries = Depends(),
 ):
@@ -56,26 +56,25 @@ def get_user(
 
 @router.post("/api/users/", response_model=UserToken | HttpError)
 async def create_user(
-    user: UserIn,
+    info: UserIn,
     request: Request,
     response: Response,
     queries: UserQueries = Depends(),
 ):
-    hashed_password = authenticator.hash_password(user.password)
+    hashed_password = authenticator.hash_password(info.password)
     try:
-        u = queries.create_user(user, hashed_password)
-        print(u)
-        form = UserForm(
-            id=u.id,
-            password=u.password
-        )
-        token = await authenticator.login(response, request, form, queries)
-        return UserToken(user=u, **token.dict())
+        user = queries.create_user(info, hashed_password)
     except DuplicateUserError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Cannot create an account with those credentials."
         )
+    form = UserForm(
+        username=info.email,
+        password=info.password
+    )
+    token = await authenticator.login(response, request, form, queries)
+    return UserToken(user=user, **token.dict())
 
 
 @router.put("/api/users/{user_id}", response_model=UserOut)

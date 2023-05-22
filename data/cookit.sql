@@ -15,7 +15,8 @@ CREATE TABLE users (
     avatar VARCHAR,
     email VARCHAR NOT NULL UNIQUE,
     username VARCHAR UNIQUE,
-    password VARCHAR NOT NULL
+    password VARCHAR NOT NULL,
+    hashed_password VARCHAR
 );
 
 CREATE TABLE ingredients (
@@ -65,16 +66,16 @@ CREATE TABLE grocery_list (
 );
 
 INSERT INTO users VALUES
-  (1, 'John', 'Smith', '1780000.jpeg', 'John@gmail.com', 'Jsmith', 'password'),
-  (2, 'Dave', 'Jones', '178030988.jpeg', 'Dave@gmail.com', 'Djones', 'password'),
-  (3, 'Patrick', 'Lacquer', '17800.jpeg', 'Patrick@gmail.com', 'Placquer', 'password'),
-  (4, 'Abbie', 'Schmabbie', '10000.jpeg', 'Abbie@gmail.com', 'Aschabbie', 'password'),
-  (5, 'David', 'Agarwal', '170000.jpeg', 'David@gmail.com', 'Dagarwal', 'password'),
-  (6, 'Susie', 'Chen', '60000.jpeg', 'Susie@gmail.com', 'Schen', 'password'),
-  (7, 'Matt', 'Gvido', '14780000.jpeg', 'Matt@gmail.com', 'Mvido', 'password'),
-  (8, 'Zuirch', 'Hernández', '1780320948.jpeg', 'Zurich@gmail.com', 'Zhernandez', 'password'),
-  (9, 'Will', 'Smith', '17800000089.jpeg', 'Will@gmail.com', 'Wsmith', 'password'),
-  (10, 'Yuri', 'Mikhailov', '17800000293908.jpeg', 'Yuri@gmail.com', 'Ymikhailov', 'password')
+  (1, 'John', 'Smith', '1780000.jpeg', 'John@gmail.com', 'Jsmith', 'password', null),
+  (2, 'Dave', 'Jones', '178030988.jpeg', 'Dave@gmail.com', 'Djones', 'password', null),
+  (3, 'Patrick', 'Lacquer', '17800.jpeg', 'Patrick@gmail.com', 'Placquer', 'password', null),
+  (4, 'Abbie', 'Schmabbie', '10000.jpeg', 'Abbie@gmail.com', 'Aschabbie', 'password', null),
+  (5, 'David', 'Agarwal', '170000.jpeg', 'David@gmail.com', 'Dagarwal', 'password', null),
+  (6, 'Susie', 'Chen', '60000.jpeg', 'Susie@gmail.com', 'Schen', 'password', null),
+  (7, 'Matt', 'Gvido', '14780000.jpeg', 'Matt@gmail.com', 'Mvido', 'password', null),
+  (8, 'Zuirch', 'Hernández', '1780320948.jpeg', 'Zurich@gmail.com', 'Zhernandez', 'password', null),
+  (9, 'Will', 'Smith', '17800000089.jpeg', 'Will@gmail.com', 'Wsmith', 'password', null),
+  (10, 'Yuri', 'Mikhailov', '17800000293908.jpeg', 'Yuri@gmail.com', 'Ymikhailov', 'password', null)
   ;
 
 INSERT INTO ingredients VALUES
