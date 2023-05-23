@@ -15,7 +15,6 @@ CREATE TABLE users (
     avatar VARCHAR,
     email VARCHAR NOT NULL UNIQUE,
     username VARCHAR UNIQUE,
-    password VARCHAR NOT NULL,
     hashed_password VARCHAR
 );
 
