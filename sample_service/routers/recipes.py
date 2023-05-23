@@ -8,8 +8,6 @@ import requests
 router = APIRouter()
 
 
-
-
 @router.get("/api/myrecipes/", response_model=RecipesOut)
 def recipe_list(user_id: int, queries: RecipeQueries = Depends()):
     return {
