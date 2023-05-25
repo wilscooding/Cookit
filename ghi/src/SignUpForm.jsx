@@ -8,10 +8,13 @@ const SignupForm = () => {
     const { register } = useToken("");
     const navigate = useNavigate();
 
+    const username = email
+
     const handleSignup = (event) => {
         event.preventDefault();
         const userData = {
-            email: email,
+            email: username,
+            username:username,
             password: password,
         };
 
