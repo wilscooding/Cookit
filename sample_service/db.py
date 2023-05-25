@@ -34,7 +34,7 @@ class UsersOut(BaseModel):
 
 
 class RecipeIn(BaseModel):
-    creator_id: UserOut
+    creator_id: int
     recipe_name: str
     diet: str
     img: str
