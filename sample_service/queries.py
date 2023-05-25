@@ -75,14 +75,13 @@ class UserQueries:
             with conn.cursor() as cur:
                 params = [
                     data.email,
-                    data.password,
                     hashed_password
                 ]
                 cur.execute(
                     """
-                    INSERT INTO users (email, password, hashed_password)
-                    VALUES (%s, %s, %s)
-                    RETURNING id, email, password
+                    INSERT INTO users (email, hashed_password)
+                    VALUES (%s, %s)
+                    RETURNING id, email
                     """,
                     params,
                 )

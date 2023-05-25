@@ -9,7 +9,10 @@ const LoginForm = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        login(email, password);
+        const username = email;
+        login(username, password);
+        console.log(username)
+        console.log(password)
         event.target.reset();
     };
 
