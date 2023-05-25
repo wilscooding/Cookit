@@ -1,20 +1,45 @@
-function Construct(props) {
+import LoginForm from "./LoginForm";
+import TokenCard from "./TokenCard";
+import useToken from "@galvanize-inc/jwtdown-for-react";
+
+const ConsoleBanner = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Under construction</h1>
-        <h2>Coming on (or before)</h2>
-        <h2>
-          Module: {props.info.module} Week: {props.info.week} Day:{" "}
-          {props.info.day}
-        </h2>
-        <h2>
-          by or <strong>WELL BEFORE</strong> {props.info.hour}:{props.info.min}{" "}
-          Cohort Time
-        </h2>
-      </header>
+    "Stuff and things"
+  );
+};
+
+export const Main = () => {
+  const { token } = useToken();
+  return (
+    <div>
+      <ConsoleBanner />
+      {!token && <LoginForm />}
+      {token && <TokenCard />}
     </div>
   );
-}
+};
 
-export default Construct;
+
+
+// function Construct(props) {
+
+
+  // return (
+  //   <div className="App">
+  //     <header className="App-header">
+  //       <h1>Under construction</h1>
+  //       <h2>Coming on (or before)</h2>
+  //       <h2>
+  //         Module: {props.info.module} Week: {props.info.week} Day:{" "}
+  //         {props.info.day}
+  //       </h2>
+  //       <h2>
+  //         by or <strong>WELL BEFORE</strong> {props.info.hour}:{props.info.min}{" "}
+  //         Cohort Time
+  //       </h2>
+  //     </header>
+  //   </div>
+  // );
+// }
+
+// export default Construct;

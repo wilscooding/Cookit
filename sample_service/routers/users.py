@@ -10,26 +10,13 @@ from db import (
     User,
     UserIn,
     UserOut,
-    UserQueries,
     DuplicateUserError,
     UsersOut
 )
 from authenticator import authenticator
-from jwtdown_fastapi.authentication import Token
-from pydantic import BaseModel
+from db import HttpError, UserForm, UserToken
+from queries import UserQueries
 
-
-class UserToken(Token):
-    user: UserOut
-
-
-class UserForm(BaseModel):
-    username: str
-    password: str
-
-
-class HttpError(BaseModel):
-    detail: str
 
 
 router = APIRouter()
@@ -45,7 +32,6 @@ def users_list(queries: UserQueries = Depends()):
 @router.get("/api/users/{user_id}", response_model=UserOut)
 def get_user(
     user_id: str,
-    response: Response,
     queries: UserQueries = Depends(),
 ):
     record = queries.get_user(user_id)
