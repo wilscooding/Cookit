@@ -8,18 +8,21 @@ const SignupForm = () => {
     const { register } = useToken();
     const navigate = useNavigate();
 
-    const handleSignup = (event) => {
-        event.preventDefault();
+    const username = email
+
+    const handleSignup = (e) => {
+        e.preventDefault();
         const userData = {
-            email: email,
+            email: username,
+            username: username,
             password: password,
         };
         register(
             userData,
             `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users`
         );
-
-        event.target.reset();
+        console.log(userData)
+        e.target.reset();
         navigate("/");
     };
 

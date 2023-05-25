@@ -4,7 +4,6 @@ import os
 from fastapi import APIRouter
 # from keys import SPOONACULAR_API_KEY
 from routers import recipes, users
-import requests
 from authenticator import authenticator
 
 
@@ -19,10 +18,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-
-
 
 app.include_router(router)
 app.include_router(users.router)
