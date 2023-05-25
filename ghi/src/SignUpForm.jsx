@@ -14,13 +14,16 @@ const SignupForm = () => {
             email: email,
             password: password,
         };
+
         register(
             userData,
             `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users`
         );
 
+
         event.target.reset();
         navigate("/");
+
     };
 
 
