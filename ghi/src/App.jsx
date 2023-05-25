@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 
 function App() {
-  const baseUrl = "http://localhost:8000";
+  const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`
 
 
   return (

@@ -5,12 +5,12 @@ const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useToken("");
-
+  const username = email;
   const handleSubmit = (event) => {
     event.preventDefault();
-    login(email, password);
+    login(username, password);
     event.target.reset();
-    console.log("login", login);
+    // console.log("login", login);
   };
 
   return (
