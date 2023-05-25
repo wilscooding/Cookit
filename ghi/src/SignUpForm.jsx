@@ -5,25 +5,28 @@ import { useNavigate } from 'react-router-dom';
 const SignupForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { register } = useToken();
+    const { register } = useToken("");
     const navigate = useNavigate();
 
     const username = email
 
-    const handleSignup = (e) => {
-        e.preventDefault();
+    const handleSignup = (event) => {
+        event.preventDefault();
         const userData = {
             email: username,
-            username: username,
+            username:username,
             password: password,
         };
+
         register(
             userData,
             `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users`
         );
-        console.log(userData)
-        e.target.reset();
+
+
+        event.target.reset();
         navigate("/");
+
     };
 
 

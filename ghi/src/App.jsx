@@ -8,14 +8,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 
 function App() {
-  const baseURL = "http://localhost:8000";
-  // const domain = /https:\/\/[^/]+/;
-  // const basename = process.env.PUBLIC_URL.replace(domain, "");
+  const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`
+
 
   return (
-    <div>
-      <BrowserRouter>
-        <AuthProvider baseURl={ baseURL }>
+    <div className="container">
+      <BrowserRouter >
+        <AuthProvider baseUrl={baseUrl}>
           <Routes>
             <Route path="/" element={ <Main /> }></Route>
             <Route path="/signup" element={<SignupForm/>}></Route>
