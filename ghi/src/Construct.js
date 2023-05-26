@@ -4,9 +4,9 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import UserDataCard from "./UserDataCard";
 
 const ConsoleBanner = () => {
-  return (
-    "Stuff and things"
-  );
+  // return (
+  //   "Stuff and things"
+  // );
 };
 
 export const Main = () => {

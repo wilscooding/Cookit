@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from jwtdown_fastapi.authentication import Token
+from typing import Optional
 
 
 class DuplicateUserError(ValueError):
@@ -34,10 +35,10 @@ class UsersOut(BaseModel):
 
 
 class RecipeIn(BaseModel):
-    creator_id: int
-    recipe_name: str
-    diet: str
-    img: str
+    creator_id: Optional[int]
+    recipe_name: Optional[str]
+    diet: Optional[str]
+    img: Optional[str]
 
 class RecipeOut(BaseModel):
     id: int
@@ -59,3 +60,10 @@ class UserForm(BaseModel):
 
 class HttpError(BaseModel):
     detail: str
+
+class IngredientIn(BaseModel):
+    ingredient_name: str
+
+class IngredientOut(BaseModel):
+    id: int
+    ingredient_name: str

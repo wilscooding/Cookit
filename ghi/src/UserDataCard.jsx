@@ -28,7 +28,7 @@ const UserDataCard = () => {
         >
           <div className="btn-group" role="group">
 
-            
+
 
             <button
               type="button"
@@ -38,14 +38,14 @@ const UserDataCard = () => {
               Get User Data using fetchWithCookie{" "}
               <i className="bi bi-cloud-arrow-down-fill"></i>
             </button>
-
+{/* 
             <button
               type="button"
               className="btn eraser-bg"
               onClick={() => setUserData("")}
             >
               <i className="bi bi-eraser-fill"></i>
-            </button>
+            </button> */}
           </div>
         </div>
       </h5>

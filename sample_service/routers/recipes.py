@@ -32,6 +32,26 @@ def delete__my_recipe(
     record = accounts.delete_recipe(recipe_id)
     return True
 
+@router.put("/api/myrecipes/{recipe_id}", response_model=RecipeOut)
+def update__my_recipe(
+    recipe_id: int,
+    info: RecipeIn,
+    accounts: RecipeQueries = Depends(),
+) -> RecipeOut:
+    updated_recipe = accounts.update_recipe(recipe_id, info)
+    return RecipeOut(**updated_recipe.dict())
+
+@router.get("/api/myrecipes/{recipe_id}", response_model=RecipeOut)
+def get_recipe(
+    recipe_id: int,
+    queries: RecipeQueries = Depends(),
+) -> RecipeOut:
+    recipe = queries.get_recipe_by_id(recipe_id)
+    if recipe:
+        return RecipeOut(**recipe.dict())
+    else:
+        return RecipeOut(**{"message": "Recipe not found"})
+
 
 @router.get("/recipes")
 async def search_recipes(query: str):
