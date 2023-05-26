@@ -12,11 +12,10 @@ class UserIn(BaseModel):
 
 
 class User(BaseModel):
-    id: int
     first: str | None
     last: str | None
     avatar: str | None
-    email: str
+    email: str | None
     username: str | None
 
 
@@ -34,10 +33,10 @@ class UsersOut(BaseModel):
 
 
 class RecipeIn(BaseModel):
-    creator_id: UserOut
+    creator_id: int
     recipe_name: str
     diet: str
-    img: str
+    img: str | None
 
 class RecipeOut(BaseModel):
     id: int

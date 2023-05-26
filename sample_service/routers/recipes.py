@@ -1,6 +1,6 @@
 from queries import RecipeQueries
 from fastapi import APIRouter, Depends
-from db import RecipesOut
+from db import RecipesOut, RecipeIn, RecipeOut
 from keys import SPOONACULAR_API_KEY
 import requests
 
@@ -14,6 +14,20 @@ def recipe_list(user_id: int, queries: RecipeQueries = Depends()):
         "recipes": queries.get_all_recipes(user_id),
     }
 
+@router.post("/api/myrecipes/", response_model=RecipeOut)
+def add_recipe(data: RecipeIn, queries: RecipeQueries = Depends()) -> RecipeOut:
+    new_recipe = queries.create_recipe(data)
+    return RecipeOut(**new_recipe.dict())
+
+@router.put("/api/myrecipes/{recipe_id}", response_model=RecipeOut)
+def change_recipe(data:RecipeIn, recipe_id: int, queries: RecipeQueries = Depends()) -> RecipeOut:
+    record = queries.update_recipe(recipe_id, data)
+    return RecipeOut(**record.dict())
+
+@router.get("/api/myrecipes/{recipe_id}", response_model=RecipeOut)
+def get_recipe(recipe_id: int, queries: RecipeQueries = Depends()) -> RecipeOut:
+    record = queries.get_recipe_by_id(recipe_id)
+    return RecipeOut(**record())
 
 @router.get("/recipes")
 async def search_recipes(query: str):
