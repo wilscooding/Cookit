@@ -1,11 +1,12 @@
 import LoginForm from "./LoginForm";
 import TokenCard from "./TokenCard";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import UserDataCard from "./UserDataCard";
 
 const ConsoleBanner = () => {
-  return (
-    "Stuff and things"
-  );
+  // return (
+  //   "Stuff and things"
+  // );
 };
 
 export const Main = () => {
@@ -15,6 +16,8 @@ export const Main = () => {
       <ConsoleBanner />
       {!token && <LoginForm />}
       {token && <TokenCard />}
+
+      <UserDataCard />
     </div>
   );
 };
