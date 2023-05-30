@@ -18,7 +18,6 @@ from db import HttpError, UserForm, UserToken
 from queries import UserQueries
 
 
-
 router = APIRouter()
 
 
@@ -27,7 +26,7 @@ def users_list(queries: UserQueries = Depends()):
     return {
         "users": queries.get_all_users(),
     }
-# comment
+
 
 @router.get("/api/users/{user_id}", response_model=UserOut)
 def get_user(
