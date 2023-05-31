@@ -25,7 +25,7 @@ CREATE TABLE ingredients (
 
 CREATE TABLE measurement_qty (
     id SERIAL NOT NULL UNIQUE PRIMARY KEY,
-    qty_amount INT NOT NULL
+    qty_amount DOUBLE PRECISION NOT NULL
 );
 
 CREATE TABLE measurement_units (
@@ -42,6 +42,7 @@ CREATE TABLE recipes (
 );
 
 CREATE TABLE recipe_ingredients (
+    id SERIAL NOT NULL UNIQUE PRIMARY KEY,
     recipe_id INT NOT NULL REFERENCES recipes(id) ON DELETE CASCADE,
     measurement_id INT NOT NULL REFERENCES measurement_units(id),
     measurement_qty_id INT NOT NULL REFERENCES measurement_qty(id),
@@ -50,6 +51,7 @@ CREATE TABLE recipe_ingredients (
 
 CREATE TABLE my_ingredients (
     id SERIAL NOT NULL UNIQUE PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(id),
     ingredient_name VARCHAR NOT NULL,
     measurement_id INT NOT NULL REFERENCES measurement_units(id),
     measurement_qty_id INT NOT NULL REFERENCES measurement_qty(id),
@@ -58,13 +60,14 @@ CREATE TABLE my_ingredients (
 
 CREATE TABLE grocery_list (
     id SERIAL NOT NULL UNIQUE PRIMARY KEY,
+    user_id int NOT NULL REFERENCES users(id),
     ingredient_name VARCHAR NOT NULL,
     measurement_id INT NOT NULL REFERENCES measurement_units(id),
     measurement_qty_id INT NOT NULL REFERENCES measurement_qty(id),
     notes TEXT
 );
 
-INSERT INTO users VALUES
+INSERT INTO users (id, first, last, avatar, email, username, hashed_password) VALUES
   (1, 'John', 'Smith', '1780000.jpeg', 'John@gmail.com', 'Jsmith', null),
   (2, 'Dave', 'Jones', '178030988.jpeg', 'Dave@gmail.com', 'Djones', null),
   (3, 'Patrick', 'Lacquer', '17800.jpeg', 'Patrick@gmail.com', 'Placquer', null),
@@ -77,42 +80,62 @@ INSERT INTO users VALUES
   (10, 'Yuri', 'Mikhailov', '17800000293908.jpeg', 'Yuri@gmail.com', 'Ymikhailov', null)
   ;
 
-INSERT INTO ingredients VALUES
+INSERT INTO ingredients (id, ingredient_name) VALUES
   (1, 'Tomato'),
   (2, 'Flour'),
-  (3, 'Corn')
-  ;
+  (3, 'Corn'),
+  (4, 'Onion'),
+  (5, 'Salt');
 
-INSERT INTO measurement_qty VALUES
+
+INSERT INTO measurement_qty (id, qty_amount) VALUES
   (1, 0.25),
   (2, 0.5),
   (3, 0.75),
   (4, 1)
   ;
 
-INSERT INTO measurement_units VALUES
+INSERT INTO measurement_units (id, measurement_description) VALUES
   (1, 'Teaspoon'),
   (2, 'Tablespoon'),
   (3, 'Cup'),
   (4, 'Ounce'),
-  (5, 'Pound')
-  ;
+  (5, 'Pound'),
+  (6, 'Gram');
 
-INSERT INTO recipes VALUES
-  (1, 1, 'Pancakes', 'Keto', null)
-  ;
+INSERT INTO recipes (id, creator_id, recipe_name, diet, img) VALUES
+  (1, 1, 'Pancakes', 'Keto', null),
+  (2, 2, 'Spaghetti Bolognese', 'Classic', null),
+  (3, 3, 'Chicken Curry', 'Indian', null),
+  (4, 4, 'Caesar Salad', 'Vegetarian', null),
+  (5, 5, 'Chocolate Chip Cookies', 'Dessert', null);
 
-INSERT INTO recipe_ingredients VALUES
-  (1, 1, 1, 1)
-  ;
+INSERT INTO recipe_ingredients (id, recipe_id, measurement_id, measurement_qty_id, ingredient_id) VALUES
+  (1, 1, 1, 1, 1),
+  (2, 1, 2, 2, 2),
+  (3, 2, 3, 3, 4),
+  (4, 3, 4, 4, 5),
+  (5, 4, 5, 1, 1),
+  (6, 5, 1, 2, 2);
 
-INSERT INTO my_ingredients VALUES
-  (1, 'Lemon', 1, 1, null)
-  ;
 
-INSERT INTO grocery_list VALUES
-  (1, 'Lettuce', 1, 1, 'Notes for my lettuce')
-  ;
+INSERT INTO my_ingredients (id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes) VALUES
+  (1, 1, 'Lemon', 1, 1, null),
+  (2, 1, 'Chicken', 3, 4, 'Free-range'),
+  (3, 2, 'Sugar', 4, 2, null),
+  (4, 2, 'Garlic', 2, 3, 'Fresh'),
+  (5, 3, 'Broccoli', 3, 1, 'Organic'),
+  (6, 4, 'Avocado', 5, 5, null);
+
+INSERT INTO grocery_list (id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes) VALUES
+  (1, 1, 'Lettuce', 1, 1, 'Notes for my lettuce'),
+  (2, 2, 'Milk', 3, 4, null),
+  (3, 3, 'Eggs', 2, 3, 'Large'),
+  (4, 4, 'Bread', 1, 2, 'Whole wheat'),
+  (5, 5, 'Apples', 4, 5, null),
+  (6, 6, 'Yogurt', 3, 2, 'Greek');
+
+
 
 SELECT setval('users_id_seq', (SELECT MAX(id) + 1 FROM users));
 SELECT setval('recipes_id_seq', (SELECT MAX(id) + 1 FROM recipes));
