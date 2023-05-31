@@ -39,14 +39,17 @@ class RecipeIn(BaseModel):
     diet: str
     img: str
 
+
 class RecipeOut(BaseModel):
     id: int
     recipe_name: str
     diet: str
     img: str | None
 
+
 class RecipesOut(BaseModel):
     recipes: list[RecipeOut]
+
 
 class UserToken(Token):
     user: UserOut
