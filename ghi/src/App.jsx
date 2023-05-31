@@ -27,7 +27,7 @@ function App(props) {
 
 
   return (
-    <div className="container">
+    <div>
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
