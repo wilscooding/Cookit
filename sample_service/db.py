@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from jwtdown_fastapi.authentication import Token
+from typing import Optional, Union
 
 
 class DuplicateUserError(ValueError):
@@ -12,11 +13,10 @@ class UserIn(BaseModel):
 
 
 class User(BaseModel):
-    id: int
     first: str | None
     last: str | None
     avatar: str | None
-    email: str
+    email: str | None
     username: str | None
 
 
@@ -34,10 +34,10 @@ class UsersOut(BaseModel):
 
 
 class RecipeIn(BaseModel):
-    creator_id: UserOut
-    recipe_name: str
-    diet: str
-    img: str
+    creator_id: Optional[int]
+    recipe_name: Optional[str]
+    diet: Optional[str]
+    img: Optional[str]
 
 
 class RecipeOut(BaseModel):
@@ -62,3 +62,69 @@ class UserForm(BaseModel):
 
 class HttpError(BaseModel):
     detail: str
+
+class IngredientIn(BaseModel):
+    ingredient_name: str
+
+class IngredientOut(BaseModel):
+    id: int
+    ingredient_name: str
+
+class MeasurementQtyIn(BaseModel):
+    qty_amount: Union[float, str]
+
+class MeasurementQtyOut(BaseModel):
+    id: int
+    qty_amount: Union[float, str]
+
+class MeasurementUnitIn(BaseModel):
+    measurement_description: str
+
+class MeasurementUnitOut(BaseModel):
+    id: int
+    measurement_description: str
+
+class RecipeIngredientIn(BaseModel):
+    recipe_id: int
+    measurement_id: int
+    measurement_qty_id: int
+    ingredient: Optional[IngredientOut]
+
+class RecipeIngredientOut(BaseModel):
+    id: int
+    recipe_id: int
+    measurement_id: int
+    measurement_qty_id: int
+    ingredient: Optional[IngredientOut]
+
+
+class MyIngredientIn(BaseModel):
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
+
+class MyIngredientOut(BaseModel):
+    id: int
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
+
+
+class GroceryListItemIn(BaseModel):
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
+
+class GroceryListItemOut(BaseModel):
+    id: int
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None

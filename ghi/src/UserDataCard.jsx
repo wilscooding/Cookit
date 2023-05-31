@@ -1,28 +1,17 @@
+import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useState } from "react";
 import JSONPretty from "react-json-pretty";
-import useToken from "@galvanize-inc/jwtdown-for-react";
+
+
 
 const UserDataCard = () => {
   const [userData, setUserData] = useState("");
-  const { fetchWithToken } = useToken();
+  const { fetchWithCookie } = useToken();
 
-  const handleFetchWithAPI = async () => {
-    const url = `${process.env.REACT_APP_USER_SERVICE_API_HOST}/token`;
-    fetch(url, {
-      credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data.user);
-        setUserData(data);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const handleFetchWithJFR = async (e) => {
-    e.preventDefault();
-    const data = await fetchWithToken(
-      `${process.env.REACT_APP_USER_SERVICE_API_HOST}/token`
+  const handleFetchWithCookie =  async(event) => {
+    event.preventDefault();
+    const data = await fetchWithCookie(
+      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
     );
     console.log(data);
     setUserData(data);
@@ -38,31 +27,25 @@ const UserDataCard = () => {
           aria-label="Toolbar with button groups"
         >
           <div className="btn-group" role="group">
-            <button
-              type="button"
-              className="btn btn-warning"
-              onClick={handleFetchWithAPI}
-            >
-              Get User Data using Fetch API{" "}
-              <i className="bi bi-cloud-arrow-down"></i>
-            </button>
+
+
 
             <button
               type="button"
               className="btn btn-info"
-              onClick={handleFetchWithJFR}
+              onClick={handleFetchWithCookie}
             >
               Get User Data using fetchWithCookie{" "}
               <i className="bi bi-cloud-arrow-down-fill"></i>
             </button>
-
+{/*
             <button
               type="button"
               className="btn eraser-bg"
               onClick={() => setUserData("")}
             >
               <i className="bi bi-eraser-fill"></i>
-            </button>
+            </button> */}
           </div>
         </div>
       </h5>
@@ -73,4 +56,6 @@ const UserDataCard = () => {
   );
 };
 
-export default UserDataCard;
+
+
+export default UserDataCard
