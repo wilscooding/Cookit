@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from jwtdown_fastapi.authentication import Token
-from typing import Optional
+from typing import Optional, Union
 
 
 class DuplicateUserError(ValueError):
@@ -66,3 +66,62 @@ class IngredientIn(BaseModel):
 class IngredientOut(BaseModel):
     id: int
     ingredient_name: str
+
+class MeasurementQtyIn(BaseModel):
+    qty_amount: Union[float, str]
+
+class MeasurementQtyOut(BaseModel):
+    id: int
+    qty_amount: Union[float, str]
+
+class MeasurementUnitIn(BaseModel):
+    measurement_description: str
+
+class MeasurementUnitOut(BaseModel):
+    id: int
+    measurement_description: str
+
+class RecipeIngredientIn(BaseModel):
+    recipe_id: int
+    measurement_id: int
+    measurement_qty_id: int
+    ingredient: Optional[IngredientOut]
+
+class RecipeIngredientOut(BaseModel):
+    id: int
+    recipe_id: int
+    measurement_id: int
+    measurement_qty_id: int
+    ingredient: Optional[IngredientOut]
+
+
+class MyIngredientIn(BaseModel):
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
+
+class MyIngredientOut(BaseModel):
+    id: int
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
+
+
+class GroceryListItemIn(BaseModel):
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
+
+class GroceryListItemOut(BaseModel):
+    id: int
+    user_id: int
+    ingredient_name: str
+    measurement_id: int
+    measurement_qty_id: int
+    notes: Optional[str] = None
