@@ -25,7 +25,7 @@ function App() {
 
 
   return (
-    <div className="container">
+    <div>
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
           <Routes>

@@ -32,7 +32,6 @@ def users_list(queries: UserQueries = Depends()):
 @router.get("/api/users/{user_id}", response_model=UserOut)
 def get_user(
     user_id: str,
-    response: Response,
     queries: UserQueries = Depends(),
 ):
     record = queries.get_user(user_id)
