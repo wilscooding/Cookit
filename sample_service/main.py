@@ -1,13 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import APIRouter
-<<<<<<< HEAD
-# from keys import SPOONACULAR_API_KEY
-from routers import recipes, users
-=======
-from routers import recipes, grocerylist, users, ingredients, measurementqty, measurementunits, recipeingredients, my_ingredients
+from routers import (
+    recipes,
+    grocerylist,
+    users,
+    ingredients,
+    measurementqty,
+    measurementunits,
+    recipeingredients,
+    my_ingredients,
+)
 
->>>>>>> main
 from authenticator import authenticator
 
 

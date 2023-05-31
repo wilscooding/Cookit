@@ -1,19 +1,21 @@
 import { useState } from "react";
-import { Main } from "./Construct.js";
+import { Main } from "./Main.jsx";
 // import ErrorNotification from "./ErrorNotification.js";
 import LoginForm from "./LoginForm.jsx";
-import SignupForm from './SignUpForm.jsx';
+import SignupForm from "./SignUpForm.jsx";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 import RecipeDetails from "./RecipeDetails.jsx";
 import RecipeSearch from "./RecipeSearch.jsx";
+import Nav from "./NavBar.jsx";
 
-function App() {
+
+
+function App(props) {
   const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -28,6 +30,7 @@ function App() {
     <div className="container">
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
+          <Nav />
           <Routes>
             <Route path="/" element={<Main />}></Route>
             <Route path="/signup" element={<SignupForm />}></Route>

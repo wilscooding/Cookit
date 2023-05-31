@@ -4,36 +4,15 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import UserDataCard from "./UserDataCard";
 
 
-
-const ConsoleBanner = () => {
-  const { logout } = useToken("");
-
-  const handleLogout = (event) => {
-    event.preventDefault();
-    logout();
-  }
-
-  // return (
-    <div>
-    //   <form onSubmit={(e) => handleLogout(e)}>
-        <button>Logout</button>
-      </form>
-    </div>
-  // );
-};
-
 export const Main = () => {
   const { token } = useToken();
 
-
-
   return (
     <div>
-      <ConsoleBanner />
       {!token && <LoginForm />}
       {token && <TokenCard />}
 
-      <UserDataCard />
+      {/* <UserDataCard /> */}
     </div>
   );
 };
