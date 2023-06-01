@@ -1,8 +1,9 @@
 from queries import RecipeQueries
 from fastapi import APIRouter, Depends
-from db import RecipesOut, RecipeIn, RecipeOut,HttpError
+from db import RecipesOut, RecipeIn, RecipeOut, HttpError
 from keys import SPOONACULAR_API_KEY
 import requests
+
 
 
 router = APIRouter()
@@ -32,6 +33,7 @@ def delete__my_recipe(
     record = accounts.delete_recipe(recipe_id)
     return True
 
+
 @router.put("/api/myrecipes/{recipe_id}", response_model=RecipeOut)
 def update__my_recipe(
     recipe_id: int,
@@ -40,6 +42,7 @@ def update__my_recipe(
 ) -> RecipeOut:
     updated_recipe = accounts.update_recipe(recipe_id, info)
     return RecipeOut(**updated_recipe.dict())
+
 
 @router.get("/api/myrecipes/{recipe_id}", response_model=RecipeOut)
 def get_recipe(
@@ -77,3 +80,31 @@ async def get_recipe_info(id: str):
     response = requests.get(api_url, params=params, headers=headers)
     data = response.json()
     return {"recipe": data}
+
+
+
+# @router.get("/recipes/{id}")
+# async def get_recipe_info(id: str, queries: RecipeQueries = Depends(), user_id: int = Depends(get_current_user)):
+#     api_url = f"https://api.spoonacular.com/recipes/{id}/information"
+#     api_key = SPOONACULAR_API_KEY
+#     headers = {"Content-Type": "application/json"}
+#     params = {
+#         "apiKey": api_key,
+#         "includeNutrition": False,
+#     }
+#     response = requests.get(api_url, params=params, headers=headers)
+#     data = response.json()
+#     print("DATA:", data)
+
+#     # Extract recipe information from the API response
+#     recipe_data = {
+#         "recipe_name": data["title"],
+#         "diet": data["diets"][0] if data["diets"] else None,
+#         "img": data["image"]
+#     }
+
+
+#     # Save recipe into the recipe table
+#     saved_recipe = queries.save_recipe_from_api(recipe_data, user_id)
+
+#     return {"recipe": data}

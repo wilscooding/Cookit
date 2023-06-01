@@ -262,6 +262,34 @@ class RecipeQueries:
 
                     return RecipeOut(**recipe_dict)
 
+    def save_recipe_from_api(self, recipe_data: dict, user_id: int) -> RecipeOut:
+        with pool.connection() as conn:
+            with conn.cursor() as cur:
+                params = [
+                    user_id,
+                    recipe_data["recipe_name"],
+                    recipe_data["diet"],
+                    recipe_data["img"]
+                ]
+                cur.execute(
+                    """
+                    INSERT INTO recipes (creator_id, recipe_name, diet, img)
+                    VALUES (%s, %s, %s, %s)
+                    RETURNING id, creator_id, recipe_name, diet, img
+                    """,
+                    params,
+                )
+                record = cur.fetchone()
+                if record:
+                    recipe_dict = {
+                        "id": record[0],
+                        "creator_id": record[1],
+                        "recipe_name": record[2],
+                        "diet": record[3],
+                        "img": record[4],
+                    }
+                    return RecipeOut(**recipe_dict)
+
 
 class IngredientQueries:
     def create_ingredients(self, ingredient: IngredientIn) -> IngredientOut:
