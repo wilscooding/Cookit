@@ -4,15 +4,9 @@ from fastapi import (
     Response,
     Request,
     HTTPException,
-    status
-    )
-from db import (
-    User,
-    UserIn,
-    UserOut,
-    DuplicateUserError,
-    UsersOut
+    status,
 )
+from db import User, UserIn, UserOut, DuplicateUserError, UsersOut
 from authenticator import authenticator
 from db import HttpError, UserForm, UserToken
 from queries import UserQueries
@@ -28,7 +22,7 @@ def users_list(queries: UserQueries = Depends()):
     }
 
 
-@router.get("/api/users/{user_id}", response_model=UserOut)
+@router.get("/api/users/{user_id}", response_model=User)
 def get_user(
     user_id: str,
     queries: UserQueries = Depends(),
@@ -37,7 +31,7 @@ def get_user(
     if record is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Could not find user with that id."
+            detail="Could not find user with that id.",
         )
     else:
         return record
@@ -56,18 +50,15 @@ async def create_user(
     except DuplicateUserError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot create an account with those credentials."
+            detail="Cannot create an account with those credentials.",
         )
-    form = UserForm(
-        username=info.email,
-        password=info.password
-    )
+    form = UserForm(username=info.email, password=info.password)
 
     token = await authenticator.login(response, request, form, queries)
     return UserToken(user=user, **token.dict())
 
 
-@router.put("/api/users/{user_id}", response_model=UserOut)
+@router.put("/api/users/{user_id}", response_model=User)
 def update_user(
     user_id: int,
     user: User,
@@ -77,7 +68,7 @@ def update_user(
     if record is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Could not find user with that id."
+            detail="Could not find user with that id.",
         )
     else:
         return record
@@ -92,7 +83,7 @@ def delete_user(user_id: int, queries: UserQueries = Depends()):
 @router.get("/token", response_model=UserToken | None)
 async def get_token(
     request: Request,
-    user: UserOut = Depends(authenticator.try_get_current_account_data)
+    user: UserOut = Depends(authenticator.try_get_current_account_data),
 ) -> UserToken | None:
     if authenticator.cookie_name in request.cookies:
         return {
