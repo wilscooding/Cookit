@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 import RecipeDetails from "./RecipeDetails.jsx";
 import RecipeSearch from "./RecipeSearch.jsx";
+import CreateRecipeForm from "./CreateRecipeForm.jsx";
 
 function App() {
   const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`
@@ -42,6 +43,7 @@ function App() {
                 />
               }
             />
+            <Route path="/recipes/new" element={<CreateRecipeForm />}></Route>
             <Route path="/recipes/:id" element={<RecipeDetails />} />
           </Routes>
         </AuthProvider>
