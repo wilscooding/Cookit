@@ -38,8 +38,6 @@ function CreateRecipeForm() {
       setDiet("");
       setImage("");
     }
-
-    console.log(response);
   }
 
   function handleRecipeNameChange(event) {
@@ -108,6 +106,9 @@ function CreateRecipeForm() {
                   value={image}
                   onChange={handleImageChange}
                 ></input>
+                {image && (
+                  <img className="mt-5" width="170px" src={image}></img>
+                )}
               </div>
               <Button color="light" type="submit">
                 Create Recipe

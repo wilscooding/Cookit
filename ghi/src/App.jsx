@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Main } from "./Construct.js";
 // import ErrorNotification from "./ErrorNotification.js";
 import LoginForm from "./LoginForm.jsx";
-import SignupForm from './SignUpForm.jsx';
+import SignupForm from "./SignUpForm.jsx";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
@@ -11,10 +11,9 @@ import RecipeSearch from "./RecipeSearch.jsx";
 import CreateRecipeForm from "./CreateRecipeForm.jsx";
 
 function App() {
-  const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`
+  const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -24,9 +23,8 @@ function App() {
     setSelectedRecipeId(id);
   };
 
-
   return (
-    <div>
+    <div className="bg-amber-400/75 min-h-screen">
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
           <Routes>
