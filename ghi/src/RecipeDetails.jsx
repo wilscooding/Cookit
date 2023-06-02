@@ -7,14 +7,14 @@ const RecipeDetails = ({ currentUser }) => {
   const { id } = useParams();
 
   useEffect(() => {
-    console.log("RecipeDetails - id:", id);
+    // console.log("RecipeDetails - id:", id);
     const fetchRecipe = async () => {
       try {
         const response = await axios.get(
           `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes/${id}`
         );
         const data = response.data;
-        console.log("Recipe Info Response:", data);
+        // console.log("Recipe Info Response:", data);
         setRecipe(data.recipe);
       } catch (error) {
         console.error(error);
@@ -27,11 +27,11 @@ const RecipeDetails = ({ currentUser }) => {
   const handleSaveRecipe = async () => {
     try {
       if (!currentUser) {
-        console.log("No current user found");
+        // coznsole.log("No current user found");
         return;
       }
-      console.log("currentUser:", currentUser);
-      console.log("currentUser.id:", currentUser.id);
+      // conzsole.log("currentUser:", currentUser);
+      // console.log("currentUser.id:", currentUser.id);
       // Extract the relevant recipe data that you want to save
       const { title, image } = recipe;
 
@@ -46,10 +46,10 @@ const RecipeDetails = ({ currentUser }) => {
         }
       );
 
-      console.log("creator_id:", currentUser.id);
+      // console.log("creator_id:", currentUser.id);
 
       // Handle the response as needed
-      console.log("Save Recipe Response:", response.data);
+      // console.log("Save Recipe Response:", response.data);
     } catch (error) {
       console.error(error);
     }

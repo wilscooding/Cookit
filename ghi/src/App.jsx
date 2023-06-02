@@ -31,20 +31,19 @@ function App(props) {
     setSelectedRecipeId(id);
   };
 
-  const handleUserFetch = async () => {
-    const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const userData = data.user
-            console.log("userData:", userData);
-            setUserData(userData);
-        };
-      }
+  // const handleUserFetch = async () => {
+  //   const data = await fetchWithCookie(
+  //           `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+  //       );
+  //       if (data !== undefined){
+  //           const userData = data.user
+  //           setUserData(userData);
+  //       };
+  //     }
 
-  useEffect(() => {
-    handleUserFetch();
-    }, []);
+  // useEffect(() => {
+  //   handleUserFetch();
+  //   }, []);
 
 
   return (
@@ -53,7 +52,7 @@ function App(props) {
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
           <Routes>
-            <Route path="/" element={<Main currentUser={userData} />}></Route>
+            <Route path="/" element={<Main />}></Route>
             <Route path="/signup" element={<SignupForm />}></Route>
             <Route path="/login" element={<LoginForm />}></Route>
             <Route path="/userdata" element={<UserDataCard />}></Route>
@@ -68,10 +67,10 @@ function App(props) {
               }
             />
             {/* Pass currentUser as userData to RecipeDetails */}
-            <Route
+            {/* <Route
               path="/recipes/:id"
-              element={<RecipeDetails currentUser={userData} />}
-            />
+              element={<RecipeDetails currentUser={handleUserFetch} />}
+            /> */}
           </Routes>
         </AuthProvider>
       </BrowserRouter>
