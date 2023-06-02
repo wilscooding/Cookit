@@ -1,45 +1,44 @@
-import { useState } from 'react';
-import useToken from '@galvanize-inc/jwtdown-for-react';
-import { useNavigate } from 'react-router-dom';
-import { Button, Label } from 'flowbite-react';
+import { useState } from "react";
+import useToken from "@galvanize-inc/jwtdown-for-react";
+import { useNavigate } from "react-router-dom";
+import { Button, Label, Card } from "flowbite-react";
 
 const SignupForm = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const { register } = useToken("");
-    const navigate = useNavigate();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const { register } = useToken("");
+	const navigate = useNavigate();
 
-    let passwordsMatch = false
-    if (password === confirmPassword) {
-      passwordsMatch = true
-    }
-    const username = email
+	let passwordsMatch = false;
+	if (password === confirmPassword) {
+		passwordsMatch = true;
+	}
+	const username = email;
 
-    const handleSignup = (event) => {
-        event.preventDefault();
-        const userData = {
-            email: username,
-            username:username,
-            password: password,
-        };
+	const handleSignup = async (event) => {
+		event.preventDefault();
+		const userData = {
+			email: username,
+			username: username,
+			password: password,
+		};
 
-        register(
-            userData,
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users`
-        );
+		register(
+			userData,
+			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users`
+		);
 
+		event.target.reset();
+		navigate("/");
+	};
 
-        event.target.reset();
-        navigate("/");
-
-    };
-
-
-    return (
-			<>
-				<div className="flex w-full h-screen">
-					<div className="w-full flex items-center justify-center lg:w-1/2">
+	return (
+		<>
+			<div className="flex w-full h-screen">
+				<div className="w-full flex items-center justify-center lg:w-1/2">
+					<Card className="bg-gray-50">
+            <h1 className="text-lg text-center font-normal">Create an Account</h1>
 						<form
 							className="flex max-w-md flex-col gap-4"
 							onSubmit={(e) => handleSignup(e)}
@@ -48,8 +47,8 @@ const SignupForm = () => {
 								<div className="mb-2 block">
 									<Label htmlFor="email2" value="Your email" />
 								</div>
-								<div class="relative">
-									<div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+								<div className="relative">
+									<div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
 										<svg
 											aria-hidden="true"
 											className="w-5 h-5 text-gray-500 dark:text-gray-400"
@@ -69,6 +68,7 @@ const SignupForm = () => {
 										onChange={(e) => {
 											setEmail(e.target.value);
 										}}
+										required
 									/>
 								</div>
 							</div>
@@ -100,18 +100,220 @@ const SignupForm = () => {
 									required
 								></input>
 							</div>
-              {passwordsMatch
-                ? <Button color="light" type="submit">Register new account</Button>
-                : <Button color="light" type="submit" disabled>Passwords don't match!</Button>
-              }
+							{passwordsMatch ? (
+								<Button color="light" type="submit">
+									Register new account
+								</Button>
+							) : (
+								<Button color="light" type="submit" disabled>
+									Passwords don't match!
+								</Button>
+							)}
 						</form>
-					</div>
-					<div className="hidden relative lg:flex h-full w-1/2 items-center justify-center">
-						<div className="w-full h-full bg-gradient-to-tr from-orange-400 to-yellow-300"></div>
+					</Card>
+				</div>
+				<div className="hidden relative lg:flex h-full w-1/2 items-center justify-center">
+					<div className="w-full h-full bg-gradient-to-tr from-orange-400 to-yellow-300 overflow-hidden">
+						<div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
+							<div class="grid gap-4">
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/1410235/pexels-photo-1410235.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/3184188/pexels-photo-3184188.jpeg"
+										alt=""
+									/>
+								</div>
+							</div>
+							<div class="grid gap-4">
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/541216/pexels-photo-541216.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/2641886/pexels-photo-2641886.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg"
+										alt=""
+									/>
+								</div>
+							</div>
+							<div class="grid gap-4">
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/1211887/pexels-photo-1211887.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/1633525/pexels-photo-1633525.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/414262/pexels-photo-414262.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/3434523/pexels-photo-3434523.jpeg"
+										alt=""
+									/>
+								</div>
+							</div>
+							<div class="grid gap-4">
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/2454533/pexels-photo-2454533.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/16958625/pexels-photo-16958625.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/3659862/pexels-photo-3659862.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/16890470/pexels-photo-16890470.jpeg"
+										alt=""
+									/>
+								</div>
+							</div>
+							<div class="grid gap-4">
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/3434523/pexels-photo-3434523.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/916925/pexels-photo-916925.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/1251208/pexels-photo-1251208.jpeg"
+										alt=""
+									/>
+								</div>
+							</div>
+							<div class="grid gap-4">
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/2015097/pexels-photo-2015097.jpeg"
+										alt=""
+									/>
+								</div>
+								<div>
+									<img
+										class="h-full max-w-full rounded-lg"
+										src="https://images.pexels.com/photos/16890470/pexels-photo-16890470.jpeg"
+										alt=""
+									/>
+								</div>
+								<div class="grid gap-4">
+
+									<div>
+										<img
+											class="h-full max-w-full rounded-lg"
+											src="https://images.pexels.com/photos/1410235/pexels-photo-1410235.jpeg"
+											alt=""
+										/>
+									</div>
+									<div>
+										<img
+											class="h-full max-w-full rounded-lg"
+											src="https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg"
+											alt=""
+										/>
+									</div>
+									<div>
+										<img
+											class="h-full max-w-full rounded-lg"
+											src="https://images.pexels.com/photos/3184188/pexels-photo-3184188.jpeg"
+											alt=""
+										/>
+									</div>
+								</div>
+								<div class="grid gap-4">
+
+									<div>
+										<img
+											class="h-full max-w-full rounded-lg"
+											src="https://images.pexels.com/photos/1410235/pexels-photo-1410235.jpeg"
+											alt=""
+										/>
+									</div>
+									<div>
+										<img
+											class="h-full max-w-full rounded-lg"
+											src="https://images.pexels.com/photos/842571/pexels-photo-842571.jpeg"
+											alt=""
+										/>
+									</div>
+									<div>
+										<img
+											class="h-full max-w-full rounded-lg"
+											src="https://images.pexels.com/photos/3184188/pexels-photo-3184188.jpeg"
+											alt=""
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-			</>
-		);
-}
+			</div>
+		</>
+	);
+};
 
-export default SignupForm
+export default SignupForm;
