@@ -1,6 +1,7 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import JSONPretty from "react-json-pretty";
+
 
 
 
@@ -9,13 +10,19 @@ const UserDataCard = () => {
   const { fetchWithCookie } = useToken();
 
   const handleFetchWithCookie =  async(event) => {
-    event.preventDefault();
+    // event.preventDefault();
     const data = await fetchWithCookie(
       `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
     );
-    console.log(data);
     setUserData(data);
+
   };
+
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, []);
+
+  console.log(userData);
 
   return (
     <div className="card text-bg-dark mb-3">
@@ -38,7 +45,7 @@ const UserDataCard = () => {
               Get User Data using fetchWithCookie{" "}
               <i className="bi bi-cloud-arrow-down-fill"></i>
             </button>
-{/* 
+{/*
             <button
               type="button"
               className="btn eraser-bg"

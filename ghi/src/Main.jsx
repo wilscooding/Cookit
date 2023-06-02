@@ -2,22 +2,33 @@ import LoginForm from "./LoginForm";
 import TokenCard from "./TokenCard";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import UserDataCard from "./UserDataCard";
-
-const ConsoleBanner = () => {
-  // return (
-  //   "Stuff and things"
-  // );
-};
+import RecipeSearch from "./RecipeSearch.jsx";
+import { useState } from "react";
 
 export const Main = () => {
   const { token } = useToken();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
+  const handleRecipeSelect = (id) => {
+    setSelectedRecipeId(id);
+  };
+
   return (
     <div>
-      <ConsoleBanner />
       {!token && <LoginForm />}
-      {token && <TokenCard />}
+      {token && <RecipeSearch
+                  onSearch={handleSearch}
+                  onSelectRecipe={handleRecipeSelect}
+                  searchQuery={searchQuery}
+                />}
 
-      <UserDataCard />
+      {/* <UserDataCard /> */}
     </div>
   );
 };

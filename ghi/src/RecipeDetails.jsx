@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-const RecipeDetails = (props) => {
+const RecipeDetails = ({ currentUser }) => {
   const [recipe, setRecipe] = useState("");
   const { id } = useParams();
 
@@ -24,9 +24,41 @@ const RecipeDetails = (props) => {
     fetchRecipe();
   }, [id]);
 
+  const handleSaveRecipe = async () => {
+    try {
+      if (!currentUser) {
+        console.log("No current user found");
+        return;
+      }
+      console.log("currentUser:", currentUser);
+      console.log("currentUser.id:", currentUser.id);
+      // Extract the relevant recipe data that you want to save
+      const { title, image } = recipe;
+
+      // Send a request to your backend API to save the recipe
+      const response = await axios.post(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+        {
+          creator_id: currentUser.id,
+          recipe_name: title,
+          diet: recipe.diets,
+          img: image,
+        }
+      );
+
+      console.log("creator_id:", currentUser.id);
+
+      // Handle the response as needed
+      console.log("Save Recipe Response:", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (!recipe) {
     return <div>Loading...</div>;
   }
+
   const ingredientNames = recipe.extendedIngredients.map((ingredient) => ({
     name: ingredient.name,
     original: ingredient.original,
@@ -42,6 +74,8 @@ const RecipeDetails = (props) => {
       <div>
         <h2>{recipe.title}</h2>
         <img src={recipe.image} alt={recipe.title} />
+        {/* Add a button to save the recipe */}
+        <button onClick={handleSaveRecipe}>Save Recipe</button>
         <h3>{recipe.creditsText}</h3>
         <h3>Summary</h3>
         <div dangerouslySetInnerHTML={{ __html: recipe.summary }} />
