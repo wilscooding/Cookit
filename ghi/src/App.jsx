@@ -53,7 +53,7 @@ function App(props) {
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
           <Routes>
-            <Route path="/" element={<Main />}></Route>
+            <Route path="/" element={<Main currentUser={userData} />}></Route>
             <Route path="/signup" element={<SignupForm />}></Route>
             <Route path="/login" element={<LoginForm />}></Route>
             <Route path="/userdata" element={<UserDataCard />}></Route>
