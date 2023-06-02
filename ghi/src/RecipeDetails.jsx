@@ -36,12 +36,15 @@ const RecipeDetails = ({ currentUser }) => {
       const { title, image } = recipe;
 
       // Send a request to your backend API to save the recipe
-      const response = await axios.post("/api/myrecipes/", {
-        creator_id: currentUser.id,
-        recipe_name: title,
-        diet: recipe.diets,
-        img: image,
-      });
+      const response = await axios.post(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+        {
+          creator_id: currentUser.id,
+          recipe_name: title,
+          diet: recipe.diets,
+          img: image,
+        }
+      );
 
       console.log("creator_id:", currentUser.id);
 

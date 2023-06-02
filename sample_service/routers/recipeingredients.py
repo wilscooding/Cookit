@@ -6,6 +6,7 @@ from queries import IngredientQueries, RecipeIngredientQueries
 
 router = APIRouter()
 
+
 @router.post("/api/recipe-ingredients/", response_model=RecipeIngredientOut)
 def create_recipe_ingredient(
     recipe_ingredient: RecipeIngredientIn,

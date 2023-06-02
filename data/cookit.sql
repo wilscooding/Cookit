@@ -125,7 +125,7 @@ INSERT INTO my_ingredients (id, user_id, ingredient_name, measurement_id, measur
   (3, 2, 'Sugar', 4, 2, null),
   (4, 2, 'Garlic', 2, 3, 'Fresh'),
   (5, 3, 'Broccoli', 3, 1, 'Organic'),
-  (6, 4, 'Avocado', 5, 5, null);
+  (6, 4, 'Avocado', 5, 4, null);
 
 INSERT INTO grocery_list (id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes) VALUES
   (1, 1, 'Lettuce', 1, 1, 'Notes for my lettuce'),
