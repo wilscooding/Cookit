@@ -168,12 +168,12 @@ class RecipeQueries:
     def create_recipes(self, data) -> RecipeOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [data.creator_id, data.recipe_name, data.diet, data.img]
+                params = [data.creator_id, data.recipe_name, data.diet, data.img, data.description, data.steps]
                 cur.execute(
                     """
-                    INSERT INTO recipes (creator_id, recipe_name, diet, img)
-                    VALUES (%s, %s, %s, %s)
-                    RETURNING id, recipe_name, diet, img
+                    INSERT INTO recipes (creator_id, recipe_name, diet, img, description, steps)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING id, recipe_name, diet, img, description, steps
                     """,
                     params,
                 )
@@ -185,6 +185,8 @@ class RecipeQueries:
                         "recipe_name": record[1],
                         "diet": record[2],
                         "img": record[3],
+                        "description": record[4],
+                        "steps": record[5]
                     }
 
                     return RecipeOut(**recipe_dict)
@@ -203,13 +205,13 @@ class RecipeQueries:
     def update_recipe(self, recipe_id: int, data:RecipeIn) -> RecipeOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [data.recipe_name, data.diet, data.img, recipe_id]
+                params = [data.recipe_name, data.diet, data.img, data.description, data.steps, recipe_id]
                 cur.execute(
                     """
                     UPDATE recipes
-                    SET recipe_name = %s, diet = %s, img = %s
+                    SET recipe_name = %s, diet = %s, img = %s, description = %s, steps = %s
                     WHERE id = %s
-                    RETURNING id, recipe_name, diet, img
+                    RETURNING id, recipe_name, diet, img, description, steps
                     """,
                     params,
                     )
@@ -220,6 +222,8 @@ class RecipeQueries:
                         "recipe_name": record[1],
                         "diet": record[2],
                         "img": record[3],
+                        "description": record[4],
+                        "steps": record[5]
                         }
 
                     return RecipeOut(**recipe_dict)
@@ -229,7 +233,7 @@ class RecipeQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_name, diet, img
+                    SELECT id, recipe_name, diet, img, description, steps
                     FROM recipes
                     WHERE id = %s
                     """,
@@ -243,6 +247,8 @@ class RecipeQueries:
                         "recipe_name": record[1],
                         "diet": record[2],
                         "img": record[3],
+                        "description": record[4],
+                        "steps": record[5]
                         }
 
                     return RecipeOut(**recipe_dict)

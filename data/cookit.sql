@@ -37,8 +37,10 @@ CREATE TABLE recipes (
     id SERIAL NOT NULL UNIQUE PRIMARY KEY,
     creator_id INT NOT NULL REFERENCES users(id),
     recipe_name VARCHAR NOT NULL,
-    diet VARCHAR NOT NULL,
-    img TEXT
+    diet VARCHAR,
+    img TEXT,
+    description TEXT NOT NULL,
+    steps TEXT NOT NULL
 );
 
 CREATE TABLE recipe_ingredients (
@@ -99,7 +101,7 @@ INSERT INTO measurement_units VALUES
   ;
 
 INSERT INTO recipes VALUES
-  (1, 1, 'Pancakes', 'Keto', null)
+  (1, 1, 'Pancakes', 'Keto', null, 'Yummy Pancakes', '1. Mix batter, 2. Cook on pan 3. Enjoy')
   ;
 
 INSERT INTO recipe_ingredients VALUES

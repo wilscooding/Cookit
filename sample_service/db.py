@@ -34,16 +34,20 @@ class UsersOut(BaseModel):
 
 
 class RecipeIn(BaseModel):
-    creator_id: Optional[int]
-    recipe_name: Optional[str]
+    creator_id: int
+    recipe_name: str
     diet: Optional[str]
     img: Optional[str]
+    description: str
+    steps: str
 
 class RecipeOut(BaseModel):
     id: int
     recipe_name: str
     diet: str
     img: str | None
+    description: str
+    steps: str
 
 class RecipesOut(BaseModel):
     recipes: list[RecipeOut]

@@ -1,0 +1,3 @@
+5/31: started working on "create recipe form" and helped others with their code for the day
+6/1: created the "create recipe form" and styled the background color for all of the pages
+6/2: create unit test for get recipe, update model for create new recipe, fix create new recipe, start on list my recipes
