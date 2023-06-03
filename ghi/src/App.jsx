@@ -20,7 +20,7 @@ function App(props) {
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [userData, setUserData] = useState(null);
-  const {fetchWithCookie} = useToken();
+  
 
 
   const handleSearch = (query) => {

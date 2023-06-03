@@ -7,26 +7,28 @@ const Nav = () => {
     const { logout } = useToken("");
     const { fetchWithCookie } = useToken();
     const { token } = useToken();
-    const [ user, setUser] = useState();
+    const [ currentUser, setCurrentUser] = useState();
     const [userDetails, setUserDetails] = useState();
 
     const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const user = data.user
-            setUser(user);
+        if (token!= null){
+            const data = await fetchWithCookie(
+                `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            );
+            const currentUser = data.user
+            setCurrentUser(currentUser);
         }
     }
 
     useEffect (() => {
-        handleFetchWithCookie();
-    }, [token]);
+            handleFetchWithCookie();
+        }, [token]);
+
+
 
     const fetchUserDetails = async () => {
-        if (user !== undefined){
-            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${user.id}`
+        if (currentUser !== undefined){
+            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
 
             if (userResponse.ok){
@@ -47,7 +49,7 @@ const Nav = () => {
 
     useEffect(() => {
         fetchUserDetails();
-    }, [user])
+    }, [currentUser])
 
     const handleLogout = (event) => {
         logout();
