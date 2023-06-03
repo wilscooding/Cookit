@@ -3,7 +3,6 @@ from psycopg_pool import ConnectionPool
 import os
 from db import RecipeOut, RecipeIn,IngredientOut, IngredientIn
 
-
 pool = ConnectionPool(conninfo=os.environ["DATABASE_URL"])
 
 
