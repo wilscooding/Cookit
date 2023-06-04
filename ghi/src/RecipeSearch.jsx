@@ -29,26 +29,35 @@ const RecipeSearch = ({ onRecipeSelect }) => {
   // };
 
   return (
-    <div>
+    <div className="bg-yellow-200 p-4">
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        className="mb-2 px-2 py-1 border border-gray-300"
       />
-      <button onClick={searchRecipes}>Search</button>
-      <ul>
-        {recipes.map((recipe) => {
-          console.log("all stuff:", recipe); // Log the recipe object to the console
-          return (
-            <li key={recipe.id}>
-              <Link to={`/recipes/${recipe.id}`}>{recipe.title}</Link>
-              <img src={recipe.image} alt={recipe.title} />
-            </li>
-          );
-        })}
+      <button
+        onClick={searchRecipes}
+        className="px-4 py-2 bg-orange-500 text-white"
+      >
+        Search
+      </button>
+      <ul className="mt-4">
+        {recipes.map((recipe) => (
+          <li key={recipe.id} className="mb-4">
+            <Link
+              to={`/recipes/${recipe.id}`}
+              className="text-blue-600 hover:underline"
+            >
+              {recipe.title}
+            </Link>
+            <img src={recipe.image} alt={recipe.title} className="mt-2" />
+          </li>
+        ))}
       </ul>
     </div>
   );
 };
+
 
 export default RecipeSearch;
