@@ -11,6 +11,8 @@ import RecipeSearch from "./RecipeSearch.jsx";
 import Nav from "./NavBar.jsx";
 import UserDataCard from "./UserDataCard.jsx";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import Dashboard from "./Dashboard.jsx"
+import GroceryList from "./GroceryList.jsx";
 
 
 
@@ -71,6 +73,16 @@ function App(props) {
             <Route
               path="/recipes/:id"
               element={<RecipeDetails currentUser={userData} />}
+            />
+            <Route
+              path="/home"
+              currentUser={userData}
+              element={<Dashboard />}
+            />
+            <Route
+              path="/grocerylist"
+              currentUser={userData}
+              element={<GroceryList />}
             />
           </Routes>
         </AuthProvider>
