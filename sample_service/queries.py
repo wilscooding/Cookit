@@ -389,7 +389,7 @@ class IngredientQueries:
                 return False
 
 
-class MeasurementUnitQueries:
+# class MeasurementUnitQueries:
     def get_measurement_units(self):
         with pool.connection() as conn:
             with conn.cursor() as cur:

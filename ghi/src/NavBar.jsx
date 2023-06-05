@@ -96,10 +96,10 @@ const Nav = () => {
                 <Navbar.Link href="#">
                     About
                 </Navbar.Link>
-                <Navbar.Link href="#">
+                <Navbar.Link href="/myrecipes">
                     My Recipes
                 </Navbar.Link>
-                <Navbar.Link href="#">
+                <Navbar.Link href="/myingredients">
                     Inventory
                 </Navbar.Link>
                 <Navbar.Link href="#">

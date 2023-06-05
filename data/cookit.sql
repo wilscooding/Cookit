@@ -92,7 +92,8 @@ INSERT INTO measurement_qty (id, qty_amount) VALUES
   (1, 0.25),
   (2, 0.5),
   (3, 0.75),
-  (4, 1)
+  (4, 1),
+  (5, 1.25)
   ;
 
 INSERT INTO measurement_units (id, measurement_description) VALUES
