@@ -96,12 +96,19 @@ const Nav = () => {
                 <Navbar.Link href="#">
                     About
                 </Navbar.Link>
+                <Navbar.Link href="/recipes">
+                    Search
+                </Navbar.Link>
                 <Navbar.Link href="/myrecipes">
                     My Recipes
                 </Navbar.Link>
                 <Navbar.Link href="/myingredients">
                     Inventory
                 </Navbar.Link>
+                <Navbar.Link href="/grocerylist">
+                    Grocery List
+                </Navbar.Link>
+
                 <Navbar.Link href="#">
                     Suggest Recipes
                 </Navbar.Link>

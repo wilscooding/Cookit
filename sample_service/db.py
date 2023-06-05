@@ -88,15 +88,14 @@ class RecipeIngredientIn(BaseModel):
     recipe_id: int
     measurement_id: int
     measurement_qty_id: int
-    ingredient: Optional[IngredientOut]
-
+    ingredient_id: int
+    
 class RecipeIngredientOut(BaseModel):
     id: int
     recipe_id: int
     measurement_id: int
     measurement_qty_id: int
-    ingredient: Optional[IngredientOut]
-
+    ingredient_id: int
 
 class MyIngredientIn(BaseModel):
     user_id: int

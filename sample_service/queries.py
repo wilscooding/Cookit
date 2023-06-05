@@ -675,29 +675,32 @@ class RecipeIngredientQueries:
                     }
                     return RecipeIngredientOut(**recipe_ingredient_dict)
 
-    def get_recipe_ingredients(self) -> List[RecipeIngredientOut]:
+    def get_recipe_ingredients(self, recipe_id: int) -> List[RecipeIngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
                     """
                     SELECT id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
                     FROM recipe_ingredients
+                    WHERE recipe_id = %s
                     """,
+                    [recipe_id],
                 )
-                records = cur.fetchall()
-                if records:
-                    recipe_ingredient_list = []
-                    for record in records:
-                        recipe_ingredient_dict = {
-                            "id": record[0],
-                            "recipe_id": record[1],
-                            "measurement_id": record[2],
-                            "measurement_qty_id": record[3],
-                            "ingredient_id": record[4],
-                        }
-                        recipe_ingredient_list.append(
-                            RecipeIngredientOut(**recipe_ingredient_dict))
-                    return recipe_ingredient_list
+
+                results = []
+                for row in cur.fetchall():
+                    record = {}
+                    for i, column in enumerate(cur.description):
+                        record[column.name] = row[i]
+                    results.append(record)
+
+                recipe_ingredient_list = []
+                for result in results:
+                    recipe_ingredient_list.append(
+                        RecipeIngredientOut(**result)
+                    )
+
+                return recipe_ingredient_list
 
     def update_recipe_ingredient(
             self,
