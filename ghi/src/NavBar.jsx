@@ -10,6 +10,7 @@ const Nav = () => {
     const [ currentUser, setCurrentUser] = useState();
     const [userDetails, setUserDetails] = useState();
 
+
     const handleFetchWithCookie = async() => {
         if (token!= null){
             const data = await fetchWithCookie(

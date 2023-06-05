@@ -20,7 +20,7 @@ function App(props) {
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [userData, setUserData] = useState(null);
-  
+  const { fetchWithCookie } = useToken();
 
 
   const handleSearch = (query) => {
@@ -31,19 +31,18 @@ function App(props) {
     setSelectedRecipeId(id);
   };
 
-  // const handleUserFetch = async () => {
-  //   const data = await fetchWithCookie(
-  //           `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-  //       );
-  //       if (data !== undefined){
-  //           const userData = data.user
-  //           setUserData(userData);
-  //       };
-  //     }
 
-  // useEffect(() => {
-  //   handleUserFetch();
-  //   }, []);
+  useEffect(() => {
+    const handleUserFetch = async () => {
+    const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const userData = data.user
+            setUserData(userData);
+        };
+      }
+    }, []);
 
 
   return (
