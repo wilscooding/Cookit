@@ -172,7 +172,7 @@ class RecipeQueries:
                     """
                     INSERT INTO recipes (creator_id, recipe_name, diet, img, description, steps)
                     VALUES (%s, %s, %s, %s, %s, %s)
-                    RETURNING id, recipe_name, diet, img, description, steps
+                    RETURNING id, recipe_name, diet, img, description, steps, creator_id
                     """,
                     params,
                 )
@@ -185,7 +185,8 @@ class RecipeQueries:
                         "diet": record[2],
                         "img": record[3],
                         "description": record[4],
-                        "steps": record[5]
+                        "steps": record[5],
+                        "creator_id": record[6]
                     }
 
                     return RecipeOut(**recipe_dict)
@@ -210,7 +211,7 @@ class RecipeQueries:
                     UPDATE recipes
                     SET recipe_name = %s, diet = %s, img = %s, description = %s, steps = %s
                     WHERE id = %s
-                    RETURNING id, recipe_name, diet, img, description, steps
+                    RETURNING id, recipe_name, diet, img, description, steps, creator_id
                     """,
                     params,
                     )
@@ -222,7 +223,8 @@ class RecipeQueries:
                         "diet": record[2],
                         "img": record[3],
                         "description": record[4],
-                        "steps": record[5]
+                        "steps": record[5],
+                        "creator_id": record[6]
                         }
 
                     return RecipeOut(**recipe_dict)
@@ -232,7 +234,7 @@ class RecipeQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_name, diet, img, description, steps
+                    SELECT id, recipe_name, diet, img, description, steps, creator_id
                     FROM recipes
                     WHERE id = %s
                     """,
@@ -247,7 +249,8 @@ class RecipeQueries:
                         "diet": record[2],
                         "img": record[3],
                         "description": record[4],
-                        "steps": record[5]
+                        "steps": record[5],
+                        "creator_id": record[6]
                         }
 
                     return RecipeOut(**recipe_dict)

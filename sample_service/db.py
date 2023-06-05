@@ -48,6 +48,7 @@ class RecipeOut(BaseModel):
     img: str | None
     description: str
     steps: str
+    creator_id: int
 
 class RecipesOut(BaseModel):
     recipes: list[RecipeOut]
