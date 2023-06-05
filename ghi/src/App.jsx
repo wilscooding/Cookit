@@ -15,35 +15,39 @@ import Dashboard from "./Dashboard.jsx";
 import GroceryList from "./GroceryList.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
+import Profile from "./Profile.jsx";
+import EditProfile from "./EditProfile.jsx";
+
 
 
 function App(props) {
-  const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
-  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [userData, setUserData] = useState(null);
-  const { fetchWithCookie } = useToken();
+    const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
+    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [userData, setUserData] = useState(null);
+    const { fetchWithCookie } = useToken();
 
-  const handleSearch = (query) => {
+    const handleSearch = (query) => {
     setSearchQuery(query);
-  };
+    };
 
-  const handleRecipeSelect = (id) => {
+    const handleRecipeSelect = (id) => {
     setSelectedRecipeId(id);
-  };
+    };
 
-  useEffect(() => {
+    useEffect(() => {
     const handleUserFetch = async () => {
-      const data = await fetchWithCookie(
+        const data = await fetchWithCookie(
         `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
         );
         if (data !== undefined) {
-          const userData = data.user;
-          setUserData(userData);
+            const userData = data.user;
+            setUserData(userData);
         }
-      };
+    };
+
     handleUserFetch();
-  }, []);
+    }, []);
 
     return (
 		<div>
@@ -86,6 +90,13 @@ function App(props) {
 							path="/myingredients"
 							element={<MyIngredients currentUser={userData} />}
 						/>
+                        <Route
+							path="/profile"
+							element={<Profile currentUser={userData} />}
+                        />
+                        <Route path="/profile/edit"
+                            element={<EditProfile currentUser={userData} />}
+                        />
 					</Routes>
 				</AuthProvider>
 			</BrowserRouter>
