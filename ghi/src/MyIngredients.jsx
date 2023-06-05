@@ -236,5 +236,4 @@ const MyIngredients = ({ currentUser }) => {
 };
 
 export { getMeasurementQtyDescription, getMeasurementUnitDescription };
-export { getMeasurementQtyDescription, getMeasurementUnitDescription };
 export default MyIngredients;

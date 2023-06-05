@@ -1,19 +1,21 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login } = useToken("");
+  const navigate = useNavigate();
 
   const username = email;
 
   const handleSubmit = (event) => {
     event.preventDefault();
     login(username, password);
-    event.target.reset();
-    // console.log("login", login);
+    navigate("/recipes")
+
   };
 
   return (

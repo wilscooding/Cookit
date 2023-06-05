@@ -2,6 +2,7 @@ import { useState } from "react";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useNavigate } from "react-router-dom";
 import { Button, Label, Card } from "flowbite-react";
+import { Link } from "react-router-dom";
 
 const SignupForm = () => {
 	const [email, setEmail] = useState("");
@@ -109,6 +110,8 @@ const SignupForm = () => {
 									Passwords don't match!
 								</Button>
 							)}
+								<div className="text-center">Already have an account?
+								<Link className="font-medium text-blue-600 dark:text-blue-500 hover:underline" to="/login"> Login</Link></div>
 						</form>
 					</Card>
 				</div>

@@ -15,7 +15,7 @@ import Dashboard from "./Dashboard.jsx"
 import GroceryList from "./GroceryList.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
-import GroceryList from "./GroceryList.jsx";
+
 
 
 
@@ -36,8 +36,6 @@ function App(props) {
   };
 
 
-
-
   useEffect(() => {
     const handleUserFetch = async () => {
       const data = await fetchWithCookie(
@@ -45,7 +43,6 @@ function App(props) {
         );
         if (data !== undefined) {
           const userData = data.user;
-          console.log("userData:", userData);
           setUserData(userData);
         }
       };
@@ -56,7 +53,7 @@ function App(props) {
 		<div>
 			<BrowserRouter>
 				<AuthProvider baseUrl={baseUrl}>
-					<Nav />
+					<Nav currentUser={userData} />
 					<Routes>
 						<Route path="/" element={<Main currentUser={userData} />}></Route>
 						<Route path="/signup" element={<SignupForm />}></Route>
