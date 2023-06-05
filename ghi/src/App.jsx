@@ -13,7 +13,9 @@ import UserDataCard from "./UserDataCard.jsx";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
-import SuggestedRecipes from "./SuggestedRecipes.jsx";
+import GroceryList from "./GroceryList.jsx";
+
+
 
 function App(props) {
   const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
@@ -76,6 +78,10 @@ function App(props) {
             <Route
               path="/myingredients"
               element={<MyIngredients currentUser={userData} />}
+            />
+            <Route
+              path="/grocerylist"
+              element={<GroceryList currentUser={userData} />}
             />
           </Routes>
         </AuthProvider>

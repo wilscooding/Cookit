@@ -1,73 +1,82 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { getMeasurementQtyDescription, getMeasurementUnitDescription } from "./MyIngredients";
 
-const getMeasurementQtyDescription = async (id) => {
-  try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/${id}`
-    );
-    return response.data.qty_amount;
-  } catch (error) {
-    console.error(error);
-    return "";
-  }
-};
 
-const getMeasurementUnitDescription = async (id) => {
-  try {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/${id}`
-    );
-    return response.data.measurement_description;
-  } catch (error) {
-    console.error(error);
-    return "";
-  }
-};
-const MyIngredients = ({ currentUser }) => {
-  const [ingredients, setIngredients] = useState([]);
-  const [newIngredient, setNewIngredient] = useState({
+// const getMeasurementQtyDescription = async (id) => {
+//   try {
+//     const response = await axios.get(
+//       `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/${id}`
+//     );
+//     return response.data.qty_amount;
+//   } catch (error) {
+//     console.error(error);
+//     return "";
+//   }
+// };
+
+// const getMeasurementUnitDescription = async (id) => {
+//   try {
+//     const response = await axios.get(
+//       `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/${id}`
+//     );
+//     return response.data.measurement_description;
+//   } catch (error) {
+//     console.error(error);
+//     return "";
+//   }
+// };
+
+const GroceryList = ({ currentUser }) => {
+  const [groceryItems, setGroceryItems] = useState([]);
+  const [newItem, setNewItem] = useState({
     ingredient_name: "",
     measurement_qty_id: "",
     measurement_id: "",
     notes: "",
   });
+
   const [measurementQtys, setMeasurementQtys] = useState([]);
   const [measurementUnits, setMeasurementUnits] = useState([]);
 
   useEffect(() => {
-    fetchIngredients();
+    fetchGroceryList();
     fetchMeasurementQtys();
     fetchMeasurementUnits();
   }, [currentUser]);
 
-  const fetchIngredients = async () => {
-
+  const fetchGroceryList = async () => {
     if (currentUser && currentUser.id) {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/`,
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
           {
             params: {
               user_id: currentUser.id,
             },
           }
         );
-        const data = response.data;
-        const processedIngredients = await Promise.all(
-          data.map(async (ingredient) => {
-            const measurementQtyDescription =
-              await getMeasurementQtyDescription(ingredient.measurement_qty_id);
-            const measurementUnitDescription =
-              await getMeasurementUnitDescription(ingredient.measurement_id);
+        const groceryListData = response.data;
+        const itemsWithDescriptions = await Promise.all(
+          groceryListData.map(async (item) => {
+            const measurementQty = await getMeasurementQtyDescription(
+              item.measurement_qty_id
+              );
+            const measurementUnit = await getMeasurementUnitDescription(
+              item.measurement_id
+              );
             return {
-              ...ingredient,
-              measurement_qty_description: measurementQtyDescription,
-              measurement_unit_description: measurementUnitDescription,
-            };
-          })
-        );
-        setIngredients(processedIngredients);
+              ...item,
+              measurement_qty_description: measurementQty,
+              measurement_unit_description: measurementUnit,
+              };
+              })
+
+
+        )
+
+        setGroceryItems(itemsWithDescriptions);
+        console.log("Grocery List Data:", itemsWithDescriptions);
       } catch (error) {
         console.log(error);
       }
@@ -77,7 +86,7 @@ const MyIngredients = ({ currentUser }) => {
   const fetchMeasurementQtys = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty`
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`
       );
       setMeasurementQtys(response.data);
     } catch (error) {
@@ -88,7 +97,7 @@ const MyIngredients = ({ currentUser }) => {
   const fetchMeasurementUnits = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units`
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`
       );
       setMeasurementUnits(response.data);
     } catch (error) {
@@ -96,37 +105,38 @@ const MyIngredients = ({ currentUser }) => {
     }
   };
 
-
   const handleInputChange = (event) => {
-    setNewIngredient({
-      ...newIngredient,
+    setNewItem({
+      ...newItem,
       [event.target.name]: event.target.value,
     });
   };
 
-  const handleAddIngredient = async () => {
+  const handleAddItem = async () => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/`,
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
         {
           user_id: currentUser.id,
-          ...newIngredient,
+          ...newItem,
         }
       );
-      const newIngredientData = response.data;
+      const newItemData = response.data;
       const measurementQtyDescription = await getMeasurementQtyDescription(
-        newIngredientData.measurement_qty_id
+        newItemData.measurement_qty_id
       );
+      console.log("Measurement Qty Description:", measurementQtyDescription);
       const measurementUnitDescription = await getMeasurementUnitDescription(
-        newIngredientData.measurement_id
+        newItemData.measurement_id
       );
-      const newIngredientWithDescriptions = {
-        ...newIngredientData,
+      console.log("Measurement Unit Description:", measurementUnitDescription);
+      const newItemWithDescriptions = {
+        ...newItemData,
         measurement_qty_description: measurementQtyDescription,
         measurement_unit_description: measurementUnitDescription,
       };
-      setIngredients([...ingredients, newIngredientWithDescriptions]);
-      setNewIngredient({
+      setGroceryItems([...groceryItems, newItemWithDescriptions]);
+      setNewItem({
         ingredient_name: "",
         measurement_qty_id: "",
         measurement_id: "",
@@ -137,12 +147,12 @@ const MyIngredients = ({ currentUser }) => {
     }
   };
 
-  const handleDeleteIngredient = async (id) => {
+  const handleDeleteItem = async (itemId) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${id}`
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${itemId}`
       );
-      setIngredients(ingredients.filter((ingredient) => ingredient.id !== id));
+      setGroceryItems(groceryItems.filter((item) => item.id !== itemId));
     } catch (error) {
       console.error(error);
     }
@@ -150,7 +160,7 @@ const MyIngredients = ({ currentUser }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">Inventory</h2>
+      <h2 className="text-2xl font-semibold mb-4">Grocery List</h2>
       <table className="table-auto w-full">
         <thead>
           <tr>
@@ -162,18 +172,18 @@ const MyIngredients = ({ currentUser }) => {
           </tr>
         </thead>
         <tbody>
-          {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
-              <td className="border px-4 py-2">{ingredient.ingredient_name}</td>
+          {groceryItems.map((item) => (
+            <tr key={item.id}>
+              <td className="border px-4 py-2">{item.ingredient_name}</td>
               <td className="border px-4 py-2">
-                {ingredient.measurement_qty_description}
+                {item.measurement_qty_description}
               </td>
               <td className="border px-4 py-2">
-                {ingredient.measurement_unit_description}
+                {item.measurement_unit_description}
               </td>
-              <td className="border px-4 py-2">{ingredient.notes}</td>
+              <td className="border px-4 py-2">{item.notes}</td>
               <td className="border px-4 py-2">
-                <button onClick={() => handleDeleteIngredient(ingredient.id)}>
+                <button onClick={() => handleDeleteItem(item.id)}>
                   Delete
                 </button>
               </td>
@@ -184,14 +194,14 @@ const MyIngredients = ({ currentUser }) => {
               <input
                 type="text"
                 name="ingredient_name"
-                value={newIngredient.ingredient_name}
+                value={newItem.ingredient_name}
                 onChange={handleInputChange}
               />
             </td>
             <td className="border px-4 py-2">
               <select
                 name="measurement_qty_id"
-                value={newIngredient.measurement_qty_id}
+                value={newItem.measurement_qty_id}
                 onChange={handleInputChange}
               >
                 <option value="">Select Quantity</option>
@@ -205,7 +215,7 @@ const MyIngredients = ({ currentUser }) => {
             <td className="border px-4 py-2">
               <select
                 name="measurement_id"
-                value={newIngredient.measurement_id}
+                value={newItem.measurement_id}
                 onChange={handleInputChange}
               >
                 <option value="">Select Unit</option>
@@ -220,12 +230,12 @@ const MyIngredients = ({ currentUser }) => {
               <input
                 type="text"
                 name="notes"
-                value={newIngredient.notes}
+                value={newItem.notes}
                 onChange={handleInputChange}
               />
             </td>
             <td className="border px-4 py-2">
-              <button onClick={handleAddIngredient}>Add</button>
+              <button onClick={handleAddItem}>Add</button>
             </td>
           </tr>
         </tbody>
@@ -234,5 +244,4 @@ const MyIngredients = ({ currentUser }) => {
   );
 };
 
-export { getMeasurementQtyDescription, getMeasurementUnitDescription };
-export default MyIngredients;
+export default GroceryList;
