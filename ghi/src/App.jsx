@@ -11,16 +11,13 @@ import RecipeSearch from "./RecipeSearch.jsx";
 import Nav from "./NavBar.jsx";
 import UserDataCard from "./UserDataCard.jsx";
 import useToken from "@galvanize-inc/jwtdown-for-react";
-import Dashboard from "./Dashboard.jsx"
+import Dashboard from "./Dashboard.jsx";
 import GroceryList from "./GroceryList.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
 
 
-
-
 function App(props) {
-
   const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
   const [selectedRecipeId, setSelectedRecipeId] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,7 +32,6 @@ function App(props) {
     setSelectedRecipeId(id);
   };
 
-
   useEffect(() => {
     const handleUserFetch = async () => {
       const data = await fetchWithCookie(
@@ -47,7 +43,7 @@ function App(props) {
         }
       };
     handleUserFetch();
-    }, []);
+  }, []);
 
     return (
 		<div>

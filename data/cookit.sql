@@ -37,8 +37,10 @@ CREATE TABLE recipes (
     id SERIAL NOT NULL UNIQUE PRIMARY KEY,
     creator_id INT NOT NULL REFERENCES users(id),
     recipe_name VARCHAR NOT NULL,
-    diet VARCHAR NOT NULL,
-    img TEXT
+    diet VARCHAR,
+    img TEXT,
+    description TEXT NOT NULL,
+    steps TEXT NOT NULL
 );
 
 CREATE TABLE recipe_ingredients (
@@ -104,12 +106,13 @@ INSERT INTO measurement_units (id, measurement_description) VALUES
   (5, 'Pound'),
   (6, 'Gram');
 
-INSERT INTO recipes (id, creator_id, recipe_name, diet, img) VALUES
-  (1, 1, 'Pancakes', 'Keto', null),
-  (2, 2, 'Spaghetti Bolognese', 'Classic', null),
-  (3, 3, 'Chicken Curry', 'Indian', null),
-  (4, 4, 'Caesar Salad', 'Vegetarian', null),
-  (5, 5, 'Chocolate Chip Cookies', 'Dessert', null);
+INSERT INTO recipes (id, creator_id, recipe_name, diet, img, description, steps) VALUES
+  (1, 1, 'Pancakes', 'Keto', null, 'Yummy Pancakes', '1. Mix batter, 2. Cook on pan 3. Enjoy'),
+  (2, 2, 'Spaghetti Bolognese', 'Classic', null, 'Good meat sauce', '1. Boil Pasta'),
+  (3, 3, 'Chicken Curry', 'Indian', null, 'Curry sauce', '1. Order takeout'),
+  (4, 4, 'Caesar Salad', 'Vegetarian', null, 'Healthy salad', 'Mix vegetables and add sauce'),
+  (5, 5, 'Chocolate Chip Cookies', 'Dessert', null, 'Best cookies ever', 'Place on baking sheet in oven');
+  ;
 
 INSERT INTO recipe_ingredients (id, recipe_id, measurement_id, measurement_qty_id, ingredient_id) VALUES
   (1, 1, 1, 1, 1),
