@@ -26,6 +26,7 @@ function App(props) {
     const [searchQuery, setSearchQuery] = useState("");
     const [userData, setUserData] = useState(null);
     const { fetchWithCookie } = useToken();
+    const [isLoading, setLoading] = useState(true);
 
     const handleSearch = (query) => {
     setSearchQuery(query);
@@ -36,6 +37,7 @@ function App(props) {
     };
 
     useEffect(() => {
+
     const handleUserFetch = async () => {
         const data = await fetchWithCookie(
         `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
@@ -43,6 +45,7 @@ function App(props) {
         if (data !== undefined) {
             const userData = data.user;
             setUserData(userData);
+            setLoading(false)
         }
     };
 
@@ -51,7 +54,7 @@ function App(props) {
 
     return (
 		<div>
-			<BrowserRouter>
+      <BrowserRouter>
 				<AuthProvider baseUrl={baseUrl}>
 					<Nav currentUser={userData} />
 					<Routes>
@@ -101,7 +104,6 @@ function App(props) {
 				</AuthProvider>
 			</BrowserRouter>
 		</div>
-	);
-}
+)};
 
 export default App;

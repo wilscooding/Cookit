@@ -2,6 +2,7 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import icons from "./constants/icons";
 
 
 const Nav = ({currentUser}) => {
@@ -45,13 +46,10 @@ const Nav = ({currentUser}) => {
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
                     <img
-                    alt="Flowbite React Logo"
-                    className="mr-3 h-6 sm:h-9"
-                    src="https://www.flowbite-react.com/favicon.svg"
+                    alt="CookIt Logo"
+                    className="mr-2 h-8 sm:h-9"
+                    src={icons.CookIt}
                     />
-                    <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                    CookIt
-                    </span>
                 </Navbar.Brand>
             <div className="flex md:order-2">
                 <Dropdown
