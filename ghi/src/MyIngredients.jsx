@@ -33,6 +33,13 @@ const MyIngredients = ({ currentUser }) => {
     measurement_id: "",
     notes: "",
   });
+  const [selectedIngredient, setSelectedIngredient] = useState(null);
+  const [updatedIngredient, setUpdatedIngredient] = useState({
+    ingredient_name: "",
+    measurement_qty_id: "",
+    measurement_id: "",
+    notes: "",
+  });
   const [measurementQtys, setMeasurementQtys] = useState([]);
   const [measurementUnits, setMeasurementUnits] = useState([]);
 
@@ -43,7 +50,6 @@ const MyIngredients = ({ currentUser }) => {
   }, [currentUser]);
 
   const fetchIngredients = async () => {
-
     if (currentUser && currentUser.id) {
       try {
         const response = await axios.get(
@@ -97,7 +103,6 @@ const MyIngredients = ({ currentUser }) => {
     }
   };
 
-
   const handleInputChange = (event) => {
     setNewIngredient({
       ...newIngredient,
@@ -138,6 +143,93 @@ const MyIngredients = ({ currentUser }) => {
     }
   };
 
+  const handleSelectIngredient = (ingredient) => {
+    setSelectedIngredient(ingredient);
+    setUpdatedIngredient({
+      ingredient_name: ingredient.ingredient_name,
+      measurement_qty_id: ingredient.measurement_qty_id,
+      measurement_id: ingredient.measurement_id,
+      notes: ingredient.notes,
+    });
+  };
+
+  const handleUpdateIngredient = async () => {
+    try {
+      const selectedQTY = measurementQtys.find(
+        (qty) => qty.id === updatedIngredient.measurement_qty_id
+      );
+      const selectedUnit = measurementUnits.find(
+        (unit) => unit.id === updatedIngredient.measurement_id
+      );
+
+      const updatedData = {
+        ingredient_name: updatedIngredient.ingredient_name,
+        measurement_qty_id: selectedQTY ? selectedQTY.id : null,
+        measurement_id: selectedUnit ? selectedUnit.id : null,
+        notes: updatedIngredient.notes,
+      };
+
+      const response = await axios.put(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
+        updatedData
+      );
+
+      console.log("response:", response);
+      const updatedIngredientData = response.data;
+      const measurementQtyDescription = await getMeasurementQtyDescription(
+        updatedIngredientData.measurement_qty_id
+      );
+      const measurementUnitDescription = await getMeasurementUnitDescription(
+        updatedIngredientData.measurement_id
+      );
+      const updatedIngredientWithDescriptions = {
+        ...updatedIngredientData,
+        measurement_qty_description: measurementQtyDescription,
+        measurement_unit_description: measurementUnitDescription,
+      };
+
+      setIngredients((prevIngredients) =>
+        prevIngredients.map((ingredient) =>
+          ingredient.id === selectedIngredient.id
+            ? updatedIngredientWithDescriptions
+            : ingredient
+        )
+      );
+      setSelectedIngredient(null);
+      setUpdatedIngredient({
+        ingredient_name: "",
+        measurement_qty_id: "",
+        measurement_id: "",
+        notes: "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+const handleUpdateIngredient = async () => {
+  try {
+    const response = await axios.put(
+      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
+      updatedIngredient
+    );
+    setIngredients((prevIngredients) =>
+      prevIngredients.map((ingredient) =>
+        ingredient.id === selectedIngredient.id ? response.data : ingredient
+      )
+    );
+    setSelectedIngredient(null);
+    setUpdatedIngredient({
+      ingredient_name: "",
+      measurement_qty_id: "",
+      measurement_id: "",
+      notes: "",
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
   const handleDeleteIngredient = async (id) => {
     try {
       await axios.delete(
@@ -174,6 +266,9 @@ const MyIngredients = ({ currentUser }) => {
               </td>
               <td className="border px-4 py-2">{ingredient.notes}</td>
               <td className="border px-4 py-2">
+                <button onClick={() => handleSelectIngredient(ingredient)}>
+                  Update
+                </button>
                 <button onClick={() => handleDeleteIngredient(ingredient.id)}>
                   Delete
                 </button>
@@ -231,6 +326,69 @@ const MyIngredients = ({ currentUser }) => {
           </tr>
         </tbody>
       </table>
+      {selectedIngredient && (
+        <div>
+          <h3>Update Ingredient</h3>
+          <input
+            type="text"
+            name="ingredient_name"
+            value={updatedIngredient.ingredient_name}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                ingredient_name: event.target.value,
+              })
+            }
+          />
+          <select
+            name="measurement_qty_id"
+            value={updatedIngredient.measurement_qty_id}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                measurement_qty_id: event.target.value,
+              })
+            }
+          >
+            <option value="">Select Quantity</option>
+            {measurementQtys.map((qty) => (
+              <option key={qty.id} value={qty.id}>
+                {qty.qty_amount}
+              </option>
+            ))}
+          </select>
+          <select
+            name="measurement_id"
+            value={updatedIngredient.measurement_id}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                measurement_id: event.target.value,
+              })
+            }
+          >
+            <option value="">Select Unit</option>
+            {measurementUnits.map((unit) => (
+              <option key={unit.id} value={unit.id}>
+                {unit.measurement_description}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            name="notes"
+            value={updatedIngredient.notes}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                notes: event.target.value,
+              })
+            }
+          />
+          <button onClick={handleUpdateIngredient}>Update</button>
+          <button onClick={() => setSelectedIngredient(null)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 };
