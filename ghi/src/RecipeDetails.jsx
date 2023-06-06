@@ -68,7 +68,6 @@ const RecipeDetails = () => {
         }
       );
 
-
       console.log("creator_id:", currentUser.id);
 
       // Handle the response as needed

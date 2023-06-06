@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { Button, Label } from "flowbite-react";
 import axios from "axios";
 
-function CreateRecipeForm() {
-  const [creatorId, setCreatorId] = useState(null);
+function CreateMyRecipeForm({ currentUser }) {
   const [recipeName, setRecipeName] = useState("");
   const [description, setDescription] = useState("");
   const [steps, setSteps] = useState("");
@@ -23,25 +22,12 @@ function CreateRecipeForm() {
     "whole30",
   ];
 
-  async function fetchCreatorId() {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`,
-      { withCredentials: true }
-    );
-    const data = response.data;
-    setCreatorId(data.user.id);
-  }
-
-  useEffect(() => {
-    fetchCreatorId();
-  }, []);
-
   async function handleSubmit(event) {
     event.preventDefault();
     const response = await axios.post(
       `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
       {
-        creator_id: creatorId,
+        creator_id: currentUser.id,
         recipe_name: recipeName,
         diet: diet,
         img: image,
@@ -82,6 +68,10 @@ function CreateRecipeForm() {
   function handleStepsChange(event) {
     const value = event.target.value;
     setSteps(value);
+  }
+
+  if (!currentUser) {
+    <div>Must be signed in!</div>;
   }
 
   return (
@@ -190,4 +180,4 @@ function CreateRecipeForm() {
   );
 }
 
-export default CreateRecipeForm;
+export default CreateMyRecipeForm;

@@ -23,30 +23,28 @@ const Nav = () => {
         }
     }
 
-    useEffect (() => {
-        handleFetchWithCookie();
-    }, [token]);
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
     const fetchUserDetails = async () => {
         if (currentUser !== undefined){
             const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
 
-            if (userResponse.ok){
-                const userDetails = await userResponse.json();
+      if (userResponse.ok) {
+        const userDetails = await userResponse.json();
 
-                setUserDetails(
-                    {
-                        "first": userDetails.first,
-                        "last": userDetails.last,
-                        "avatar": userDetails.avatar,
-                        "email": userDetails.email,
-                        "username": userDetails.username,
-                }
-                );
-            }
-        }
+        setUserDetails({
+          first: userDetails.first,
+          last: userDetails.last,
+          avatar: userDetails.avatar,
+          email: userDetails.email,
+          username: userDetails.username,
+        });
+      }
     }
+  };
 
     useEffect(() => {
         fetchUserDetails();

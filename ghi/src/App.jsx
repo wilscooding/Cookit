@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Main } from "./Main.jsx";
-// import ErrorNotification from "./ErrorNotification.js";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignUpForm.jsx";
 import "./App.css";
@@ -12,7 +11,6 @@ import Nav from "./NavBar.jsx";
 import UserDataCard from "./UserDataCard.jsx";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import Dashboard from "./Dashboard.jsx";
-import GroceryList from "./GroceryList.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
 import Profile from "./Profile.jsx";

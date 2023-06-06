@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 
@@ -38,9 +39,8 @@ const fetchRecipes = async () => {
     } catch (error) {
       console.error(error);
     }
-  }
-};
-useEffect(() => {
+  };
+  useEffect(() => {
     fetchRecipes();
   }, [currentUser]);
 
@@ -50,16 +50,19 @@ useEffect(() => {
       <ul>
         {recipes.map((recipe) => (
           <li key={recipe.id}>
-            <img src={recipe.img} alt={recipe.recipe_name}/>
             <div>
-              <p>{recipe.recipe_name}</p>
+              <Link to={recipe.id.toString()}>
+                <p className="text-blue-600">{recipe.recipe_name}</p>
+              </Link>
               <p>Diet: {recipe.diet}</p>
-              </div>
-              </li>
+            </div>
+            <img src={recipe.img} alt={recipe.recipe_name} width="100px" />
+          </li>
         ))}
       </ul>
     </div>
   );
 };
+}
 
 export default MyRecipes;
