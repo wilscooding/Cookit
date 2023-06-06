@@ -23,7 +23,7 @@ const Nav = () => {
     useEffect (() => {
         handleFetchWithCookie();
     }, [token]);
-
+    try {
     const fetchUserDetails = async () => {
         if (user !== undefined){
             const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${user.id}`
@@ -53,7 +53,7 @@ const Nav = () => {
         logout();
     }
 
-    if (token) {
+
         return (
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
@@ -108,7 +108,7 @@ const Nav = () => {
             </Navbar.Collapse>
             </Navbar>
     )
-    } else {
+    } catch {
         return (
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
