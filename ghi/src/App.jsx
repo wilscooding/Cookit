@@ -15,7 +15,7 @@ import Dashboard from "./Dashboard.jsx"
 import GroceryList from "./GroceryList.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
-import GroceryList from "./GroceryList.jsx";
+
 
 
 
