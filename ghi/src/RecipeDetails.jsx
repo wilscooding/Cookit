@@ -1,8 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
-const RecipeDetails = ({ currentUser }) => {
+const RecipeDetails = () => {
+  const { fetchWithCookie } = useToken();
+  const { token } = useToken();
+  const [ currentUser, setUser] = useState();
+
+  const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+  }
+
+    useEffect(() => {
+      handleFetchWithCookie();
+    }, [token]);
+
   const [recipe, setRecipe] = useState("");
   const { id } = useParams();
 

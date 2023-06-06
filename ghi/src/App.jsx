@@ -24,9 +24,6 @@ function App(props) {
     const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [userData, setUserData] = useState(null);
-    const { fetchWithCookie } = useToken();
-	const { token } = useToken
 
     const handleSearch = (query) => {
     setSearchQuery(query);
@@ -36,28 +33,13 @@ function App(props) {
     setSelectedRecipeId(id);
     };
 
-    useEffect(() => {
-    const handleUserFetch = async () => {
-        const data = await fetchWithCookie(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-		console.log("data", data)
-        if (data !== undefined) {
-            const userData = data.user;
-            setUserData(userData);
-        }
-    };
-
-    handleUserFetch();
-    }, [token]);
-
     return (
 		<div>
 			<BrowserRouter>
 				<AuthProvider baseUrl={baseUrl}>
 					<Nav />
 					<Routes>
-						<Route path="/" element={<Main currentUser={userData} />} />
+						<Route path="/" element={<Main />} />
 						<Route path="/signup" element={<SignupForm />}/>
 						<Route path="/login" element={<LoginForm />}/>
 						<Route path="/userdata" element={<UserDataCard />}/>
@@ -73,31 +55,30 @@ function App(props) {
 						/>
 						<Route
 							path="/recipes/:id"
-							element={<RecipeDetails currentUser={userData} />}
+							element={<RecipeDetails />}
 						/>
 						<Route
 							path="/home"
-							currentUser={userData}
 							element={<Dashboard />}
 						/>
 						<Route
 							path="/grocerylist"
-							element={<GroceryList currentUser={userData} />}
+							element={<GroceryList />}
 						/>
 						<Route
 							path="/myrecipes"
-							element={<MyRecipes currentUser={userData} />}
+							element={<MyRecipes />}
 						/>
 						<Route
 							path="/myingredients"
-							element={<MyIngredients currentUser={userData} />}
+							element={<MyIngredients />}
 						/>
                         <Route
 							path="/profile"
-							element={<Profile currentUser={userData} />}
+							element={<Profile />}
                         />
                         <Route path="/profile/edit"
-                            element={<EditProfile currentUser={userData} />}
+                            element={<EditProfile />}
                         />
 					</Routes>
 				</AuthProvider>

@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
-const MyRecipes = ({currentUser}) => {
-  const [recipes, setRecipes] = useState([]);
+const MyRecipes = () => {
+    const [recipes, setRecipes] = useState([]);
+    const { fetchWithCookie } = useToken();
+    const { token } = useToken();
+    const [ currentUser, setUser] = useState();
 
+    const handleFetchWithCookie = async() => {
+            const data = await fetchWithCookie(
+                `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            );
+            if (data !== undefined){
+                const currentUser = data.user
+                setUser(currentUser);
+            }
+        }
 
+    useEffect(() => {
+            handleFetchWithCookie();
+    }, [token]);
 
 const fetchRecipes = async () => {
   if (currentUser && currentUser.id) {
@@ -18,7 +34,6 @@ const fetchRecipes = async () => {
         }
       );
       const data = response.data;
-      console.log("data:", data);
       setRecipes(data.recipes);
     } catch (error) {
       console.error(error);

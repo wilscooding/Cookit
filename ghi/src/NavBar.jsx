@@ -9,7 +9,7 @@ const Nav = () => {
     const { fetchWithCookie } = useToken();
     const { token } = useToken();
     const [ currentUser, setUser] = useState();
-    const [userDetails, setUserDetails] = useState();
+    const [ userDetails, setUserDetails] = useState();
     const navigate = useNavigate();
     const { logout } = useToken();
 
