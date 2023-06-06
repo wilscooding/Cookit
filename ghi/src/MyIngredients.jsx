@@ -43,7 +43,6 @@ const MyIngredients = ({ currentUser }) => {
   }, [currentUser]);
 
   const fetchIngredients = async () => {
-
     if (currentUser && currentUser.id) {
       try {
         const response = await axios.get(
@@ -96,7 +95,6 @@ const MyIngredients = ({ currentUser }) => {
       console.error(error);
     }
   };
-
 
   const handleInputChange = (event) => {
     setNewIngredient({
@@ -235,6 +233,5 @@ const MyIngredients = ({ currentUser }) => {
   );
 };
 
-export { getMeasurementQtyDescription, getMeasurementUnitDescription };
 export { getMeasurementQtyDescription, getMeasurementUnitDescription };
 export default MyIngredients;

@@ -12,7 +12,6 @@ import Nav from "./NavBar.jsx";
 import UserDataCard from "./UserDataCard.jsx";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import Dashboard from "./Dashboard.jsx";
-import GroceryList from "./GroceryList.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
 import GroceryList from "./GroceryList.jsx";
