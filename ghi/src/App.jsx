@@ -48,7 +48,7 @@ function App(props) {
   }, []);
 
   return (
-    <div>
+    <div className="bg-amber-400/50 min-h-screen">
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
