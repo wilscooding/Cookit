@@ -9,7 +9,8 @@ import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 import RecipeDetails from "./RecipeDetails.jsx";
 import RecipeSearch from "./RecipeSearch.jsx";
 import Nav from "./NavBar.jsx";
-import UserDataCard from "./UserDataCard.jsx";
+import UserData from "./UserDataCard.jsx";
+import Profile from "./Profile.jsx";
 
 
 
@@ -36,7 +37,8 @@ function App(props) {
             <Route path="/" element={<Main />}></Route>
             <Route path="/signup" element={<SignupForm />}></Route>
             <Route path="/login" element={<LoginForm />}></Route>
-            <Route path="/userdata" element={<UserDataCard />}></Route>
+            <Route path="/userdata" element={<UserData />}></Route>
+			<Route path="/profile" element={<Profile />}></Route>
             <Route
               path="/recipes"
               element={

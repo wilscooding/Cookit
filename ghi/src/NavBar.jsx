@@ -1,32 +1,35 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 const Nav = () => {
-    const { logout } = useToken("");
     const { fetchWithCookie } = useToken();
     const { token } = useToken();
-    const [ user, setUser] = useState();
-    const [userDetails, setUserDetails] = useState();
+    const [ currentUser, setUser] = useState();
+    const [ userDetails, setUserDetails] = useState();
+    const navigate = useNavigate();
+    const { logout } = useToken();
 
     const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
             `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
         );
         if (data !== undefined){
-            const user = data.user
-            setUser(user);
+            const currentUser = data.user
+            setUser(currentUser);
         }
     }
 
     useEffect (() => {
         handleFetchWithCookie();
     }, [token]);
-    try {
+
     const fetchUserDetails = async () => {
-        if (user !== undefined){
-            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${user.id}`
+        if (currentUser !== undefined){
+            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
 
             if (userResponse.ok){
@@ -47,13 +50,14 @@ const Nav = () => {
 
     useEffect(() => {
         fetchUserDetails();
-    }, [user])
+    }, [currentUser])
 
     const handleLogout = (event) => {
         logout();
+        navigate("/");
     }
 
-
+    if (token) {
         return (
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
@@ -80,10 +84,10 @@ const Nav = () => {
                     </span>
                 </Dropdown.Header>
                 <Dropdown.Item>
-                    Settings
+                    <Link to="/profile">Settings</Link>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout} href="/">
+                <Dropdown.Item onClick={handleLogout}>
                     Sign out
                 </Dropdown.Item>
                 </Dropdown>
@@ -93,14 +97,14 @@ const Nav = () => {
                 <Navbar.Link active href="/">
                     Home
                 </Navbar.Link>
-                <Navbar.Link href="#">
-                    About
-                </Navbar.Link>
-                <Navbar.Link href="#">
+                <Navbar.Link href="/myrecipes">
                     My Recipes
                 </Navbar.Link>
-                <Navbar.Link href="#">
+                <Navbar.Link href="/myingredients">
                     Inventory
+                </Navbar.Link>
+                <Navbar.Link href="/grocerylist">
+                    Grocery List
                 </Navbar.Link>
                 <Navbar.Link href="#">
                     Suggest Recipes
@@ -108,28 +112,9 @@ const Nav = () => {
             </Navbar.Collapse>
             </Navbar>
     )
-    } catch {
+    } else {
         return (
-            <Navbar fluid rounded>
-                <Navbar.Brand href="https://flowbite-react.com">
-                    <img
-                    alt="Flowbite React Logo"
-                    className="mr-3 h-6 sm:h-9"
-                    src="https://www.flowbite-react.com/favicon.svg"
-                    />
-                    <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-                    CookIt
-                    </span>
-                </Navbar.Brand>
-                <Navbar.Collapse>
-                    <Navbar.Link active href="/signup">
-                        <p>Sign Up</p>
-                    </Navbar.Link>
-                    <Navbar.Link active href="/">
-                        <p>Login</p>
-                    </Navbar.Link>
-                </Navbar.Collapse>
-            </Navbar>
+            <div></div>
         )
     }
 }
