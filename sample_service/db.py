@@ -34,10 +34,12 @@ class UsersOut(BaseModel):
 
 
 class RecipeIn(BaseModel):
-    creator_id: Optional[int]
-    recipe_name: Optional[str]
+    creator_id: int
+    recipe_name: str
     diet: Optional[str]
     img: Optional[str]
+    description: str
+    steps: str
 
 
 class RecipeOut(BaseModel):
@@ -45,6 +47,9 @@ class RecipeOut(BaseModel):
     recipe_name: str
     diet: str
     img: str | None
+    description: str
+    steps: str
+    creator_id: int
 
 
 class RecipesOut(BaseModel):
@@ -88,15 +93,14 @@ class RecipeIngredientIn(BaseModel):
     recipe_id: int
     measurement_id: int
     measurement_qty_id: int
-    ingredient: Optional[IngredientOut]
-
+    ingredient_id: int
+    
 class RecipeIngredientOut(BaseModel):
     id: int
     recipe_id: int
     measurement_id: int
     measurement_qty_id: int
-    ingredient: Optional[IngredientOut]
-
+    ingredient_id: int
 
 class MyIngredientIn(BaseModel):
     user_id: int
