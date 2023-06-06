@@ -4,10 +4,9 @@ import { useParams } from "react-router-dom";
 import { Button, Label } from "flowbite-react";
 import axios from "axios";
 
-function EditRecipeForm() {
+function EditMyRecipeForm({ currentUser }) {
   const { id } = useParams();
 
-  const [currentUser, setCurrentUser] = useState(null);
   const [creatorId, setCreatorId] = useState(null);
   const [recipeName, setRecipeName] = useState("");
   const [description, setDescription] = useState("");
@@ -46,7 +45,7 @@ function EditRecipeForm() {
     );
 
     if (response.statusText === "OK") {
-      return navigate(`/recipes/${id}`);
+      return navigate(`/myrecipes/${id}`);
     }
   }
 
@@ -92,24 +91,19 @@ function EditRecipeForm() {
     }
   }
 
-  async function fetchCurrentUser() {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`,
-      { withCredentials: true }
-    );
-    const data = response.data;
-    setCurrentUser(data.user.id);
-  }
-
-  useEffect(() => {
-    fetchCurrentUser();
-  }, []);
-
   useEffect(() => {
     fetchRecipe();
   }, []);
 
-  const editForm = (
+  if (!currentUser) {
+    return <div>Must be signed in to edit recipes</div>;
+  }
+
+  if (creatorId !== currentUser.id) {
+    return <div>You are not allowed to edit this recipe!</div>;
+  }
+
+  return (
     <>
       <div className="flex w-full">
         <div className="w-full flex items-center justify-center mt-20">
@@ -213,12 +207,6 @@ function EditRecipeForm() {
       </div>
     </>
   );
-
-  return creatorId === currentUser ? (
-    editForm
-  ) : (
-    <div>You are not allowed to edit this recipe!</div>
-  );
 }
 
-export default EditRecipeForm;
+export default EditMyRecipeForm;

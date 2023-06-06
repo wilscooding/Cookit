@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { Main } from "./Main.jsx";
-// import ErrorNotification from "./ErrorNotification.js";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignUpForm.jsx";
 import "./App.css";
@@ -15,8 +14,9 @@ import Dashboard from "./Dashboard.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
 import GroceryList from "./GroceryList.jsx";
-import CreateRecipeForm from "./CreateRecipeForm.jsx";
-import EditRecipeForm from "./EditRecipeForm.jsx";
+import CreateMyRecipeForm from "./CreateMyRecipeForm.jsx";
+import EditMyRecipeForm from "./EditMyRecipeForm.jsx";
+import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
 function App(props) {
   const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
@@ -40,7 +40,6 @@ function App(props) {
       );
       if (data !== undefined) {
         const userData = data.user;
-        console.log("userData:", userData);
         setUserData(userData);
       }
     };
@@ -48,7 +47,7 @@ function App(props) {
   }, []);
 
   return (
-    <div className="bg-amber-400/50 min-h-screen">
+    <div className="bg-amber-400/50 min-h-screen pb-10">
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
@@ -71,8 +70,14 @@ function App(props) {
               path="/recipes/:id"
               element={<RecipeDetails currentUser={userData} />}
             />
-            <Route path="/recipes/new" element={<CreateRecipeForm />} />
-            <Route path="/recipes/:id/edit" element={<EditRecipeForm />} />
+            <Route
+              path="/myrecipes/new"
+              element={<CreateMyRecipeForm currentUser={userData} />}
+            />
+            <Route
+              path="/myrecipes/:id/edit"
+              element={<EditMyRecipeForm currentUser={userData} />}
+            />
             <Route
               path="/home"
               currentUser={userData}
@@ -85,6 +90,10 @@ function App(props) {
             <Route
               path="/myrecipes"
               element={<MyRecipes currentUser={userData} />}
+            />
+            <Route
+              path="/myrecipes/:id"
+              element={<MyRecipeDetails currentUser={userData} />}
             />
             <Route
               path="/myingredients"
