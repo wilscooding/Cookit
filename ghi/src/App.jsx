@@ -26,6 +26,7 @@ function App(props) {
     const [searchQuery, setSearchQuery] = useState("");
     const [userData, setUserData] = useState(null);
     const { fetchWithCookie } = useToken();
+	const { token } = useToken
 
     const handleSearch = (query) => {
     setSearchQuery(query);
@@ -40,6 +41,7 @@ function App(props) {
         const data = await fetchWithCookie(
         `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
         );
+		console.log("data", data)
         if (data !== undefined) {
             const userData = data.user;
             setUserData(userData);
@@ -47,18 +49,18 @@ function App(props) {
     };
 
     handleUserFetch();
-    }, []);
+    }, [token]);
 
     return (
 		<div>
 			<BrowserRouter>
 				<AuthProvider baseUrl={baseUrl}>
-					<Nav currentUser={userData} />
+					<Nav />
 					<Routes>
-						<Route path="/" element={<Main currentUser={userData} />}></Route>
-						<Route path="/signup" element={<SignupForm />}></Route>
-						<Route path="/login" element={<LoginForm />}></Route>
-						<Route path="/userdata" element={<UserDataCard />}></Route>
+						<Route path="/" element={<Main currentUser={userData} />} />
+						<Route path="/signup" element={<SignupForm />}/>
+						<Route path="/login" element={<LoginForm />}/>
+						<Route path="/userdata" element={<UserDataCard />}/>
 						<Route
 							path="/recipes"
 							element={

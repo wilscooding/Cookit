@@ -2,16 +2,33 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
-const Nav = ({currentUser}) => {
-    const { logout } = useToken("");
+const Nav = () => {
+    const { fetchWithCookie } = useToken();
     const { token } = useToken();
+    const [ currentUser, setUser] = useState();
     const [userDetails, setUserDetails] = useState();
     const navigate = useNavigate();
+    const { logout } = useToken();
+
+    const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+    }
+
+    useEffect (() => {
+        handleFetchWithCookie();
+    }, [token]);
 
     const fetchUserDetails = async () => {
-        if (currentUser !== null){
+        if (currentUser !== undefined){
             const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
 
@@ -67,10 +84,10 @@ const Nav = ({currentUser}) => {
                     </span>
                 </Dropdown.Header>
                 <Dropdown.Item>
-                    Settings
+                    <Link to="/profile">Settings</Link>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout} href="/">
+                <Dropdown.Item onClick={handleLogout}>
                     Sign out
                 </Dropdown.Item>
                 </Dropdown>
