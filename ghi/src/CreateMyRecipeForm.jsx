@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Label } from "flowbite-react";
+import { Button, Card, Label } from "flowbite-react";
 import axios from "axios";
 
 function CreateMyRecipeForm({ currentUser }) {
@@ -75,9 +75,9 @@ function CreateMyRecipeForm({ currentUser }) {
   }
 
   return (
-    <>
-      <div className="flex w-full">
-        <div className="w-full flex items-center justify-center mt-20">
+    <div className="flex w-full">
+      <div className="w-full flex items-center justify-center mt-10">
+        <Card className="p-4">
           <div className="flex-col">
             <div>
               <div className="mb-6 block">
@@ -169,14 +169,14 @@ function CreateMyRecipeForm({ currentUser }) {
                   )}
                 </div>
               </div>
-              <Button className="mb-10 mt-5" color="light" type="submit">
+              <Button className="mt-5" color="light" type="submit">
                 Create Recipe
               </Button>
             </form>
           </div>
-        </div>
+        </Card>
       </div>
-    </>
+    </div>
   );
 }
 
