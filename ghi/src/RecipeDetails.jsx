@@ -4,6 +4,7 @@ import axios from "axios";
 
 const RecipeDetails = ({ currentUser }) => {
   const [recipe, setRecipe] = useState("");
+  const [extendedIngredientsData, setExtendedIngredientsData] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
@@ -16,6 +17,7 @@ const RecipeDetails = ({ currentUser }) => {
         const data = response.data;
         console.log("Recipe Info Response:", data);
         setRecipe(data.recipe);
+        setExtendedIngredientsData(data.recipe.extendedIngredientsData)
       } catch (error) {
         console.error(error);
       }
@@ -24,39 +26,83 @@ const RecipeDetails = ({ currentUser }) => {
     fetchRecipe();
   }, [id]);
 
-  const handleSaveRecipe = async () => {
-    try {
-      if (!currentUser) {
-        console.log("No current user found");
-        return;
-      }
-      console.log("currentUser:", currentUser);
-      console.log("currentUser.id:", currentUser.id);
-      // Extract the relevant recipe data that you want to save
-      const { title, image } = recipe;
-      console.log("Recipe Title:", title);
-      console.log("Recipe Diets:", recipe.diets);
-      console.log("Recipe Image:", image);
+const handleSaveRecipe = async () => {
+  try {
+    if (!currentUser) {
+      console.log("No current user found");
+      return;
+    }
 
-      // Send a request to your backend API to save the recipe
-      const response = await axios.post(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+    const { title, image, diets, summary, analyzedInstructions } = recipe;
+
+    const steps = analyzedInstructions[0].steps.map(
+      (step) => `${step.number} - ${step.step}`
+    );
+    console.log("steps:", steps);
+    const savedRecipe = {
+      creator_id: currentUser.id,
+      recipe_name: title,
+      diet: diets[0],
+      img: image,
+      description: summary,
+      steps: steps.join("\n"),
+    };
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+      savedRecipe
+    );
+
+    console.log("Save Recipe Response:", response.data);
+
+    const recipeId = response.data.id;
+    const extendedIngredientsData = recipe.extendedIngredients
+
+    const ingredientPromises = extendedIngredientsData.map(async (ingredientData) => {
+      const { id, name } = ingredientData;
+      console.log("ingredientPromises:", ingredientPromises)
+
+      // Check if the ingredient already exists in the ingredients table
+      let ingredientId = null;
+      const existingIngredient = await axios.get(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/?ingredient_name=${name}`
+      );
+
+      if (existingIngredient.data.length > 0) {
+        ingredientId = existingIngredient.data[0].id;
+      } else {
+        // Create a new ingredient if it doesn't exist
+        const newIngredientResponse = await axios.post(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/`,
+          {
+            ingredient_name: name,
+          }
+        );
+
+        ingredientId = newIngredientResponse.data.id;
+      }
+
+      // Create the recipe_ingredient entry
+      const recipeIngredientResponse = await axios.post(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe-ingredients/`,
         {
-          creator_id: currentUser.id,
-          recipe_name: title,
-          diet: recipe.diets[0],
-          img: image,
+          recipe_id: recipeId,
+          measurement_id: ingredientData.id,
+          measurement_qty_id: ingredientData.amount,
+          ingredient_id: ingredientId,
         }
       );
 
-      console.log("creator_id:", currentUser.id);
+      console.log("Saved Recipe Ingredient:", recipeIngredientResponse.data);
+    });
 
-      // Handle the response as needed
-      console.log("Save Recipe Response:", response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    await Promise.all(ingredientPromises);
+
+    console.log("All recipe ingredients saved successfully!");
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   if (!recipe) {
     return <div>Loading...</div>;

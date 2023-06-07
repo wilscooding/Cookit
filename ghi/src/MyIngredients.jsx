@@ -76,7 +76,7 @@ const MyIngredients = ({ currentUser }) => {
         );
         setIngredients(processedIngredients);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
   };
@@ -153,82 +153,59 @@ const MyIngredients = ({ currentUser }) => {
     });
   };
 
-// const handleUpdateIngredient = async () => {
-//   try {
-//     const selectedQTY = measurementQtys.find(
-//       (qty) => qty.id === updatedIngredient.measurement_qty_id
-//     );
-//     const selectedUnit = measurementUnits.find(
-//       (unit) => unit.id === updatedIngredient.measurement_id
-//     );
+  const handleUpdateIngredient = async () => {
+    try {
+      const selectedQTY = measurementQtys.find(
+        (qty) => qty.id === Number(updatedIngredient.measurement_qty_id)
+      );
+      const selectedUnit = measurementUnits.find(
+        (unit) => unit.id === Number(updatedIngredient.measurement_id)
+      );
 
-//     const updatedData = {
-//       ingredient_name: updatedIngredient.ingredient_name,
-//       measurement_qty_id: selectedQTY ? selectedQTY.id : null,
-//       measurement_id: selectedUnit ? selectedUnit.id : null,
-//       notes: updatedIngredient.notes,
-//     };
+      const updatedData = {
+        user_id: currentUser.id,
+        ingredient_name: updatedIngredient.ingredient_name,
+        measurement_qty_id: selectedQTY ? String(selectedQTY.id) : null,
+        measurement_id: selectedUnit ? String(selectedUnit.id) : null,
+        notes: updatedIngredient.notes,
+      };
 
-//     const response = await axios.put(
-//       `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
-//       updatedData
-//     );
+      const response = await axios.put(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
+        updatedData
+      );
 
-//     console.log("response:", response);
-//     const updatedIngredientData = response.data;
-//     const measurementQtyDescription = await getMeasurementQtyDescription(
-//       updatedIngredientData.measurement_qty_id
-//     );
-//     const measurementUnitDescription = await getMeasurementUnitDescription(
-//       updatedIngredientData.measurement_id
-//     );
-//     const updatedIngredientWithDescriptions = {
-//       ...updatedIngredientData,
-//       measurement_qty_description: measurementQtyDescription,
-//       measurement_unit_description: measurementUnitDescription,
-//     };
+      const updatedIngredientData = response.data;
+      const measurementQtyDescription = await getMeasurementQtyDescription(
+        updatedIngredientData.measurement_qty_id
+      );
+      const measurementUnitDescription = await getMeasurementUnitDescription(
+        updatedIngredientData.measurement_id
+      );
+      const updatedIngredientWithDescriptions = {
+        ...updatedIngredientData,
+        measurement_qty_description: measurementQtyDescription,
+        measurement_unit_description: measurementUnitDescription,
+      };
 
-//     setIngredients((prevIngredients) =>
-//       prevIngredients.map((ingredient) =>
-//         ingredient.id === selectedIngredient.id
-//           ? updatedIngredientWithDescriptions
-//           : ingredient
-//       )
-//     );
-//     setSelectedIngredient(null);
-//     setUpdatedIngredient({
-//       ingredient_name: "",
-//       measurement_qty_id: "",
-//       measurement_id: "",
-//       notes: "",
-//     });
-//   } catch (error) {
-//     console.error(error);
-//   }
-// };
-
-const handleUpdateIngredient = async () => {
-  try {
-    const response = await axios.put(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
-      updatedIngredient
-    );
-    setIngredients((prevIngredients) =>
-      prevIngredients.map((ingredient) =>
-        ingredient.id === selectedIngredient.id ? response.data : ingredient
-      )
-    );
-    setSelectedIngredient(null);
-    setUpdatedIngredient({
-      ingredient_name: "",
-      measurement_qty_id: "",
-      measurement_id: "",
-      notes: "",
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
+      setIngredients((prevIngredients) =>
+        prevIngredients.map((ingredient) =>
+          ingredient.id === selectedIngredient.id
+            ? updatedIngredientWithDescriptions
+            : ingredient
+        )
+      );
+      setSelectedIngredient(null);
+      setUpdatedIngredient({
+        ingredient_name: "",
+        measurement_qty_id: "",
+        measurement_id: "",
+        notes: "",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const handleDeleteIngredient = async (id) => {
     try {
@@ -392,7 +369,6 @@ const handleUpdateIngredient = async () => {
     </div>
   );
 };
-
 
 export { getMeasurementQtyDescription, getMeasurementUnitDescription };
 export default MyIngredients;
