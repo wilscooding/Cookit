@@ -1,14 +1,21 @@
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Button, Label } from "flowbite-react";
+import { useParams } from "react-router-dom";
+import { Button, Card, Label } from "flowbite-react";
 import axios from "axios";
 
-function CreateRecipeForm() {
+function EditMyRecipeForm({ currentUser }) {
+  const { id } = useParams();
+
   const [creatorId, setCreatorId] = useState(null);
   const [recipeName, setRecipeName] = useState("");
   const [description, setDescription] = useState("");
   const [steps, setSteps] = useState("");
   const [diet, setDiet] = useState("");
   const [image, setImage] = useState("");
+
+  const navigate = useNavigate();
+
   const dietOptions = [
     "glutenFree",
     "ketogenic",
@@ -23,23 +30,10 @@ function CreateRecipeForm() {
     "whole30",
   ];
 
-  async function fetchCreatorId() {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`,
-      { withCredentials: true }
-    );
-    const data = response.data;
-    setCreatorId(data.user.id);
-  }
-
-  useEffect(() => {
-    fetchCreatorId();
-  }, []);
-
   async function handleSubmit(event) {
     event.preventDefault();
-    const response = await axios.post(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+    const response = await axios.put(
+      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${id}`,
       {
         creator_id: creatorId,
         recipe_name: recipeName,
@@ -51,11 +45,7 @@ function CreateRecipeForm() {
     );
 
     if (response.statusText === "OK") {
-      setRecipeName("");
-      setDiet("");
-      setImage("");
-      setDescription("");
-      setSteps("");
+      return navigate(`/myrecipes/${id}`);
     }
   }
 
@@ -84,14 +74,43 @@ function CreateRecipeForm() {
     setSteps(value);
   }
 
+  async function fetchRecipe() {
+    const response = await axios.get(
+      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${id}`,
+      { withCredentials: true }
+    );
+
+    if (response.statusText === "OK") {
+      const data = response.data;
+      setCreatorId(data.creator_id);
+      setRecipeName(data.recipe_name);
+      setDiet(data.diet);
+      setImage(data.img);
+      setDescription(data.description);
+      setSteps(data.steps);
+    }
+  }
+
+  useEffect(() => {
+    fetchRecipe();
+  }, []);
+
+  if (!currentUser) {
+    return <div>Must be signed in to edit recipes</div>;
+  }
+
+  if (creatorId !== currentUser.id) {
+    return <div>You are not allowed to edit this recipe!</div>;
+  }
+
   return (
-    <>
-      <div className="flex w-full">
-        <div className="w-full flex items-center justify-center mt-20">
+    <div className="flex w-full">
+      <div className="w-full flex items-center justify-center mt-10">
+        <Card className="p-4">
           <div className="flex-col">
             <div>
               <div className="mb-6 block">
-                <h1 className="text-4xl">Create A Recipe</h1>
+                <h1 className="text-4xl">Edit Your Recipe</h1>
               </div>
             </div>
             <form
@@ -179,15 +198,15 @@ function CreateRecipeForm() {
                   )}
                 </div>
               </div>
-              <Button className="mb-10 mt-5" color="light" type="submit">
-                Create Recipe
+              <Button className="mt-5" color="light" type="submit">
+                Edit Recipe
               </Button>
             </form>
           </div>
-        </div>
+        </Card>
       </div>
-    </>
+    </div>
   );
 }
 
-export default CreateRecipeForm;
+export default EditMyRecipeForm;

@@ -2,54 +2,61 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import icons from "./constants/icons";
-
-
-const Nav = ({currentUser}) => {
-    const { logout } = useToken("");
+import { Link } from "react-router-dom";
+const Nav = () => {
+    const { fetchWithCookie } = useToken();
     const { token } = useToken();
-    const [userDetails, setUserDetails] = useState();
+    const [ currentUser, setUser] = useState();
+    const [ userDetails, setUserDetails] = useState();
     const navigate = useNavigate();
-
-    const fetchUserDetails = async () => {
-        if (currentUser !== null){
-            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
-            const userResponse = await fetch(userUrl);
-
-            if (userResponse.ok){
-                const userDetails = await userResponse.json();
-
-                setUserDetails(
-                    {
-                        "first": userDetails.first,
-                        "last": userDetails.last,
-                        "avatar": userDetails.avatar,
-                        "email": userDetails.email,
-                        "username": userDetails.username,
-                }
-                );
-            }
+    const { logout } = useToken();
+    const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
         }
     }
-
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
+    const fetchUserDetails = async () => {
+        if (currentUser !== undefined){
+            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
+            const userResponse = await fetch(userUrl);
+      if (userResponse.ok) {
+        const userDetails = await userResponse.json();
+        setUserDetails({
+          first: userDetails.first,
+          last: userDetails.last,
+          avatar: userDetails.avatar,
+          email: userDetails.email,
+          username: userDetails.username,
+        });
+      }
+    }
+  };
     useEffect(() => {
         fetchUserDetails();
     }, [currentUser])
-
     const handleLogout = (event) => {
         logout();
         navigate("/");
     }
-
     if (token) {
         return (
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
                     <img
-                    alt="CookIt Logo"
-                    className="mr-2 h-8 sm:h-9"
-                    src={icons.CookIt}
+                    alt="Flowbite React Logo"
+                    className="mr-3 h-6 sm:h-9"
+                    src="https://www.flowbite-react.com/favicon.svg"
                     />
+                    <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+                    CookIt
+                    </span>
                 </Navbar.Brand>
             <div className="flex md:order-2">
                 <Dropdown
@@ -65,10 +72,10 @@ const Nav = ({currentUser}) => {
                     </span>
                 </Dropdown.Header>
                 <Dropdown.Item>
-                    Settings
+                    <Link to="/profile">Settings</Link>
                 </Dropdown.Item>
                 <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout} href="/">
+                <Dropdown.Item onClick={handleLogout}>
                     Sign out
                 </Dropdown.Item>
                 </Dropdown>
@@ -99,6 +106,4 @@ const Nav = ({currentUser}) => {
         )
     }
 }
-
-
 export default Nav

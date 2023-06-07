@@ -5,13 +5,10 @@ import { Card, Button } from "flowbite-react";
 import icons from "./constants/icons";
 
 const LoginForm = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const { login } = useToken("");
-	const navigate = useNavigate();
-  const [isLoading, setLoading] = useState(true)
-
-	const username = email;
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { login } = useToken("");
+  const username = email;
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
