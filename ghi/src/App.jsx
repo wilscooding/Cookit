@@ -33,7 +33,7 @@ function App(props) {
     };
 
     return (
-		<div>
+		<div className="bg-amber-400/50 min-h-screen pb-10">
 			<BrowserRouter>
 				<AuthProvider baseUrl={baseUrl}>
 					<Nav />
