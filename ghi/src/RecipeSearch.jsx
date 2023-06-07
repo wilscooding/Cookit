@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { Card } from "flowbite-react";
 
 const RecipeSearch = ({ onRecipeSelect }) => {
 	const [query, setQuery] = useState("");
@@ -69,32 +70,40 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 					</div>
 				</div>
 			) : (
-				<div className="bg-yellow-200 p-4">
-					<input
-						type="text"
-						value={query}
-						onChange={(e) => setQuery(e.target.value)}
-						className="mb-2 px-2 py-1 border border-gray-300"
-					/>
-					<button
-						onClick={searchRecipes}
-						className="px-4 py-2 bg-orange-500 text-white"
-					>
-						Search
-					</button>
-					<ul className="mt-4">
-						{recipes.map((recipe) => (
-							<li key={recipe.id} className="mb-4">
-								<Link
-									to={`/recipes/${recipe.id}`}
-									className="text-blue-600 hover:underline"
-								>
-									{recipe.title}
-								</Link>
-								<img src={recipe.image} alt={recipe.title} className="mt-2" />
-							</li>
-						))}
-					</ul>
+				<div className="flex w-full h-screen">
+					<div className="w-full flex justify-center">
+						<div className="bg-yellow-200 p-4">
+							<input
+								type="text"
+								value={query}
+								onChange={(e) => setQuery(e.target.value)}
+								className="mb-2 px-2 py-1 border border-gray-300"
+							/>
+							<button
+								onClick={searchRecipes}
+								className="px-4 py-2 bg-orange-500 text-white"
+							>
+								Search
+							</button>
+							<ul className="mt-4">
+								{recipes.map((recipe) => (
+									<li key={recipe.id} className="mb-4">
+										<Link
+											to={`/recipes/${recipe.id}`}
+											className="text-blue-600 hover:underline"
+										>
+											{recipe.title}
+										</Link>
+										<img
+											src={recipe.image}
+											alt={recipe.title}
+											className="mt-2"
+										/>
+									</li>
+								))}
+							</ul>
+						</div>
+					</div>
 				</div>
 			)}
 		</>

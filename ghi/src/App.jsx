@@ -79,7 +79,7 @@ function App(props) {
 						<Route
 							path="/home"
 							currentUser={userData}
-							element={<Dashboard />}
+							element={<Dashboard currentUser={userData} />}
 						/>
 						<Route
 							path="/grocerylist"
