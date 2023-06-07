@@ -36,15 +36,7 @@ const Profile = () => {
                 const userDetails = await userResponse.json();
                 setLoading(false);
 
-                setUserDetails(
-                    {
-                        "first": userDetails.first,
-                        "last": userDetails.last,
-                        "avatar": userDetails.avatar,
-                        "email": userDetails.email,
-                        "username": userDetails.username,
-                }
-                );
+                setUserDetails(userDetails);
             }
         }
     }
