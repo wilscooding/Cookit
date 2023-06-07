@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Button } from "flowbite-react";
 
 const MyRecipes = ({ currentUser }) => {
   const [recipes, setRecipes] = useState([]);
@@ -43,6 +44,11 @@ const MyRecipes = ({ currentUser }) => {
           </li>
         ))}
       </ul>
+      <Link to={"new"}>
+        <Button className="mb-10 mt-5" color="light">
+          Create New Recipe
+        </Button>
+      </Link>
     </div>
   );
 };
