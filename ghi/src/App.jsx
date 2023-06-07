@@ -13,10 +13,12 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import Dashboard from "./Dashboard.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
+import GroceryList from "./GroceryList.jsx";
+import CreateMyRecipeForm from "./CreateMyRecipeForm.jsx";
+import EditMyRecipeForm from "./EditMyRecipeForm.jsx";
+import MyRecipeDetails from "./MyRecipeDetails.jsx";
 import Profile from "./Profile.jsx";
 import EditProfile from "./EditProfile.jsx";
-import GroceryList from "./GroceryList.jsx";
-
 
 
 function App(props) {
