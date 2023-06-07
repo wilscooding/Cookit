@@ -15,7 +15,7 @@ from db import (
     MyIngredientIn,
     MyIngredientOut,
     GroceryListItemIn,
-    GroceryListItemOut
+    GroceryListItemOut,
 )
 
 pool = ConnectionPool(conninfo=os.environ["DATABASE_URL"])
@@ -89,10 +89,7 @@ class UserQueries:
     def create_user(self, data, hashed_password: str):
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [
-                    data.email,
-                    hashed_password
-                ]
+                params = [data.email, hashed_password]
                 cur.execute(
                     """
                     INSERT INTO users (email, hashed_password)
@@ -182,13 +179,19 @@ class RecipeQueries:
     def create_recipes(self, data) -> RecipeOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [data.creator_id,
-                          data.recipe_name, data.diet, data.img]
+                params = [
+                    data.creator_id,
+                    data.recipe_name,
+                    data.diet,
+                    data.img,
+                    data.description,
+                    data.steps,
+                ]
                 cur.execute(
                     """
-                    INSERT INTO recipes (creator_id, recipe_name, diet, img)
-                    VALUES (%s, %s, %s, %s)
-                    RETURNING id, recipe_name, diet, img
+                    INSERT INTO recipes (creator_id, recipe_name, diet, img, description, steps)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                    RETURNING id, recipe_name, diet, img, description, steps, creator_id
                     """,
                     params,
                 )
@@ -200,6 +203,9 @@ class RecipeQueries:
                         "recipe_name": record[1],
                         "diet": record[2],
                         "img": record[3],
+                        "description": record[4],
+                        "steps": record[5],
+                        "creator_id": record[6],
                     }
 
                     return RecipeOut(**recipe_dict)
@@ -218,13 +224,20 @@ class RecipeQueries:
     def update_recipe(self, recipe_id: int, data: RecipeIn) -> RecipeOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [data.recipe_name, data.diet, data.img, recipe_id]
+                params = [
+                    data.recipe_name,
+                    data.diet,
+                    data.img,
+                    data.description,
+                    data.steps,
+                    recipe_id,
+                ]
                 cur.execute(
                     """
                     UPDATE recipes
-                    SET recipe_name = %s, diet = %s, img = %s
+                    SET recipe_name = %s, diet = %s, img = %s, description = %s, steps = %s
                     WHERE id = %s
-                    RETURNING id, recipe_name, diet, img
+                    RETURNING id, recipe_name, diet, img, description, steps, creator_id
                     """,
                     params,
                 )
@@ -235,6 +248,9 @@ class RecipeQueries:
                         "recipe_name": record[1],
                         "diet": record[2],
                         "img": record[3],
+                        "description": record[4],
+                        "steps": record[5],
+                        "creator_id": record[6],
                     }
 
                     return RecipeOut(**recipe_dict)
@@ -244,7 +260,7 @@ class RecipeQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_name, diet, img
+                    SELECT id, recipe_name, diet, img, description, steps, creator_id
                     FROM recipes
                     WHERE id = %s
                     """,
@@ -258,18 +274,23 @@ class RecipeQueries:
                         "recipe_name": record[1],
                         "diet": record[2],
                         "img": record[3],
+                        "description": record[4],
+                        "steps": record[5],
+                        "creator_id": record[6],
                     }
 
                     return RecipeOut(**recipe_dict)
 
-    def save_recipe_from_api(self, recipe_data: dict, user_id: int) -> RecipeOut:
+    def save_recipe_from_api(
+        self, recipe_data: dict, user_id: int
+    ) -> RecipeOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [
                     user_id,
                     recipe_data["recipe_name"],
                     recipe_data["diet"],
-                    recipe_data["img"]
+                    recipe_data["img"],
                 ]
                 cur.execute(
                     """
@@ -321,7 +342,6 @@ class IngredientQueries:
                     SELECT id, ingredient_name
                     FROM ingredients
                     """,
-
                 )
                 records = cur.fetchall()
                 if records:
@@ -353,7 +373,9 @@ class IngredientQueries:
                     }
                     return IngredientOut(**ingredient_dict)
 
-    def update_ingredient(self, id: int, ingredient: IngredientIn) -> IngredientOut:
+    def update_ingredient(
+        self, id: int, ingredient: IngredientIn
+    ) -> IngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [ingredient.ingredient_name, id]
@@ -388,8 +410,7 @@ class IngredientQueries:
                     return True
                 return False
 
-
-# class MeasurementUnitQueries:
+    # class MeasurementUnitQueries:
     def get_measurement_units(self):
         with pool.connection() as conn:
             with conn.cursor() as cur:
@@ -434,7 +455,9 @@ class IngredientQueries:
 
 
 class MeasurementQtyQueries:
-    def create_measurement_qty(self, measurement_qty: MeasurementQtyIn) -> MeasurementQtyOut:
+    def create_measurement_qty(
+        self, measurement_qty: MeasurementQtyIn
+    ) -> MeasurementQtyOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -472,7 +495,8 @@ class MeasurementQtyQueries:
                         "qty_amount": record[1],
                     }
                     measurement_qty_list.append(
-                        MeasurementQtyOut(**measurement_qty_dict))
+                        MeasurementQtyOut(**measurement_qty_dict)
+                    )
                 return measurement_qty_list
 
     def get_measurement_qty_by_id(self, id: int) -> MeasurementQtyOut:
@@ -494,7 +518,9 @@ class MeasurementQtyQueries:
                     }
                     return MeasurementQtyOut(**measurement_qty_dict)
 
-    def update_measurement_qty(self, id: int, measurement_qty: MeasurementQtyIn) -> MeasurementQtyOut:
+    def update_measurement_qty(
+        self, id: int, measurement_qty: MeasurementQtyIn
+    ) -> MeasurementQtyOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -504,7 +530,10 @@ class MeasurementQtyQueries:
                     WHERE id = %s
                     RETURNING id, qty_amount
                     """,
-                    (measurement_qty.qty_amount, id,),
+                    (
+                        measurement_qty.qty_amount,
+                        id,
+                    ),
                 )
                 record = cur.fetchone()
                 if record:
@@ -531,7 +560,9 @@ class MeasurementQtyQueries:
 
 
 class MeasurementUnitQueries:
-    def create_measurement_unit(self, measurement_unit: MeasurementUnitIn) -> MeasurementUnitOut:
+    def create_measurement_unit(
+        self, measurement_unit: MeasurementUnitIn
+    ) -> MeasurementUnitOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -567,7 +598,8 @@ class MeasurementUnitQueries:
                         "measurement_description": record[1],
                     }
                     measurement_units_list.append(
-                        MeasurementUnitOut(**measurement_unit_dict))
+                        MeasurementUnitOut(**measurement_unit_dict)
+                    )
                 return measurement_units_list
 
     def get_measurement_unit_by_id(self, id: int) -> MeasurementUnitOut:
@@ -590,7 +622,9 @@ class MeasurementUnitQueries:
 
                     return MeasurementUnitOut(**measurement_unit_dict)
 
-    def update_measurement_unit(self, id: int, measurement_unit: MeasurementUnitIn) -> MeasurementUnitOut:
+    def update_measurement_unit(
+        self, id: int, measurement_unit: MeasurementUnitIn
+    ) -> MeasurementUnitOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -627,13 +661,20 @@ class MeasurementUnitQueries:
 
 class RecipeIngredientQueries:
     def create_recipe_ingredient(
-        self, recipe_id: int, measurement_id: int, measurement_qty_id: int,
+        self,
+        recipe_id: int,
+        measurement_id: int,
+        measurement_qty_id: int,
         ingredient_id: Optional[int],
     ) -> RecipeIngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [recipe_id, measurement_id,
-                          measurement_qty_id, ingredient_id]
+                params = [
+                    recipe_id,
+                    measurement_id,
+                    measurement_qty_id,
+                    ingredient_id,
+                ]
                 cur.execute(
                     """
                     INSERT INTO recipe_ingredients (recipe_id, measurement_id, measurement_qty_id, ingredient_id)
@@ -675,7 +716,9 @@ class RecipeIngredientQueries:
                     }
                     return RecipeIngredientOut(**recipe_ingredient_dict)
 
-    def get_recipe_ingredients(self, recipe_id: int) -> List[RecipeIngredientOut]:
+    def get_recipe_ingredients(
+        self, recipe_id: int
+    ) -> List[RecipeIngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -703,17 +746,21 @@ class RecipeIngredientQueries:
                 return recipe_ingredient_list
 
     def update_recipe_ingredient(
-            self,
-            id: int,
-            recipe_id: int,
-            measurement_id: int,
-            measurement_qty_id: int,
-            ingredient_id: int,
+        self,
+        id: int,
+        recipe_id: int,
+        measurement_id: int,
+        measurement_qty_id: int,
+        ingredient_id: int,
     ) -> RecipeIngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
-                params = [recipe_id, measurement_id,
-                          measurement_qty_id, ingredient_id]
+                params = [
+                    recipe_id,
+                    measurement_id,
+                    measurement_qty_id,
+                    ingredient_id,
+                ]
                 cur.execute(
                     """
                     UPDATE recipe_ingredients
@@ -770,7 +817,7 @@ class MyIngredientQueries:
 
                 return results
 
-    def create_my_ingredient(self, data:MyIngredientIn) -> MyIngredientOut:
+    def create_my_ingredient(self, data: MyIngredientIn) -> MyIngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [
@@ -813,7 +860,9 @@ class MyIngredientQueries:
                     [ingredient_id],
                 )
 
-    def update_my_ingredient(self, ingredient_id: int, data: MyIngredientIn) -> MyIngredientOut:
+    def update_my_ingredient(
+        self, ingredient_id: int, data: MyIngredientIn
+    ) -> MyIngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [
@@ -846,7 +895,9 @@ class MyIngredientQueries:
 
                     return MyIngredientOut(**ingredient_dict)
 
-    def get_my_ingredient_by_id(self, ingredient_id: int) -> Optional[MyIngredientOut]:
+    def get_my_ingredient_by_id(
+        self, ingredient_id: int
+    ) -> Optional[MyIngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
@@ -894,7 +945,9 @@ class GroceryListQueries:
 
                 return results
 
-    def add_to_grocery_list(self, data: GroceryListItemIn) -> GroceryListItemOut:
+    def add_to_grocery_list(
+        self, data: GroceryListItemIn
+    ) -> GroceryListItemOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [
@@ -937,7 +990,9 @@ class GroceryListQueries:
                     [item_id],
                 )
 
-    def update_grocery_list_item(self, item_id: int, data: GroceryListItemIn) -> GroceryListItemOut:
+    def update_grocery_list_item(
+        self, item_id: int, data: GroceryListItemIn
+    ) -> GroceryListItemOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 params = [
@@ -970,7 +1025,9 @@ class GroceryListQueries:
 
                     return GroceryListItemOut(**item_dict)
 
-    def get_grocery_list_item_by_id(self, item_id: int) -> Optional[GroceryListItemOut]:
+    def get_grocery_list_item_by_id(
+        self, item_id: int
+    ) -> Optional[GroceryListItemOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
