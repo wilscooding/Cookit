@@ -1,9 +1,10 @@
-import LoginForm from "./LoginForm";
-import TokenCard from "./TokenCard";
+// import LoginForm from "./LoginForm";
+// import TokenCard from "./TokenCard";
 import useToken from "@galvanize-inc/jwtdown-for-react";
-import UserDataCard from "./UserDataCard";
+// import UserDataCard from "./UserDataCard";
 import RecipeSearch from "./RecipeSearch.jsx";
 import { useState } from "react";
+import SignupForm from "./SignUpForm";
 
 export const Main = () => {
   const { token } = useToken();
@@ -19,17 +20,15 @@ export const Main = () => {
     setSelectedRecipeId(id);
   };
 
-  
+
   return (
     <div>
-      {!token && <LoginForm />}
+      {!token && <SignupForm />}
       {token && <RecipeSearch
                   onSearch={handleSearch}
                   onSelectRecipe={handleRecipeSelect}
                   searchQuery={searchQuery}
                 />}
-
-      {/* <UserDataCard /> */}
     </div>
   );
 };
