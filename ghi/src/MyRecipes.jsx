@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import { Button, Card } from "flowbite-react";
 
 const MyRecipes = () => {
     const [recipes, setRecipes] = useState([]);
@@ -45,24 +46,39 @@ const MyRecipes = () => {
         fetchRecipes();
     }, [currentUser]);
 
-    return (
-        <div>
-            <h1>My Recipes</h1>
-            <ul>
-                {recipes.map((recipe) => (
-                    <li key={recipe.id}>
-                        <div>
-                            <Link to={recipe.id.toString()}>
-                                <p className="text-blue-600">{recipe.recipe_name}</p>
-                            </Link>
-                            <p>Diet: {recipe.diet}</p>
-                        </div>
-                        <img src={recipe.img} alt={recipe.recipe_name} width="100px" />
-                    </li>
-                ))}
-            </ul>
+  return (
+    <div className="flex w-full">
+      <div className="w-full flex items-center justify-center">
+        <div className="w-full flex-col">
+          <div className="w-full flex items-center justify-end">
+            <Link to={"new"} className="mr-10">
+              <Button className="mt-5" color="light">
+                Create New Recipe
+              </Button>
+            </Link>
+          </div>
+          <div className="w-full flex items-center justify-center">
+            <div className="flex-col text-center">
+              {recipes.map((recipe) => (
+                <Card key={recipe.id} className="mb-5 p-2">
+                  <img
+                    src={recipe.img}
+                    alt={recipe.recipe_name}
+                    width="250px"
+                    className="m-auto"
+                  />
+                  <Link to={recipe.id.toString()}>
+                    <p className="text-blue-600">{recipe.recipe_name}</p>
+                  </Link>
+                  <p>{recipe.description}</p>
+                </Card>
+              ))}
+            </div>
+          </div>
         </div>
-    );
-    };
+      </div>
+    </div>
+  );
+};
 
 export default MyRecipes;
