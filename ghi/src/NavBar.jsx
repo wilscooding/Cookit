@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-
 const Nav = () => {
     const { fetchWithCookie } = useToken();
     const { token } = useToken();
@@ -12,7 +11,6 @@ const Nav = () => {
     const [ userDetails, setUserDetails] = useState();
     const navigate = useNavigate();
     const { logout } = useToken();
-
     const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
             `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
@@ -31,10 +29,8 @@ const Nav = () => {
         if (currentUser !== undefined){
             const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
-
       if (userResponse.ok) {
         const userDetails = await userResponse.json();
-
         setUserDetails({
           first: userDetails.first,
           last: userDetails.last,
@@ -49,12 +45,10 @@ const Nav = () => {
     useEffect(() => {
         fetchUserDetails();
     }, [currentUser])
-
     const handleLogout = (event) => {
         logout();
         navigate("/");
     }
-
     if (token) {
         return (
             <Navbar fluid rounded>
@@ -92,7 +86,7 @@ const Nav = () => {
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                <Navbar.Link active href="/">
+                <Navbar.Link active href="/home">
                     Home
                 </Navbar.Link>
                 <Navbar.Link href="/myrecipes">
@@ -116,6 +110,4 @@ const Nav = () => {
         )
     }
 }
-
-
 export default Nav

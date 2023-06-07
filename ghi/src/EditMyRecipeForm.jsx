@@ -3,10 +3,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Button, Card, Label } from "flowbite-react";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
-function EditMyRecipeForm({ currentUser }) {
+function EditMyRecipeForm() {
   const { id } = useParams();
-
+  const { fetchWithCookie } = useToken();
+  const { token } = useToken();
+  const [ currentUser, setUser] = useState();
   const [creatorId, setCreatorId] = useState(null);
   const [recipeName, setRecipeName] = useState("");
   const [description, setDescription] = useState("");
@@ -29,6 +32,20 @@ function EditMyRecipeForm({ currentUser }) {
     "vegetarian",
     "whole30",
   ];
+
+  const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+  }
+
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
   async function handleSubmit(event) {
     event.preventDefault();

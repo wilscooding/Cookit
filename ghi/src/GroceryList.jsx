@@ -4,9 +4,12 @@ import {
 	getMeasurementQtyDescription,
 	getMeasurementUnitDescription,
 } from "./MyIngredients";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
-const GroceryList = ({ currentUser }) => {
-	console.log(currentUser);
+const GroceryList = () => {
+	const { fetchWithCookie } = useToken();
+  	const { token } = useToken();
+  	const [ currentUser, setUser] = useState();
 	const [items, setItems] = useState([]);
 	const [newItem, setNewItem] = useState({
 		ingredient_name: "",
@@ -16,6 +19,20 @@ const GroceryList = ({ currentUser }) => {
 	});
 	const [measurementQtys, setMeasurementQtys] = useState([]);
 	const [measurementUnits, setMeasurementUnits] = useState([]);
+
+	const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+  }
+
+    useEffect(() => {
+      handleFetchWithCookie();
+    }, [token]);
 
 	const fetchMeasurementQtys = async () => {
 		try {
@@ -90,7 +107,7 @@ const GroceryList = ({ currentUser }) => {
 		}
 	};
 
-	console.log(items);
+	// console.log(items);
 	useEffect(() => {
 		const fetchItems = async () => {
 			if (currentUser && currentUser.id) {
@@ -118,7 +135,7 @@ const GroceryList = ({ currentUser }) => {
 						})
 					);
 					setItems(processeditems);
-					console.log("processeditems:", processeditems);
+					// console.log("processeditems:", processeditems);
 				} catch (error) {
 					console.log(error);
 				}

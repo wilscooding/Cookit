@@ -23,9 +23,9 @@ const EditProfile = () => {
         }
     }
 
-    useEffect(() => {
-            handleFetchWithCookie();
-    }, [token]);
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
     const fetchUserDetails = async () => {
         if (currentUser !== undefined){
@@ -146,12 +146,10 @@ const EditProfile = () => {
                     </Card>
                 </div>
             </div>
-
-            )
-            }
-
-        </>
-    )
-}
+        )
+    }
+    </>
+  );
+};
 
 export default EditProfile;
