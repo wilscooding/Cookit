@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Label } from "flowbite-react";
+import { Button, Card, Label } from "flowbite-react";
 import axios from "axios";
 
 function EditMyRecipeForm({ currentUser }) {
@@ -104,13 +104,13 @@ function EditMyRecipeForm({ currentUser }) {
   }
 
   return (
-    <>
-      <div className="flex w-full">
-        <div className="w-full flex items-center justify-center mt-20">
+    <div className="flex w-full">
+      <div className="w-full flex items-center justify-center mt-10">
+        <Card className="p-4">
           <div className="flex-col">
             <div>
               <div className="mb-6 block">
-                <h1 className="text-4xl">Edit A Recipe</h1>
+                <h1 className="text-4xl">Edit Your Recipe</h1>
               </div>
             </div>
             <form
@@ -198,14 +198,14 @@ function EditMyRecipeForm({ currentUser }) {
                   )}
                 </div>
               </div>
-              <Button className="mb-10 mt-5" color="light" type="submit">
+              <Button className="mt-5" color="light" type="submit">
                 Edit Recipe
               </Button>
             </form>
           </div>
-        </div>
+        </Card>
       </div>
-    </>
+    </div>
   );
 }
 

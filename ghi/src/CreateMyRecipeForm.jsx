@@ -169,7 +169,7 @@ function CreateMyRecipeForm({ currentUser }) {
                   )}
                 </div>
               </div>
-              <Button className="mb-10 mt-5" color="light" type="submit">
+              <Button className="mt-5" color="light" type="submit">
                 Create Recipe
               </Button>
             </form>
