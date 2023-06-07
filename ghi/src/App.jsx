@@ -35,15 +35,19 @@ function App(props) {
 
   useEffect(() => {
     const handleUserFetch = async () => {
-      const data = await fetchWithCookie(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-      );
-      if (data !== undefined) {
+      try {
+        const data = await fetchWithCookie(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
         const userData = data.user;
-        console.log("userData:", userData);
+        // console.log("userData:", userData);
         setUserData(userData);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        // Handle the error as needed (e.g., show an error message)
       }
     };
+
     handleUserFetch();
   }, []);
 
