@@ -20,7 +20,6 @@ const Nav = () => {
             setUser(currentUser);
         }
     }
-
   useEffect(() => {
     handleFetchWithCookie();
   }, [token]);
