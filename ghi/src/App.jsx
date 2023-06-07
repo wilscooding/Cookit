@@ -15,6 +15,7 @@ import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
 import Profile from "./Profile.jsx";
 import EditProfile from "./EditProfile.jsx";
+import GroceryList from "./GroceryList.jsx";
 
 
 
