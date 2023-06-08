@@ -114,7 +114,7 @@ const EditProfile = () => {
                                         {userDetails.avatar && (
                                             <img
                                                 className="mt-5 m-auto rounded-full shadow-lg"
-                                                alt="profile image"
+                                                alt="profile/avatar"
                                                 height="96"
                                                 width="96"
                                                 src={userDetails.avatar}>

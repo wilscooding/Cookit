@@ -210,6 +210,7 @@ function CreateMyRecipeForm() {
                 <div className="w-full items-center">
                   {image && (
                     <img
+                      alt="food the recipe is for"
                       className="mt-5 m-auto"
                       width="100px"
                       src={image}

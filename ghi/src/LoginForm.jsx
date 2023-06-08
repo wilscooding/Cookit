@@ -62,7 +62,7 @@ const LoginForm = () => {
           <div className="w-full flex items-center justify-center">
             <Card className="shadow-lg">
               <div className="flex max-w-md justify-center">
-                <img className="w-24 h-24" src={icons.CookIt} />
+                <img className="w-24 h-24" alt="A stylized CI with an icon of a knife and fork" src={icons.CookIt} />
               </div>
               <h1 className="text-2xl text-gray-900 font-bold leading-none tracking-tight">
                 Sign In

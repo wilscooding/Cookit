@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Card } from "flowbite-react";
 import useToken from "@galvanize-inc/jwtdown-for-react";
-import { useNavigate } from "react-router-dom";
 
 
 
@@ -11,8 +10,6 @@ const Profile = () => {
     const [ currentUser, setUser] = useState();
     const [ userDetails, setUserDetails] = useState();
     const [isLoading, setLoading] = useState(true);
-    const navigate = useNavigate();
-
 
     const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
@@ -80,7 +77,7 @@ const Profile = () => {
                         <div className="flex flex-col items-center pb-5">
                             <h1 className="text-lg text-center font-normal">Profile</h1>
                             <img
-                                alt="profile image"
+                                alt="profile/avatar"
                                 className="mb-3 rounded-full shadow-lg my-5"
                                 height="96"
                                 src={userDetails.avatar}

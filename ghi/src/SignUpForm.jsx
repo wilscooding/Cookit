@@ -80,7 +80,7 @@ const SignupForm = () => {
 					<div className="w-full flex items-center justify-center lg:w-1/2">
 						<Card className="bg-gray-50">
 							<div className="flex max-w-md justify-center">
-								<img className="w-24 h-24" src={icons.CookIt} />
+								<img className="w-24 h-24" alt="A stylized CI with an icon of a knife and fork"src={icons.CookIt} />
 							</div>
 							<h1 className="text-2xl text-center font-bold">
 								Create an Account

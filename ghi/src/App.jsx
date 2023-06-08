@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Main } from "./Main.jsx";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignUpForm.jsx";
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 import RecipeDetails from "./RecipeDetails.jsx";
 import RecipeSearch from "./RecipeSearch.jsx";
@@ -18,7 +18,7 @@ import GroceryList from "./GroceryList.jsx";
 import CreateMyRecipeForm from "./CreateMyRecipeForm.jsx";
 import EditMyRecipeForm from "./EditMyRecipeForm.jsx";
 import MyRecipeDetails from "./MyRecipeDetails.jsx";
-import useToken from "@galvanize-inc/jwtdown-for-react";
+
 
 
 // function RequireAuth({children}) {
@@ -30,7 +30,6 @@ function App(props) {
     const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isLoading, setLoading] = useState(true);
 
   const handleSearch = (query) => {
     setSearchQuery(query);

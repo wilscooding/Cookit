@@ -3,6 +3,7 @@ import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import icons from "./constants/icons";
 
 const Nav = () => {
     const { fetchWithCookie } = useToken();
@@ -53,9 +54,9 @@ const Nav = () => {
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
                     <img
-                    alt="Flowbite React Logo"
+                    alt="A stylized CI with an icon of a knife and fork"
                     className="mr-3 h-6 sm:h-9"
-                    src="https://www.flowbite-react.com/favicon.svg"
+                    src={icons.CookIt}
                     />
                     <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
                     CookIt
