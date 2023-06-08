@@ -3,6 +3,7 @@ import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+
 const Nav = () => {
     const { fetchWithCookie } = useToken();
     const { token } = useToken();
@@ -22,6 +23,7 @@ const Nav = () => {
   useEffect(() => {
     handleFetchWithCookie();
   }, [token]);
+
     const fetchUserDetails = async () => {
         if (currentUser !== undefined){
             const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
@@ -38,6 +40,7 @@ const Nav = () => {
       }
     }
   };
+
     useEffect(() => {
         fetchUserDetails();
     }, [currentUser])
@@ -82,7 +85,7 @@ const Nav = () => {
                 <Navbar.Toggle />
             </div>
             <Navbar.Collapse>
-                <Navbar.Link active href="/">
+                <Navbar.Link active href="/home">
                     Home
                 </Navbar.Link>
                 <Navbar.Link href="/myrecipes">

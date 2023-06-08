@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
 const getMeasurementQtyDescription = async (id) => {
   try {
@@ -25,7 +26,26 @@ const getMeasurementUnitDescription = async (id) => {
   }
 };
 
-const MyIngredients = ({ currentUser }) => {
+const MyIngredients = () => {
+  const { fetchWithCookie } = useToken();
+  const { token } = useToken();
+  const [ currentUser, setUser] = useState();
+
+  const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+  }
+
+    useEffect(() => {
+      handleFetchWithCookie();
+    }, [token]);
+
+
   const [ingredients, setIngredients] = useState([]);
   const [newIngredient, setNewIngredient] = useState({
     ingredient_name: "",

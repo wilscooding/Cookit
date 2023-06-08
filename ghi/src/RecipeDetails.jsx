@@ -1,10 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
-const RecipeDetails = ({ currentUser }) => {
-	const [recipe, setRecipe] = useState("");
-	const { id } = useParams();
+const RecipeDetails = () => {
+  const { fetchWithCookie } = useToken();
+  const { token } = useToken();
+  const [ currentUser, setUser] = useState();
+
+  const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+  }
+
+    useEffect(() => {
+      handleFetchWithCookie();
+    }, [token]);
+
+  const [recipe, setRecipe] = useState("");
+  const { id } = useParams();
 
 	useEffect(() => {
 		console.log("RecipeDetails - id:", id);
@@ -65,7 +84,7 @@ const RecipeDetails = ({ currentUser }) => {
 					<div role="status">
 						<svg
 							aria-hidden="true"
-							class="inline w-10 h-10 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+							class="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
 							viewBox="0 0 100 101"
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"

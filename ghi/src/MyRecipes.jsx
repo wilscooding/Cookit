@@ -1,32 +1,50 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Button, Card } from "flowbite-react";
 
-const MyRecipes = ({ currentUser }) => {
-  const [recipes, setRecipes] = useState([]);
+const MyRecipes = () => {
+    const [recipes, setRecipes] = useState([]);
+    const { fetchWithCookie } = useToken();
+    const { token } = useToken();
+    const [ currentUser, setUser] = useState();
 
-  const fetchRecipes = async () => {
-    if (currentUser && currentUser.id) {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes`,
-          {
-            params: {
-              user_id: currentUser.id,
-            },
-          }
+    const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
         );
-        const data = response.data;
-        setRecipes(data.recipes);
-      } catch (error) {
-        console.error(error);
-      }
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
     }
-  };
-  useEffect(() => {
-    fetchRecipes();
-  }, [currentUser]);
+
+    useEffect(() => {
+        handleFetchWithCookie();
+    }, [token]);
+
+    const fetchRecipes = async () => {
+        if (currentUser && currentUser.id) {
+            try {
+            const response = await axios.get(
+                `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes`,
+                {
+                params: {
+                    user_id: currentUser.id,
+                },
+                }
+            );
+            const data = response.data;
+            setRecipes(data.recipes);
+            } catch (error) {
+            console.error(error);
+            }
+        };
+    }
+    useEffect(() => {
+        fetchRecipes();
+    }, [currentUser]);
 
   return (
     <div className="flex w-full">

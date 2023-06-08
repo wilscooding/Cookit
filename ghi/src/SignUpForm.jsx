@@ -57,7 +57,7 @@ const SignupForm = () => {
 						<div role="status">
 							<svg
 								aria-hidden="true"
-								class="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
+								className="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
 								viewBox="0 0 100 101"
 								fill="none"
 								xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +71,7 @@ const SignupForm = () => {
 									fill="currentFill"
 								/>
 							</svg>
-							<span class="sr-only">Loading...</span>
+							<span className="sr-only">Loading...</span>
 						</div>
 					</div>
 				</div>
@@ -167,7 +167,7 @@ const SignupForm = () => {
 							</form>
 						</Card>
 					</div>
-					<div className="hidden relative lg:flex h-full w-full items-center justify-center">
+					<div className="hidden relative lg:flex h-full w-1/2 items-center justify-center">
 						<div className="w-full h-full bg-gradient-to-tr from-orange-400 to-yellow-300 overflow-hidden">
 							<div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
 								<div className="grid gap-4">
