@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button, Card, Label } from "flowbite-react";
+import { Button, Card, Label, Table } from "flowbite-react";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useNavigate } from "react-router-dom";
@@ -271,10 +271,7 @@ function CreateMyRecipeForm() {
                     <h1 className="text-4xl">Create A Recipe</h1>
                   </div>
                 </div>
-                <form
-                  className="flex max-w-md flex-col gap-4"
-                  onSubmit={handleSubmit}
-                >
+                <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                   <div>
                     <div className="mb-2 block">
                       <Label htmlFor="recipeName" value="Name Your Recipe" />
@@ -360,40 +357,52 @@ function CreateMyRecipeForm() {
                     </div>
                   </div>
                   <div>
-                    <table className="table-auto w-full">
-                      <thead>
-                        <tr>
-                          <th className="py-1">Ingredient</th>
-                          <th className="py-1">Quantity</th>
-                          <th className="py-1">Unit</th>
-                          <th className="py-1">Add</th>
-                        </tr>
-                      </thead>
-                      <tbody>
+                    <Table>
+                      <Table.Head>
+                        <Table.HeadCell className="py-1 text-center">
+                          Ingredient
+                        </Table.HeadCell>
+                        <Table.HeadCell className="py-1 text-center">
+                          Quantity
+                        </Table.HeadCell>
+                        <Table.HeadCell className="py-1 text-center">
+                          Unit
+                        </Table.HeadCell>
+                        <Table.HeadCell className="py-1 text-center">
+                          Add
+                        </Table.HeadCell>
+                      </Table.Head>
+                      <Table.Body className="divide-y">
                         {recipeIngredients.map((ingredient, idx) => (
-                          <tr key={idx}>
-                            <td className="text-center border py-1">
+                          <Table.Row
+                            key={idx}
+                            className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                          >
+                            <Table.Cell className="text-center py-1">
                               {ingredients[ingredient.id].ingredient_name}
-                            </td>
-                            <td className="text-center border py-1">
+                            </Table.Cell>
+                            <Table.Cell className="text-center py-1">
                               {qtys[ingredient.qty].qty_amount}
-                            </td>
-                            <td className="text-center border py-1">
+                            </Table.Cell>
+                            <Table.Cell className="text-center py-1">
                               {units[ingredient.unit].measurement_description}
-                            </td>
-                            <td className="text-center border py-1">
+                            </Table.Cell>
+                            <Table.Cell className="text-center py-1">
                               <Button
+                                size="xs"
+                                className="m-auto"
+                                color="failure"
                                 onClick={() =>
                                   handleRemoveRecipeIngredient(ingredient.id)
                                 }
                               >
                                 Remove
                               </Button>
-                            </td>
-                          </tr>
+                            </Table.Cell>
+                          </Table.Row>
                         ))}
-                        <tr>
-                          <td className="border py-1">
+                        <Table.Row>
+                          <Table.Cell className="py-1">
                             <select
                               name="ingredient"
                               value={newRecipeIngredient.id}
@@ -409,8 +418,8 @@ function CreateMyRecipeForm() {
                                 </option>
                               ))}
                             </select>
-                          </td>
-                          <td className="border py-1">
+                          </Table.Cell>
+                          <Table.Cell className="py-1">
                             <select
                               name="qty"
                               value={newRecipeIngredient.qty}
@@ -423,8 +432,8 @@ function CreateMyRecipeForm() {
                                 </option>
                               ))}
                             </select>
-                          </td>
-                          <td className="border py-1">
+                          </Table.Cell>
+                          <Table.Cell className="py-1">
                             <select
                               name="measurement_id"
                               value={newRecipeIngredient.unit.description}
@@ -437,15 +446,19 @@ function CreateMyRecipeForm() {
                                 </option>
                               ))}
                             </select>
-                          </td>
-                          <td className="border py-1">
-                            <Button onClick={handleAddRecipeIngredient}>
+                          </Table.Cell>
+                          <Table.Cell className="py-1">
+                            <Button
+                              size="xs"
+                              className="m-auto"
+                              onClick={handleAddRecipeIngredient}
+                            >
                               Add
                             </Button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          </Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
                   </div>
                   <Button className="mt-5" color="light" type="submit">
                     Create Recipe
