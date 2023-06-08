@@ -31,6 +31,9 @@ function App(props) {
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const domain = /https:\/\/[^/]+/;
+    const basename = process.env.PUBLIC_URL.replace(domain, '');
+
   const handleSearch = (query) => {
     setSearchQuery(query);
     };
@@ -41,7 +44,7 @@ function App(props) {
 
   return (
     <div className="bg-amber-400/50 min-h-screen pb-10">
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
           <Routes>
