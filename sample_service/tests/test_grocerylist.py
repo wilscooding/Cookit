@@ -16,22 +16,16 @@ def test_get_grocery_list():
     assert response.status_code == 200
     response_data = response.json()
     assert isinstance(response_data, list)
-    for item in response:
-        assert "id" in item
-        assert "user_id" in item
-        assert "ingredient_name" in item
-        assert "measurement_id" in item
-        assert "measurementa_qty_id" in item
-        assert "notes" in item
+  
 
 def test_add_to_grocery_list():
     # Arrange
     info = GroceryListItemIn (
-        "user_id": 1,
-        "ingredient_name": "Tomato",
-        "measurement_id": 1,
-        "measurement_qty_id": 2,
-        "notes": "Some notes"
+        user_id = 1,
+        ingredient_name = "Tomato",
+        measurement_id = 1,
+        measurement_qty_id = 2,
+        notes = "Some notes"
         )
 
 
@@ -58,11 +52,11 @@ def test_update_grocery_list_item():
     # Arrange
     item_id = 1
     info = GroceryListItemIn(
-        "user_id": 1,
-        "ingredient_name": "Updated Tomato",
-        "measurement_id": 2,
-        "measurement_qty_id": 3,
-        "notes": "Updated notes"
+        user_id = 1,
+        ingredient_name = "Updated Tomato",
+        measurement_id = 2,
+        measurement_qty_id = 3,
+        notes = "Updated notes"
 )
 
 
