@@ -39,7 +39,6 @@ const RecipeDetails = () => {
         console.error(error);
       }
     };
-
     fetchRecipe();
   }, [id]);
 
@@ -50,162 +49,173 @@ const RecipeDetails = () => {
         return;
       }
 
-      if (!recipe) {
-        console.log("Recipe data not available");
-        return;
-      }
-
       const {
         title,
         image,
-        diets,
         summary,
         analyzedInstructions,
         extendedIngredients,
       } = recipe;
 
-      const steps = analyzedInstructions[0]?.steps || [];
+      const stepsText = recipe.analyzedInstructions
+        .map((step) => step.step)
+        .join("\n");
+      const response = await axios.post(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+        {
+          creator_id: currentUser.id,
+          recipe_name: title,
+          diet: recipe.diets[0],
+          img: image,
+          description: recipe.summary,
+          steps: stepsText,
+        }
+      );
+      console.log("creator_id:", currentUser.id);
+      // Handle the response as needed
+      console.log("Save Recipe Response:", response.data);
+      const savedRecipeId = response.data.id;
+      console.log("Saved Recipe ID:", savedRecipeId);
       const ingredientPromises = [];
 
-      for (const step of steps) {
-        const { number, step: stepText } = step;
-        console.log("Step:", number, stepText);
-      }
+      for (const ingredient of extendedIngredients) {
+        const { name, measures } = ingredient;
 
-      for (const ingredientData of extendedIngredients) {
-        const { id, name, measures } = ingredientData;
-        const amount = measures?.us?.amount;
-        const unit = measures?.us?.unitShort;
+        const existingIngredientResponse = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
+          {
+            params: {
+              ingredient_name: name,
+            },
+          }
+        );
 
-        try {
-          // Check if the ingredient already exists in the ingredients table
-          let ingredientId = null;
-          const existingIngredientResponse = await axios.get(
+        if (existingIngredientResponse.data.length > 0) {
+          const existingIngredient = existingIngredientResponse.data.find(
+            (ingredient) => ingredient.ingredient_name === name
+          );
+          const ingredientId = existingIngredient.id;
+          console.log("Ingredient already exists:", name);
+          console.log("Ingredient ID:", ingredientId);
+          // Associate the existing ingredient with the saved recipe
+        } else {
+          const newIngredientResponse = await axios.post(
             `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
             {
-              params: {
-                ingredient_name: name,
-              },
+              ingredient_name: name,
             }
           );
 
-          if (existingIngredientResponse.data.length > 0) {
-            const existingIngredient = existingIngredientResponse.data.find(
-              (ingredient) => ingredient.ingredient_name === name
-            );
-            ingredientId = existingIngredient.id;
-            console.log("Ingredient already exists:", name);
-          } else {
-            const newIngredientResponse = await axios.post(
-              `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
-              {
-                ingredient_name: name,
-              }
-            );
+          const newIngredient = newIngredientResponse.data;
+          const ingredientId = newIngredient.id;
+          console.log("New Ingredient created:", name);
+          console.log("Ingredient ID:", ingredientId);
+          // Associate the new ingredient with the saved recipe
+        }
 
-            ingredientId = newIngredientResponse.data.id;
-            console.log("New Ingredient created:", name);
+        const amount = measures.us.amount;
+        let measurementQtyId;
+        console.log("Amount from frontend:", amount);
+
+        const existingMeasurementQtyResponse = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
+          {
+            params: {
+              qty_amount: amount,
+            },
           }
+        );
+        console.log(
+          "Existing qty_amounts from backend:",
+          existingMeasurementQtyResponse.data.map((item) => item.qty_amount)
+        );
 
-          let measurementQtyId, measurementUnitId;
+        if (
+          existingMeasurementQtyResponse.data &&
+          existingMeasurementQtyResponse.data.length > 0
+        ) {
+          const existingMeasurementQty =
+            existingMeasurementQtyResponse.data.find(
+              (measurementQty) => measurementQty.qty_amount === amount
+            );
 
-          try {
-            const existingMeasurementQtyResponse = await axios.get(
+          if (existingMeasurementQty) {
+            measurementQtyId = existingMeasurementQty.id;
+            console.log(
+              "Measurement quantity already exists:",
+              measurementQtyId
+            );
+          } else {
+            const newMeasurementQtyResponse = await axios.post(
               `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
               {
-                params: {
-                  qty_amount: amount,
-                },
+                qty_amount: amount,
               }
             );
-
-            if (
-              existingMeasurementQtyResponse.data &&
-              existingMeasurementQtyResponse.data.length > 0
-            ) {
-              const existingMeasurementQty =
-                existingMeasurementQtyResponse.data.find(
-                  (measurementQty) => measurementQty.qty_amount === amount
-                );
-              measurementQtyId = existingMeasurementQty.id;
-              console.log(
-                "Measurement quantity already exists:",
-                measurementQtyId
-              );
-            } else {
-              const newMeasurementQtyResponse = await axios.post(
-                `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
-                {
-                  qty_amount: amount,
-                }
-              );
-              measurementQtyId = newMeasurementQtyResponse.data.id;
-              console.log("New Measurement quantity created:", amount);
-            }
-          } catch (error) {
-            console.error("Error checking/saving measurement quantity:", error);
+            measurementQtyId = newMeasurementQtyResponse.data.id;
+            console.log("New Measurement quantity created:", amount);
           }
+        }
 
-          try {
-            const existingMeasurementUnitResponse = await axios.get(
+        const unit = measures.us.unitLong;
+        let measurementUnitId;
+        console.log("Unit from frontend:", unit);
+
+        const existingMeasurementUnitResponse = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
+          {
+            params: {
+              measurement_description: unit,
+            },
+          }
+        );
+        console.log(
+          "Existing measurement units from backend:",
+          existingMeasurementUnitResponse.data.map(
+            (item) => item.measurement_description
+          )
+        );
+
+        if (
+          existingMeasurementUnitResponse.data &&
+          existingMeasurementUnitResponse.data.length > 0
+        ) {
+          const existingMeasurementUnit =
+            existingMeasurementUnitResponse.data.find(
+              (measurementUnit) =>
+                measurementUnit.measurement_description === unit
+            );
+
+          if (existingMeasurementUnit) {
+            measurementUnitId = existingMeasurementUnit.id;
+            console.log("Measurement unit already exists:", unit);
+          } else {
+            const newMeasurementUnitResponse = await axios.post(
               `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
               {
-                params: {
-                  measurement_description: unit,
-                },
+                measurement_description: unit,
               }
             );
-
-            if (
-              existingMeasurementUnitResponse.data &&
-              existingMeasurementUnitResponse.data.length > 0
-            ) {
-              const existingMeasurementUnit =
-                existingMeasurementUnitResponse.data.find(
-                  (measurementUnit) =>
-                    measurementUnit.measurement_description === unit
-                );
-              measurementUnitId = existingMeasurementUnit.id;
-              console.log("Measurement unit already exists:", unit);
-            } else {
-              const newMeasurementUnitResponse = await axios.post(
-                `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
-                {
-                  measurement_description: unit,
-                }
-              );
-
-              measurementUnitId = newMeasurementUnitResponse.data.id;
-              console.log("New Measurement unit created:", unit);
-            }
-          } catch (error) {
-            console.error("Error checking/saving measurement unit:", error);
+            measurementUnitId = newMeasurementUnitResponse.data.id;
+            console.log("New Measurement unit created:", unit);
           }
-
-          // Send a request to your backend API to save the recipe
-          const response = await axios.post(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
-            {
-              creator_id: currentUser.id,
-              recipe_name: title,
-              diet: recipe.diets[0],
-              img: image,
-            }
-          );
-
-          console.log("creator_id:", currentUser.id);
-
-          // Handle the response as needed
-          console.log("Save Recipe Response:", response.data);
-        } catch (error) {
-          console.error(error);
         }
+
+
+        console.log("Ingredient:", name);
+        console.log("Measurement Quantity ID:", measurementQtyId);
+        console.log("Measurement Unit ID:", measurementUnitId);
+        console.log("---------------------------");
       }
+
+      console.log("Ingredients saved successfully!");
+
+      await Promise.all(ingredientPromises);
+      console.log("Ingredients saved successfully!");
     } catch (error) {
       console.error(error);
     }
   };
-
   if (!recipe) {
     return (
       <div className="flex w-full h-screen">

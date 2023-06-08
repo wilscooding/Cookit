@@ -85,7 +85,9 @@ const MyRecipes = () => {
                   <Link to={recipe.id.toString()}>
                     <p className="text-blue-600">{recipe.recipe_name}</p>
                   </Link>
-                  <p>{recipe.description}</p>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: recipe.description }}
+                  />
                   <button onClick={() => handleDeleteRecipe(recipe.id)}>
                     Delete
                   </button>

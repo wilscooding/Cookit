@@ -10,7 +10,6 @@ from db import (
     MeasurementQtyOut,
     MeasurementUnitIn,
     MeasurementUnitOut,
-    RecipeIngredientIn,
     RecipeIngredientOut,
     MyIngredientIn,
     MyIngredientOut,

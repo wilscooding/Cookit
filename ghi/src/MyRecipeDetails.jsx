@@ -32,12 +32,12 @@ const MyRecipeDetails = ({ currentUser }) => {
     return <div>This recipe does not belong to you!</div>;
   }
 
-  return (
+ return (
     <div className="flex w-full">
       <div className="w-full flex items-center justify-center">
         <div className="w-full flex-col">
           <div className="w-full flex items-center justify-end">
-            <Link to={`/myrecipes/${id}/edit`} className="mr-10">
+            <Link to={`/myrecipes/${recipe.id}/edit`} className="mr-10">
               <Button className="mt-5" color="light">
                 Edit Recipe
               </Button>
@@ -51,7 +51,7 @@ const MyRecipeDetails = ({ currentUser }) => {
                 </h1>
                 <img src={recipe.img} alt={recipe.title} width="300px" />
                 <div className="border-b border-slate-300 pb-3">
-                  dangerouslySetInnerHTML={{ __html: recipe.description }}
+                  <div dangerouslySetInnerHTML={{ __html: recipe.description }} />
                 </div>
                 <div className="border-b border-slate-300 pb-3">
                   {recipe.steps}

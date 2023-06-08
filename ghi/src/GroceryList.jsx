@@ -309,6 +309,69 @@ const GroceryList = () => {
           </tr>
         </tbody>
       </table>
+      {selectedIngredient && (
+        <div>
+          <h3>Update Ingredient</h3>
+          <input
+            type="text"
+            name="ingredient_name"
+            value={updatedIngredient.ingredient_name}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                ingredient_name: event.target.value,
+              })
+            }
+          />
+          <select
+            name="measurement_qty_id"
+            value={updatedIngredient.measurement_qty_id}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                measurement_qty_id: event.target.value,
+              })
+            }
+          >
+            <option value="">Select Quantity</option>
+            {measurementQtys.map((qty) => (
+              <option key={qty.id} value={qty.id}>
+                {qty.qty_amount}
+              </option>
+            ))}
+          </select>
+          <select
+            name="measurement_id"
+            value={updatedIngredient.measurement_id}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                measurement_id: event.target.value,
+              })
+            }
+          >
+            <option value="">Select Unit</option>
+            {measurementUnits.map((unit) => (
+              <option key={unit.id} value={unit.id}>
+                {unit.measurement_description}
+              </option>
+            ))}
+          </select>
+          <input
+            type="text"
+            name="notes"
+            value={updatedIngredient.notes}
+            onChange={(event) =>
+              setUpdatedIngredient({
+                ...updatedIngredient,
+                notes: event.target.value,
+              })
+            }
+          />
+          <button onClick={handleUpdateIngredient}>Update</button>
+          <button onClick={() => setSelectedIngredient(null)}>Cancel</button>
+        </div>
+      )}
     </div>
   );
 };

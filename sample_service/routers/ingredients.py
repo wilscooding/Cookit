@@ -32,11 +32,6 @@ def get_ingredients(
     return filtered_ingredients
 
 
-    # if not ingredients:
-    #     raise HTTPException(status_code=404, detail="Ingredient not found")
-
-
-    return ingredients
 
 @router.get("/api/ingredients/{id}", response_model=IngredientOut)
 def get_ingredient_by_id(
@@ -60,17 +55,3 @@ def delete_ingredient_by_id(
     ):
     return queries.delete_ingredient(id)
 
-# @router.get("/api/ingredients/{id}/recipes", response_model=list[IngredientOut])
-# def get_ingredient_by_id_recipes(
-#     id: int,
-#     queries: IngredientQueries = Depends(),
-#     ) -> list[IngredientOut]:
-#     return queries.get_ingredient_by_id_recipes(id)
-
-# @router.get("/api/ingredients/{id}/recipes/{recipe_id}", response_model=IngredientOut)
-# def get_ingredient_by_id_recipes_by_id(
-#     id: int,
-#     recipe_id: int,
-#     queries: IngredientQueries = Depends(),
-#     ) -> IngredientOut:
-#     return queries.get_ingredient_by_id_recipes_by_id(id, recipe_id)
