@@ -1,22 +1,22 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {
-	getMeasurementQtyDescription,
-	getMeasurementUnitDescription,
-} from "./MyIngredients";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import {
+  getMeasurementQtyDescription,
+  getMeasurementUnitDescription,
+} from "./MyIngredients";
 
 const GroceryList = () => {
-	const { fetchWithCookie } = useToken();
-  	const { token } = useToken();
-  	const [ currentUser, setUser] = useState();
-	const [items, setItems] = useState([]);
-	const [newItem, setNewItem] = useState({
-		ingredient_name: "",
-		measurement_qty_id: "",
-		measurement_id: "",
-		notes: "",
-	});
+  const { fetchWithCookie } = useToken();
+  const { token } = useToken();
+  const [currentUser, setUser] = useState();
+  const [items, setItems] = useState([]);
+  const [newItem, setNewItem] = useState({
+    ingredient_name: "",
+    measurement_qty_id: "",
+    measurement_id: "",
+    notes: "",
+  });
   const [selectedIngredient, setSelectedIngredient] = useState(null);
   const [updatedIngredient, setUpdatedIngredient] = useState({
     ingredient_name: "",
@@ -24,51 +24,55 @@ const GroceryList = () => {
     measurement_id: "",
     notes: "",
   });
-	const [measurementQtys, setMeasurementQtys] = useState([]);
-	const [measurementUnits, setMeasurementUnits] = useState([]);
+  const [measurementQtys, setMeasurementQtys] = useState([]);
+  const [measurementUnits, setMeasurementUnits] = useState([]);
 
-	const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const currentUser = data.user
-            setUser(currentUser);
-        }
-  }
+  const handleFetchWithCookie = async () => {
+    try {
+      const data = await fetchWithCookie(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+      );
+      if (data !== undefined) {
+        const currentUser = data.user;
+        setUser(currentUser);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    useEffect(() => {
-      handleFetchWithCookie();
-    }, [token]);
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
-	const fetchMeasurementQtys = async () => {
-		try {
-			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty`
-			);
-			setMeasurementQtys(response.data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  const fetchMeasurementQtys = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty`
+      );
+      setMeasurementQtys(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-	const fetchMeasurementUnits = async () => {
-		try {
-			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units`
-			);
-			setMeasurementUnits(response.data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+  const fetchMeasurementUnits = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units`
+      );
+      setMeasurementUnits(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-	const handleInputChange = (event) => {
-		setNewItem({
-			...newItem,
-			[event.target.name]: event.target.value,
-		});
-	};
+  const handleInputChange = (event) => {
+    setNewItem({
+      ...newItem,
+      [event.target.name]: event.target.value,
+    });
+  };
 
   const handleAddItem = async () => {
     try {
@@ -92,7 +96,7 @@ const GroceryList = () => {
         measurement_qty_description: measurementQtyDescription,
         measurement_unit_description: measurementUnitDescription,
       };
-      setGroceryItems([...groceryItems, newItemWithDescriptions]);
+      setItems([...items, newItemWithDescriptions]);
       setNewItem({
         ingredient_name: "",
         measurement_qty_id: "",
@@ -131,7 +135,7 @@ const GroceryList = () => {
       };
 
       const response = await axios.put(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${selectedIngredient.id}`,
         updatedData
       );
 
@@ -148,7 +152,7 @@ const GroceryList = () => {
         measurement_unit_description: measurementUnitDescription,
       };
 
-      setGroceryItems((prevIngredients) =>
+      setItems((prevIngredients) =>
         prevIngredients.map((item) =>
           item.id === selectedIngredient.id
             ? updatedIngredientWithDescriptions
@@ -172,56 +176,55 @@ const GroceryList = () => {
       await axios.delete(
         `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${itemId}`
       );
-      setGroceryItems(groceryItems.filter((item) => item.id !== itemId));
+      setItems(items.filter((item) => item.id !== itemId));
     } catch (error) {
       console.error(error);
     }
   };
 
-	// console.log(items);
-	useEffect(() => {
-		const fetchItems = async () => {
-			if (currentUser && currentUser.id) {
-				try {
-					const response = await axios.get(
-						`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
-						{
-							params: {
-								user_id: currentUser.id,
-							},
-						}
-					);
-					const data = response.data;
-					const processeditems = await Promise.all(
-						data.map(async (item) => {
-							const measurementQtyDescription =
-								await getMeasurementQtyDescription(item.measurement_qty_id);
-							const measurementUnitDescription =
-								await getMeasurementUnitDescription(item.measurement_id);
-							return {
-								...item,
-								measurement_qty_description: measurementQtyDescription,
-								measurement_unit_description: measurementUnitDescription,
-							};
-						})
-					);
-					setItems(processeditems);
-					// console.log("processeditems:", processeditems);
-				} catch (error) {
-					console.log(error);
-				}
-			}
-		};
-		fetchItems();
-		fetchMeasurementQtys();
-		fetchMeasurementUnits();
-	}, [currentUser]);
+  useEffect(() => {
+    const fetchItems = async () => {
+      if (currentUser && currentUser.id) {
+        try {
+          const response = await axios.get(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
+            {
+              params: {
+                user_id: currentUser.id,
+              },
+            }
+          );
+          const data = response.data;
+          const processedItems = await Promise.all(
+            data.map(async (item) => {
+              const measurementQtyDescription =
+                await getMeasurementQtyDescription(item.measurement_qty_id);
+              const measurementUnitDescription =
+                await getMeasurementUnitDescription(item.measurement_id);
+              return {
+                ...item,
+                measurement_qty_description: measurementQtyDescription,
+                measurement_unit_description: measurementUnitDescription,
+              };
+            })
+          );
+          setItems(processedItems);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
 
-	if (!items) {
-		return <div>Loading...</div>;
-	}
+    fetchItems();
+    fetchMeasurementQtys();
+    fetchMeasurementUnits();
+  }, [currentUser]);
 
-	return (
+  if (!items) {
+    return <div>Loading...</div>;
+  }
+
+  return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">Inventory</h2>
       <table className="table-auto w-full">
@@ -235,7 +238,7 @@ const GroceryList = () => {
           </tr>
         </thead>
         <tbody>
-          {groceryItems.map((item) => (
+          {items.map((item) => (
             <tr key={item.id}>
               <td className="border px-4 py-2">{item.ingredient_name}</td>
               <td className="border px-4 py-2">
@@ -309,4 +312,5 @@ const GroceryList = () => {
     </div>
   );
 };
+
 export default GroceryList;

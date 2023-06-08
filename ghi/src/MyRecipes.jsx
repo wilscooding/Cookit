@@ -5,42 +5,40 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Button, Card } from "flowbite-react";
 
 const MyRecipes = () => {
-    const [recipes, setRecipes] = useState([]);
-    const { fetchWithCookie } = useToken();
-    const { token } = useToken();
-    const [ currentUser, setUser] = useState();
+  const [recipes, setRecipes] = useState([]);
+  const { fetchWithCookie, token } = useToken();
+  const [currentUser, setUser] = useState();
 
-    const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const currentUser = data.user
-            setUser(currentUser);
-        }
+  const handleFetchWithCookie = async () => {
+    try {
+      const data = await fetchWithCookie(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+      );
+      if (data !== undefined) {
+        const currentUser = data.user;
+        setUser(currentUser);
+      }
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    useEffect(() => {
-        handleFetchWithCookie();
-    }, [token]);
-
-    const fetchRecipes = async () => {
-        if (currentUser && currentUser.id) {
-            try {
-            const response = await axios.get(
-                `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes`,
-                {
-                params: {
-                    user_id: currentUser.id,
-                },
-                }
-            );
-            const data = response.data;
-            setRecipes(data.recipes);
-            } catch (error) {
-            console.error(error);
-            }
-        };
+  const fetchRecipes = async () => {
+    if (currentUser && currentUser.id) {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes`,
+          {
+            params: {
+              user_id: currentUser.id,
+            },
+          }
+        );
+        const data = response.data;
+        setRecipes(data.recipes);
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -54,6 +52,10 @@ const MyRecipes = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
   useEffect(() => {
     fetchRecipes();
@@ -84,11 +86,11 @@ const MyRecipes = () => {
                     <p className="text-blue-600">{recipe.recipe_name}</p>
                   </Link>
                   <p>{recipe.description}</p>
+                  <button onClick={() => handleDeleteRecipe(recipe.id)}>
+                    Delete
+                  </button>
                 </Card>
               ))}
-              <button onClick={() => handleDeleteRecipe(recipe.id)}>
-                Delete
-              </button>
             </div>
           </div>
         </div>

@@ -6,51 +6,51 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 const RecipeDetails = () => {
   const { fetchWithCookie } = useToken();
   const { token } = useToken();
-  const [ currentUser, setUser] = useState();
+  const [currentUser, setUser] = useState();
 
-  const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const currentUser = data.user
-            setUser(currentUser);
-        }
-  }
+  const handleFetchWithCookie = async () => {
+    const data = await fetchWithCookie(
+      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+    );
+    if (data !== undefined) {
+      const currentUser = data.user;
+      setUser(currentUser);
+    }
+  };
 
-    useEffect(() => {
-      handleFetchWithCookie();
-    }, [token]);
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
   const [recipe, setRecipe] = useState("");
   const { id } = useParams();
 
-	useEffect(() => {
-		console.log("RecipeDetails - id:", id);
-		const fetchRecipe = async () => {
-			try {
-				const response = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes/${id}`
-				);
-				const data = response.data;
-				console.log("Recipe Info Response:", data);
-				setRecipe(data.recipe);
-			} catch (error) {
-				console.error(error);
-			}
-		};
+  useEffect(() => {
+    console.log("RecipeDetails - id:", id);
+    const fetchRecipe = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes/${id}`
+        );
+        const data = response.data;
+        console.log("Recipe Info Response:", data);
+        setRecipe(data.recipe);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-		fetchRecipe();
-	}, [id]);
+    fetchRecipe();
+  }, [id]);
 
-	const handleSaveRecipe = async () => {
-		try {
-			if (!currentUser) {
-				console.log("No current user found");
-				return;
-			}
+  const handleSaveRecipe = async () => {
+    try {
+      if (!currentUser) {
+        console.log("No current user found");
+        return;
+      }
 
-			if (!recipe) {
+      if (!recipe) {
         console.log("Recipe data not available");
         return;
       }
@@ -69,7 +69,7 @@ const RecipeDetails = () => {
 
       for (const step of steps) {
         const { number, step: stepText } = step;
-  			console.log("Step:", number, stepText);
+        console.log("Step:", number, stepText);
       }
 
       for (const ingredientData of extendedIngredients) {
@@ -93,7 +93,7 @@ const RecipeDetails = () => {
             const existingIngredient = existingIngredientResponse.data.find(
               (ingredient) => ingredient.ingredient_name === name
             );
-			      ingredientId = existingIngredient.id;
+            ingredientId = existingIngredient.id;
             console.log("Ingredient already exists:", name);
           } else {
             const newIngredientResponse = await axios.post(
@@ -121,14 +121,14 @@ const RecipeDetails = () => {
 
             if (
               existingMeasurementQtyResponse.data &&
-			        existingMeasurementQtyResponse.data.length > 0
+              existingMeasurementQtyResponse.data.length > 0
             ) {
               const existingMeasurementQty =
                 existingMeasurementQtyResponse.data.find(
                   (measurementQty) => measurementQty.qty_amount === amount
                 );
               measurementQtyId = existingMeasurementQty.id;
-        			console.log(
+              console.log(
                 "Measurement quantity already exists:",
                 measurementQtyId
               );
@@ -140,7 +140,7 @@ const RecipeDetails = () => {
                 }
               );
               measurementQtyId = newMeasurementQtyResponse.data.id;
-        			console.log("New Measurement quantity created:", amount);
+              console.log("New Measurement quantity created:", amount);
             }
           } catch (error) {
             console.error("Error checking/saving measurement quantity:", error);
@@ -166,7 +166,7 @@ const RecipeDetails = () => {
                     measurementUnit.measurement_description === unit
                 );
               measurementUnitId = existingMeasurementUnit.id;
-        			console.log("Measurement unit already exists:", unit);
+              console.log("Measurement unit already exists:", unit);
             } else {
               const newMeasurementUnitResponse = await axios.post(
                 `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
@@ -182,64 +182,68 @@ const RecipeDetails = () => {
             console.error("Error checking/saving measurement unit:", error);
           }
 
-			// Send a request to your backend API to save the recipe
-			const response = await axios.post(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
-				{
-					creator_id: currentUser.id,
-					recipe_name: title,
-					diet: recipe.diets[0],
-					img: image,
-				}
-			);
+          // Send a request to your backend API to save the recipe
+          const response = await axios.post(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+            {
+              creator_id: currentUser.id,
+              recipe_name: title,
+              diet: recipe.diets[0],
+              img: image,
+            }
+          );
 
-			console.log("creator_id:", currentUser.id);
+          console.log("creator_id:", currentUser.id);
 
-			// Handle the response as needed
-			console.log("Save Recipe Response:", response.data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
+          // Handle the response as needed
+          console.log("Save Recipe Response:", response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-	if (!recipe) {
-		return (
-			<div className="flex w-full h-screen">
-				<div className="w-full flex items-center justify-center">
-					<div role="status">
-						<svg
-							aria-hidden="true"
-							class="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
-							viewBox="0 0 100 101"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-								fill="currentColor"
-							/>
-							<path
-								d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-								fill="currentFill"
-							/>
-						</svg>
-						<span class="sr-only">Loading...</span>
-					</div>
-				</div>
-			</div>
-		);
-	}
+  if (!recipe) {
+    return (
+      <div className="flex w-full h-screen">
+        <div className="w-full flex items-center justify-center">
+          <div role="status">
+            <svg
+              aria-hidden="true"
+              className="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
+              viewBox="0 0 100 101"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                fill="currentColor"
+              />
+              <path
+                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                fill="currentFill"
+              />
+            </svg>
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
-	const ingredientNames = recipe.extendedIngredients.map((ingredient) => ({
-		name: ingredient.name,
-		original: ingredient.original,
-	}));
+  const ingredientNames = recipe.extendedIngredients.map((ingredient) => ({
+    name: ingredient.name,
+    original: ingredient.original,
+  }));
 
-	if (recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0) {
-		const instructions = recipe.analyzedInstructions[0].steps.map((step) => ({
-			number: step.number,
-			step: step.step,
-		}));
+  if (recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0) {
+    const instructions = recipe.analyzedInstructions[0].steps.map((step) => ({
+      number: step.number,
+      step: step.step,
+    }));
 
     return (
       <div>
@@ -265,14 +269,21 @@ const RecipeDetails = () => {
         </ul>
         <h3>Instructions</h3>
         <ul>
-          {instructions.map((step, index) => (
+          {instructions.map((instruction, index) => (
             <li key={index}>
-              {step.number} - {step.step}
+              <div className="row">
+                <div className="col-sm-4">
+                  <strong>{instruction.number}</strong>
+                </div>
+                <div className="col-sm-8">{instruction.step}</div>
+              </div>
             </li>
           ))}
         </ul>
       </div>
     );
+  } else {
+    return <div>No instructions found for this recipe.</div>;
   }
 };
 
