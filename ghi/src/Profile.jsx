@@ -4,7 +4,6 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 
 
 
-
 const Profile = () => {
     const { fetchWithCookie } = useToken();
     const { token } = useToken();

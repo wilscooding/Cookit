@@ -10,7 +10,7 @@ const RecipeDetails = () => {
 
   const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -30,7 +30,7 @@ const RecipeDetails = () => {
 		const fetchRecipe = async () => {
 			try {
 				const response = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes/${id}`
+					`${process.env.REACT_APP_COOKIT_API_HOST}/recipes/${id}`
 				);
 				const data = response.data;
 				console.log("Recipe Info Response:", data);
@@ -59,7 +59,7 @@ const RecipeDetails = () => {
 
 			// Send a request to your backend API to save the recipe
 			const response = await axios.post(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/`,
 				{
 					creator_id: currentUser.id,
 					recipe_name: title,
@@ -84,7 +84,7 @@ const RecipeDetails = () => {
 					<div role="status">
 						<svg
 							aria-hidden="true"
-							class="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
+							className="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
 							viewBox="0 0 100 101"
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +98,7 @@ const RecipeDetails = () => {
 								fill="currentFill"
 							/>
 						</svg>
-						<span class="sr-only">Loading...</span>
+						<span className="sr-only">Loading...</span>
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Main } from "./Main.jsx";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignUpForm.jsx";
@@ -21,11 +21,15 @@ import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
 
 
+// function RequireAuth({children}) {
+//   const { token } = useToken();
+//   return token === true ? children : <Navigate to="/signup" replace />;
+// }
+
 function App(props) {
-    const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
+    const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isLoading, setLoading] = useState(true);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -41,10 +45,10 @@ function App(props) {
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
           <Routes>
-            <Route path="/" element={<Main />}></Route>
-            <Route path="/signup" element={<SignupForm />}></Route>
-            <Route path="/login" element={<LoginForm />}></Route>
-            <Route path="/userdata" element={<UserDataCard />}></Route>
+            <Route path="/" element={<Main />} />
+            <Route path="/signup" element={<SignupForm />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/userdata" element={<UserDataCard />} />
             <Route
               path="/recipes"
               element={

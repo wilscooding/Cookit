@@ -12,7 +12,7 @@ const UserDataCard = () => {
   const handleFetchWithCookie =  async(event) => {
     // event.preventDefault();
     const data = await fetchWithCookie(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+      `${process.env.REACT_APP_COOKIT_API_HOST}/token`
     );
     setUserData(data);
 

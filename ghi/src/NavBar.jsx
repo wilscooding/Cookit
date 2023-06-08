@@ -3,6 +3,7 @@ import { Navbar, Dropdown, Avatar } from "flowbite-react";
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import icons from "./constants/icons";
 
 const Nav = () => {
     const { fetchWithCookie } = useToken();
@@ -13,7 +14,7 @@ const Nav = () => {
     const { logout } = useToken();
     const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -26,7 +27,7 @@ const Nav = () => {
 
     const fetchUserDetails = async () => {
         if (currentUser !== undefined){
-            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
+            const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
       if (userResponse.ok) {
         const userDetails = await userResponse.json();
@@ -53,9 +54,9 @@ const Nav = () => {
             <Navbar fluid rounded>
                 <Navbar.Brand href="https://flowbite-react.com">
                     <img
-                    alt="Flowbite React Logo"
+                    alt="A stylized CI with an icon of a knife and fork"
                     className="mr-3 h-6 sm:h-9"
-                    src="https://www.flowbite-react.com/favicon.svg"
+                    src={icons.CookIt}
                     />
                     <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
                     CookIt

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { Card } from "flowbite-react";
 
 const RecipeSearch = ({ onRecipeSelect }) => {
 	const [query, setQuery] = useState("");
@@ -13,7 +12,7 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 		try {
 			setLoadingRecipes(true);
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/recipes`,
 				{
 					params: {
 						query: query,
@@ -29,10 +28,6 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 			console.error(error);
 		}
 	};
-
-	// const handleRecipeClick = (id) => {
-	//   onRecipeSelect(id);
-	// };
 
 	useEffect(() => {
 		const onPageLoad = () => {

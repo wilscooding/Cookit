@@ -1,2 +1,3 @@
 [flake8]
-exclude = ghi,docs,journals,sample_service/migrations
+exclude = ghi,docs,journals,cookit/migrations,settings.py
+ignore=E402,W503
