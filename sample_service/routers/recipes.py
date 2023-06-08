@@ -83,28 +83,3 @@ async def get_recipe_info(id: str):
 
 
 
-# @router.get("/recipes/{id}")
-# async def get_recipe_info(id: str, queries: RecipeQueries = Depends(), user_id: int = Depends(get_current_user)):
-#     api_url = f"https://api.spoonacular.com/recipes/{id}/information"
-#     api_key = SPOONACULAR_API_KEY
-#     headers = {"Content-Type": "application/json"}
-#     params = {
-#         "apiKey": api_key,
-#         "includeNutrition": False,
-#     }
-#     response = requests.get(api_url, params=params, headers=headers)
-#     data = response.json()
-#     print("DATA:", data)
-
-#     # Extract recipe information from the API response
-#     recipe_data = {
-#         "recipe_name": data["title"],
-#         "diet": data["diets"][0] if data["diets"] else None,
-#         "img": data["image"]
-#     }
-
-
-#     # Save recipe into the recipe table
-#     saved_recipe = queries.save_recipe_from_api(recipe_data, user_id)
-
-#     return {"recipe": data}

@@ -43,6 +43,18 @@ const MyRecipes = () => {
 			}
 		}
 	};
+
+  const handleDeleteRecipe = async (recipe_id) => {
+		try {
+			await axios.delete(
+				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${recipe_id}`
+			);
+			fetchRecipes();
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	useEffect(() => {
 		fetchRecipes();
 	}, [currentUser]);
@@ -87,12 +99,12 @@ const MyRecipes = () => {
 					</div>
 				</div>
 			) : (
-				<div className="flex w-full">
+				<div className="flex w-full overflow-hidden">
 					<div className="w-full flex items-center justify-center">
 						<div className="w-full flex-col">
 							<div className="w-full flex items-center justify-end">
-								<Link to={"new"} className="mr-10">
-									<Button className="mt-5" color="light">
+								<Link to={"new"} className="">
+									<Button className="mt-4" color="light">
 										Create New Recipe
 									</Button>
 								</Link>
@@ -100,17 +112,22 @@ const MyRecipes = () => {
 							<div className="w-full flex items-center justify-center">
 								<div className="flex-col text-center">
 									{recipes.map((recipe) => (
-										<Card key={recipe.id} className="mb-5 p-2">
+										<Card key={recipe.id} className=" w-fit my-5 p-2">
+											<Link to={recipe.id.toString()}>
+												<p className="text-blue-600 text-2xl font-bold capitalize">{recipe.recipe_name}</p>
+											</Link>
 											<img
 												src={recipe.img}
 												alt={recipe.recipe_name}
 												width="250px"
-												className="m-auto"
+												className="m-auto rounded-sm outline outline-1 outline-gray-200 shadow-md"
 											/>
-											<Link to={recipe.id.toString()}>
-												<p className="text-blue-600">{recipe.recipe_name}</p>
-											</Link>
-											<p>{recipe.description}</p>
+											<div
+												dangerouslySetInnerHTML={{ __html: recipe.description }}
+											/>
+											<Button color="failure" className="" onClick={() => handleDeleteRecipe(recipe.id)}>
+												DELETE
+                      </Button>
 										</Card>
 									))}
 								</div>

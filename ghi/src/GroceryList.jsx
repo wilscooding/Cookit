@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 import {
 	getMeasurementQtyDescription,
 	getMeasurementUnitDescription,
 } from "./MyIngredients";
-import useToken from "@galvanize-inc/jwtdown-for-react";
 
 const GroceryList = () => {
 	const { fetchWithCookie } = useToken();
@@ -17,17 +17,28 @@ const GroceryList = () => {
 		measurement_id: "",
 		notes: "",
 	});
+	const [selectedIngredient, setSelectedIngredient] = useState(null);
+	const [updatedIngredient, setUpdatedIngredient] = useState({
+		ingredient_name: "",
+		measurement_qty_id: "",
+		measurement_id: "",
+		notes: "",
+	});
 	const [measurementQtys, setMeasurementQtys] = useState([]);
 	const [measurementUnits, setMeasurementUnits] = useState([]);
 	const [isLoading, setLoading] = useState(true);
 
 	const handleFetchWithCookie = async () => {
-		const data = await fetchWithCookie(
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-		);
-		if (data !== undefined) {
-			const currentUser = data.user;
-			setUser(currentUser);
+		try {
+			const data = await fetchWithCookie(
+				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+			);
+			if (data !== undefined) {
+				const currentUser = data.user;
+				setUser(currentUser);
+			}
+		} catch (error) {
+			console.error(error);
 		}
 	};
 
@@ -73,19 +84,20 @@ const GroceryList = () => {
 					...newItem,
 				}
 			);
-			const newitemData = response.data;
+			const newItemData = response.data;
 			const measurementQtyDescription = await getMeasurementQtyDescription(
-				newitemData.measurement_qty_id
+				newItemData.measurement_qty_id
 			);
 			const measurementUnitDescription = await getMeasurementUnitDescription(
-				newitemData.measurement_id
+				newItemData.measurement_id
 			);
-			const newitemWithDescriptions = {
-				...newitemData,
+
+			const newItemWithDescriptions = {
+				...newItemData,
 				measurement_qty_description: measurementQtyDescription,
 				measurement_unit_description: measurementUnitDescription,
 			};
-			setItems([...items, newitemWithDescriptions]);
+			setItems([...items, newItemWithDescriptions]);
 			setNewItem({
 				ingredient_name: "",
 				measurement_qty_id: "",
@@ -97,18 +109,80 @@ const GroceryList = () => {
 		}
 	};
 
-	const handleDeleteItem = async (id) => {
+	const handleSelectIngredient = (item) => {
+		setSelectedIngredient(item);
+		setUpdatedIngredient({
+			ingredient_name: item.ingredient_name,
+			measurement_qty_id: item.measurement_qty_id,
+			measurement_id: item.measurement_id,
+			notes: item.notes,
+		});
+	};
+
+	const handleUpdateIngredient = async () => {
 		try {
-			await axios.delete(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${id}`
+			const selectedQTY = measurementQtys.find(
+				(qty) => qty.id === Number(updatedIngredient.measurement_qty_id)
 			);
-			setItems(items.filter((item) => item.id !== id));
+			const selectedUnit = measurementUnits.find(
+				(unit) => unit.id === Number(updatedIngredient.measurement_id)
+			);
+			const updatedData = {
+				user_id: currentUser.id,
+				ingredient_name: updatedIngredient.ingredient_name,
+				measurement_qty_id: selectedQTY?.id || null,
+				measurement_id: selectedUnit?.id || null,
+				notes: updatedIngredient.notes,
+			};
+
+			const response = await axios.put(
+				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${selectedIngredient.id}`,
+				updatedData
+			);
+
+			const updatedIngredientData = response.data;
+			const measurementQtyDescription = await getMeasurementQtyDescription(
+				updatedIngredientData.measurement_qty_id
+			);
+			const measurementUnitDescription = await getMeasurementUnitDescription(
+				updatedIngredientData.measurement_id
+			);
+			const updatedIngredientWithDescriptions = {
+				...updatedIngredientData,
+				measurement_qty_description: measurementQtyDescription,
+				measurement_unit_description: measurementUnitDescription,
+			};
+
+			setItems((prevIngredients) =>
+				prevIngredients.map((item) =>
+					item.id === selectedIngredient.id
+						? updatedIngredientWithDescriptions
+						: item
+				)
+			);
+			setSelectedIngredient(null);
+			setUpdatedIngredient({
+				ingredient_name: "",
+				measurement_qty_id: "",
+				measurement_id: "",
+				notes: "",
+			});
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	// console.log(items);
+	const handleDeleteItem = async (itemId) => {
+		try {
+			await axios.delete(
+				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${itemId}`
+			);
+			setItems(items.filter((item) => item.id !== itemId));
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	useEffect(() => {
 		const fetchItems = async () => {
 			if (currentUser && currentUser.id) {
@@ -122,7 +196,7 @@ const GroceryList = () => {
 						}
 					);
 					const data = response.data;
-					const processeditems = await Promise.all(
+					const processedItems = await Promise.all(
 						data.map(async (item) => {
 							const measurementQtyDescription =
 								await getMeasurementQtyDescription(item.measurement_qty_id);
@@ -135,30 +209,22 @@ const GroceryList = () => {
 							};
 						})
 					);
-					setItems(processeditems);
-					// console.log("processeditems:", processeditems);
+					setItems(processedItems);
 				} catch (error) {
 					console.log(error);
 				}
 			}
 		};
+
 		fetchItems();
 		fetchMeasurementQtys();
 		fetchMeasurementUnits();
+		setLoading(false);
 	}, [currentUser]);
 
-	useEffect(() => {
-		const onPageLoad = () => {
-			setLoading(false);
-		};
-
-		if (document.readyState === "complete" && items) {
-			onPageLoad();
-		} else {
-			window.addEventListener("load", onPageLoad);
-			return () => window.removeEventListener("load", onPageLoad);
-		}
-	}, []);
+	if (!items) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<>
@@ -187,9 +253,9 @@ const GroceryList = () => {
 					</div>
 				</div>
 			) : (
-				<div className="flex justify-center">
+				<div>
 					<h2 className="text-2xl font-semibold mb-4">Inventory</h2>
-					<table className="table-auto w-3/4">
+					<table className="table-auto w-full">
 						<thead>
 							<tr>
 								<th className="px-4 py-2">Item</th>
@@ -211,6 +277,9 @@ const GroceryList = () => {
 									</td>
 									<td className="border px-4 py-2">{item.notes}</td>
 									<td className="border px-4 py-2">
+										<button onClick={() => handleSelectIngredient(item)}>
+											Update
+										</button>
 										<button onClick={() => handleDeleteItem(item.id)}>
 											Delete
 										</button>
@@ -268,9 +337,75 @@ const GroceryList = () => {
 							</tr>
 						</tbody>
 					</table>
+					{selectedIngredient && (
+						<div>
+							<h3>Update Ingredient</h3>
+							<input
+								type="text"
+								name="ingredient_name"
+								value={updatedIngredient.ingredient_name}
+								onChange={(event) =>
+									setUpdatedIngredient({
+										...updatedIngredient,
+										ingredient_name: event.target.value,
+									})
+								}
+							/>
+							<select
+								name="measurement_qty_id"
+								value={updatedIngredient.measurement_qty_id}
+								onChange={(event) =>
+									setUpdatedIngredient({
+										...updatedIngredient,
+										measurement_qty_id: event.target.value,
+									})
+								}
+							>
+								<option value="">Select Quantity</option>
+								{measurementQtys.map((qty) => (
+									<option key={qty.id} value={qty.id}>
+										{qty.qty_amount}
+									</option>
+								))}
+							</select>
+							<select
+								name="measurement_id"
+								value={updatedIngredient.measurement_id}
+								onChange={(event) =>
+									setUpdatedIngredient({
+										...updatedIngredient,
+										measurement_id: event.target.value,
+									})
+								}
+							>
+								<option value="">Select Unit</option>
+								{measurementUnits.map((unit) => (
+									<option key={unit.id} value={unit.id}>
+										{unit.measurement_description}
+									</option>
+								))}
+							</select>
+							<input
+								type="text"
+								name="notes"
+								value={updatedIngredient.notes}
+								onChange={(event) =>
+									setUpdatedIngredient({
+										...updatedIngredient,
+										notes: event.target.value,
+									})
+								}
+							/>
+							<button onClick={handleUpdateIngredient}>Update</button>
+							<button onClick={() => setSelectedIngredient(null)}>
+								Cancel
+							</button>
+						</div>
+					)}
 				</div>
 			)}
 		</>
 	);
 };
+
 export default GroceryList;

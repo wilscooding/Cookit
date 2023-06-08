@@ -2,28 +2,29 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import { Button, Card } from "flowbite-react";
 
 const RecipeDetails = () => {
-  const { fetchWithCookie } = useToken();
-  const { token } = useToken();
-  const [ currentUser, setUser] = useState();
+	const { fetchWithCookie } = useToken();
+	const { token } = useToken();
+	const [currentUser, setUser] = useState();
 
-  const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const currentUser = data.user
-            setUser(currentUser);
-        }
-  }
+	const handleFetchWithCookie = async () => {
+		const data = await fetchWithCookie(
+			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+		);
+		if (data !== undefined) {
+			const currentUser = data.user;
+			setUser(currentUser);
+		}
+	};
 
-    useEffect(() => {
-      handleFetchWithCookie();
-    }, [token]);
+	useEffect(() => {
+		handleFetchWithCookie();
+	}, [token]);
 
-  const [recipe, setRecipe] = useState("");
-  const { id } = useParams();
+	const [recipe, setRecipe] = useState("");
+	const { id } = useParams();
 
 	useEffect(() => {
 		console.log("RecipeDetails - id:", id);
@@ -39,7 +40,6 @@ const RecipeDetails = () => {
 				console.error(error);
 			}
 		};
-
 		fetchRecipe();
 	}, [id]);
 
@@ -49,15 +49,20 @@ const RecipeDetails = () => {
 				console.log("No current user found");
 				return;
 			}
-			console.log("currentUser:", currentUser);
-			console.log("currentUser.id:", currentUser.id);
-			// Extract the relevant recipe data that you want to save
-			const { title, image } = recipe;
-			console.log("Recipe Title:", title);
-			console.log("Recipe Diets:", recipe.diets);
-			console.log("Recipe Image:", image);
 
-			// Send a request to your backend API to save the recipe
+			const {
+				title,
+				image,
+				summary,
+				analyzedInstructions,
+				extendedIngredients,
+			} = recipe;
+
+			const stepsText = recipe.analyzedInstructions[0].steps
+				.map((step) => step.step)
+				.join("\n");
+			console.log("steps text", stepsText);
+			console.log("analized inst", recipe.analyzedInstructions);
 			const response = await axios.post(
 				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
 				{
@@ -65,18 +70,165 @@ const RecipeDetails = () => {
 					recipe_name: title,
 					diet: recipe.diets[0],
 					img: image,
+					description: recipe.summary,
+					steps: stepsText,
 				}
 			);
-
-			console.log("creator_id:", currentUser.id);
-
+			// console.log("creator_id:", currentUser.id);
 			// Handle the response as needed
-			console.log("Save Recipe Response:", response.data);
+			// console.log("Save Recipe Response:", response.data);
+			const savedRecipeId = response.data.id;
+			// console.log("Saved Recipe ID:", savedRecipeId);
+			let ingredientId;
+			for (const ingredient of extendedIngredients) {
+				const { name, measures } = ingredient;
+
+				const existingIngredientResponse = await axios.get(
+					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
+					{
+						params: {
+							ingredient_name: name,
+						},
+					}
+				);
+
+				if (existingIngredientResponse.data.length > 0) {
+					const existingIngredient = existingIngredientResponse.data.find(
+						(ingredient) => ingredient.ingredient_name === name
+					);
+					ingredientId = existingIngredient.id;
+					// console.log("Ingredient already exists:", name);
+					// console.log("Ingredient ID:", ingredientId);
+					// Associate the existing ingredient with the saved recipe
+				} else {
+					const newIngredientResponse = await axios.post(
+						`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
+						{
+							ingredient_name: name,
+						}
+					);
+
+					const newIngredient = newIngredientResponse.data;
+					ingredientId = newIngredient.id;
+					// console.log("New Ingredient created:", name);
+					// console.log("Ingredient ID:", ingredientId);
+					// Associate the new ingredient with the saved recipe
+				}
+
+				const amount = measures.us.amount;
+				let measurementQtyId;
+				// console.log("Amount from frontend:", amount);
+
+				const existingMeasurementQtyResponse = await axios.get(
+					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
+					{
+						params: {
+							qty_amount: amount,
+						},
+					}
+				);
+				// console.log(
+				//   "Existing qty_amounts from backend:",
+				//   existingMeasurementQtyResponse.data.map((item) => item.qty_amount)
+				// );
+
+				if (
+					existingMeasurementQtyResponse.data &&
+					existingMeasurementQtyResponse.data.length > 0
+				) {
+					const existingMeasurementQty =
+						existingMeasurementQtyResponse.data.find(
+							(measurementQty) => measurementQty.qty_amount === amount
+						);
+
+					if (existingMeasurementQty) {
+						measurementQtyId = existingMeasurementQty.id;
+						// console.log(
+						//   "Measurement quantity already exists:",
+						//   measurementQtyId
+						// );
+					} else {
+						const newMeasurementQtyResponse = await axios.post(
+							`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
+							{
+								qty_amount: amount,
+							}
+						);
+						measurementQtyId = newMeasurementQtyResponse.data.id;
+						// console.log("New Measurement quantity created:", amount);
+					}
+				}
+
+				const unit = measures.us.unitLong;
+				let measurementUnitId;
+				// console.log("Unit from frontend:", unit);
+
+				const existingMeasurementUnitResponse = await axios.get(
+					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
+					{
+						params: {
+							measurement_description: unit,
+						},
+					}
+				);
+				// console.log(
+				//   "Existing measurement units from backend:",
+				//   existingMeasurementUnitResponse.data.map(
+				//     (item) => item.measurement_description
+				//   )
+				// );
+
+				if (
+					existingMeasurementUnitResponse.data &&
+					existingMeasurementUnitResponse.data.length > 0
+				) {
+					const existingMeasurementUnit =
+						existingMeasurementUnitResponse.data.find(
+							(measurementUnit) =>
+								measurementUnit.measurement_description === unit
+						);
+
+					if (existingMeasurementUnit) {
+						measurementUnitId = existingMeasurementUnit.id;
+						// console.log("Measurement unit already exists:", unit);
+					} else {
+						const newMeasurementUnitResponse = await axios.post(
+							`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
+							{
+								measurement_description: unit,
+							}
+						);
+						measurementUnitId = newMeasurementUnitResponse.data.id;
+						// console.log("New Measurement unit created:", unit);
+					}
+				}
+
+				// console.log("Ingredient:", name);
+				// console.log("Measurement Quantity ID:", measurementQtyId);
+				// console.log("Measurement Unit ID:", measurementUnitId);
+				// console.log("---------------------------");
+
+				const ingredientData = {
+					recipe_id: savedRecipeId,
+					measurement_id: measurementUnitId,
+					measurement_qty_id: measurementQtyId,
+					ingredient_id: ingredientId,
+				};
+				// console.log("before recipe ingredients", ingredientData);
+
+				const recipeIngredientResponse = await axios.post(
+					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe_ingredients/`,
+					ingredientData
+				);
+
+				// console.log("Saved Recipe Ingredient:", recipeIngredientResponse.data);
+			}
+
+			console.log("Ingredients saved successfully!");
 		} catch (error) {
 			console.error(error);
 		}
 	};
-
 	if (!recipe) {
 		return (
 			<div className="flex w-full h-screen">
@@ -84,7 +236,7 @@ const RecipeDetails = () => {
 					<div role="status">
 						<svg
 							aria-hidden="true"
-							class="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
+							className="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
 							viewBox="0 0 100 101"
 							fill="none"
 							xmlns="http://www.w3.org/2000/svg"
@@ -98,7 +250,7 @@ const RecipeDetails = () => {
 								fill="currentFill"
 							/>
 						</svg>
-						<span class="sr-only">Loading...</span>
+						<span className="sr-only">Loading...</span>
 					</div>
 				</div>
 			</div>
@@ -117,37 +269,56 @@ const RecipeDetails = () => {
 		}));
 
 		return (
-			<div>
-				<h2>{recipe.title}</h2>
-				<img src={recipe.image} alt={recipe.title} />
-				{/* Add a button to save the recipe */}
-				<button onClick={handleSaveRecipe}>Save Recipe</button>
-				<h3>{recipe.creditsText}</h3>
-				<h3>Summary</h3>
-				<div dangerouslySetInnerHTML={{ __html: recipe.summary }} />
-				<h3>Ingredients</h3>
-				<ul>
-					{ingredientNames.map((ingredient, index) => (
-						<li key={index}>
-							<div className="row">
-								<div className="col-sm-4">
-									<strong>{ingredient.name}</strong>
-								</div>
-								<div className="col-sm-8">{ingredient.original}</div>
+			<div className="relative w-full bg-gray-100">
+				<div className="flex p-4 justify-center">
+					<div className="container justify-center">
+						<h2 className="p-4 pl-0 pb-0 text-3xl font-bold">{recipe.title}</h2>
+						<img
+							className="rounded-md shadow m-2 ml-0"
+							src={recipe.image}
+							alt={recipe.title}
+						/>
+						<div className="flex">
+							<Button onClick={handleSaveRecipe}>Save Recipe</Button>
+							<h3 className="flex pl-2 text-xs justify-center">
+								Created By: {recipe.creditsText}
+							</h3>
+						</div>
+						<Card className="justify-center my-6">
+							<div className="flex">
+								<h3 className="flex w-full text-center justify-center text-2xl font-bold">
+									Summary:
+								</h3>
+								<div
+									className="font-normal"
+									dangerouslySetInnerHTML={{ __html: recipe.summary }}
+								/>
 							</div>
-						</li>
-					))}
-				</ul>
-				<h3>Instructions</h3>
-				<ul>
-					{instructions.map((step, index) => (
-						<li key={index}>
-							{step.number} - {step.step}
-						</li>
-					))}
-				</ul>
+						</Card>
+						<h3 className="capitalize text-2xl underline font-bold">Ingredients</h3>
+						<ol className=" indent-3 mb-3">
+							{ingredientNames.map((ingredient, index) => (
+								<li key={index}>
+									<div className="row">
+										<div className="col-sm-8">{ingredient.original}</div>
+									</div>
+								</li>
+							))}
+						</ol>
+						<h3 className="text-lg font-bold">Instructions</h3>
+						<ul>
+							{instructions.map((instruction, index) => (
+								<li key={index}>
+									{instruction.number}{": "}{instruction.step}
+								</li>
+							))}
+						</ul>
+					</div>
+				</div>
 			</div>
 		);
+	} else {
+		return <div>No instructions found for this recipe.</div>;
 	}
 };
 

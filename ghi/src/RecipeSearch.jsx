@@ -74,14 +74,14 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 					</div>
 				</div>
 			) : (
-				<div className="relative h-screen">
-					<h1 className="flex w-full h-fit justify-center m-3 font-bold text-5xl text-orange-500">
+				<div className="relative">
+					<h1 className="flex w-full h-fit justify-center my-3 font-bold text-5xl text-orange-500">
 						Welcome to CookIt!
 					</h1>
-					<h2 className="flex w-full h-fit justify-center m-3 font-bold text-lg italic text-gray-900">
+					<h2 className="flex w-full h-fit justify-center my-3 font-bold text-lg italic text-gray-900">
 						Searching for a recipe?
 					</h2>
-					<div className="flex w-full h-fit justify-center m-4 mt-1">
+					<div className="flex w-full h-fit justify-center my-3 mt-1">
 						<input
 							type="text"
 							value={query}
