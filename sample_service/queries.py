@@ -815,7 +815,7 @@ class RecipeIngredientQueries:
                     {"id": id},
                 )
                 if cur.rowcount > 0:
-                    return
+                    return True
                 return False
 
 

@@ -49,10 +49,7 @@ def get_recipe_ingredients(
     recipe_ingredients = recipe_ingredient_queries.get_recipe_ingredients(
         recipe_id
     )
-    for recipe_ingredient in recipe_ingredients:
-        ingredient_id = recipe_ingredient.ingredient_id
-        ingredient = ingredient_queries.get_ingredient_by_id(ingredient_id)
-        recipe_ingredient.ingredient = ingredient
+
     return recipe_ingredients
 
 
