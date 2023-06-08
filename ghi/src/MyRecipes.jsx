@@ -23,6 +23,18 @@ const MyRecipes = ({ currentUser }) => {
       }
     }
   };
+
+  const handleDeleteRecipe = async (recipe_id) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${recipe_id}`
+      );
+      fetchRecipes();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchRecipes();
   }, [currentUser]);
@@ -38,6 +50,9 @@ const MyRecipes = ({ currentUser }) => {
                 <p className="text-blue-600">{recipe.recipe_name}</p>
               </Link>
               <p>Diet: {recipe.diet}</p>
+              <button onClick={() => handleDeleteRecipe(recipe.id)}>
+                Delete
+              </button>
             </div>
             <img src={recipe.img} alt={recipe.recipe_name} width="100px" />
           </li>

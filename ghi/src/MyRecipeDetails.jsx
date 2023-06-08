@@ -36,12 +36,12 @@ const MyRecipeDetails = ({ currentUser }) => {
     <div>
       <h2>{recipe.recipe_name}</h2>
       <img src={recipe.img} alt={recipe.title} width="300px" />
-      <h3>Description</h3>
-      <div>{recipe.description}</div>
-      <h3>Steps</h3>
-      <div>{recipe.steps}</div>
       <h3>Diet</h3>
       <div>{recipe.diet}</div>
+      <h3>Description</h3>
+      <div dangerouslySetInnerHTML={{ __html: recipe.description }} />
+      <h3>Steps</h3>
+      <div>{recipe.steps}</div>
       <Link to={`/myrecipes/${id}/edit`}>
         <Button color="light">Edit Recipe</Button>
       </Link>

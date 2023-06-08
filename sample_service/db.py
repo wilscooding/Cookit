@@ -94,7 +94,7 @@ class RecipeIngredientIn(BaseModel):
     measurement_id: int
     measurement_qty_id: int
     ingredient_id: int
-    
+
 class RecipeIngredientOut(BaseModel):
     id: int
     recipe_id: int

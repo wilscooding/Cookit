@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException
 from db import IngredientIn, IngredientOut
 from queries import IngredientQueries
 
@@ -15,9 +16,27 @@ def create_ingredient(
 
 @router.get("/api/ingredients/", response_model=list[IngredientOut])
 def get_ingredients(
+    ingredient_name: Optional[str] = None,
     queries: IngredientQueries = Depends(),
-    ) -> list[IngredientOut]:
-    return queries.get_ingredients()
+) -> list[IngredientOut]:
+    ingredients = queries.get_ingredients(ingredient_name)
+    if ingredient_name:
+        filtered_ingredients = [
+            IngredientOut(**ingredient.dict()) for ingredient in ingredients
+            if ingredient.ingredient_name == ingredient_name
+        ]
+    else:
+        filtered_ingredients = [
+            IngredientOut(**ingredient.dict()) for ingredient in ingredients
+        ]
+    return filtered_ingredients
+
+
+    # if not ingredients:
+    #     raise HTTPException(status_code=404, detail="Ingredient not found")
+
+
+    return ingredients
 
 @router.get("/api/ingredients/{id}", response_model=IngredientOut)
 def get_ingredient_by_id(
