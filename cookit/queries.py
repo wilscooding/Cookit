@@ -665,7 +665,7 @@ class RecipeIngredientQueries:
         recipe_id: int,
         measurement_id: int,
         measurement_qty_id: int,
-        ingredient_id: Optional[int],
+        ingredient_id: int,
     ) -> RecipeIngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
@@ -704,6 +704,30 @@ class RecipeIngredientQueries:
                     WHERE id = %s
                     """,
                     (id,),
+                )
+                record = cur.fetchone()
+                if record:
+                    recipe_ingredient_dict = {
+                        "id": record[0],
+                        "recipe_id": record[1],
+                        "measurement_id": record[2],
+                        "measurement_qty_id": record[3],
+                        "ingredient_id": record[4],
+                    }
+                    return RecipeIngredientOut(**recipe_ingredient_dict)
+
+    def get_recipe_ingredient_by_recipe_and_ingredient(
+        self, recipe_id: int, ingredient_id: int
+    ) -> RecipeIngredientOut:
+        with pool.connection() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """
+                  SELECT id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                  FROM recipe_ingredients
+                  WHERE recipe_id = %s AND ingredient_id = %s
+                  """,
+                    (recipe_id, ingredient_id),
                 )
                 record = cur.fetchone()
                 if record:
@@ -791,7 +815,7 @@ class RecipeIngredientQueries:
                     {"id": id},
                 )
                 if cur.rowcount > 0:
-                    return
+                    return True
                 return False
 
 
