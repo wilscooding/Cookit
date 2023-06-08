@@ -252,8 +252,11 @@ const MyIngredients = () => {
           </tr>
         </thead>
         <tbody>
-          {ingredients.map((ingredient) => (
-            <tr key={ingredient.id}>
+          {ingredients.map((ingredient, index) => (
+            <tr
+              key={ingredient.id}
+              className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+            >
               <td className="border px-4 py-2">{ingredient.ingredient_name}</td>
               <td className="border px-4 py-2">
                 {ingredient.measurement_qty_description}
@@ -263,10 +266,32 @@ const MyIngredients = () => {
               </td>
               <td className="border px-4 py-2">{ingredient.notes}</td>
               <td className="border px-4 py-2">
-                <button onClick={() => handleSelectIngredient(ingredient)}>
+                <button
+                  style={{
+                    backgroundColor: "#3B82F6",
+                    color: "white",
+                    fontWeight: "bold",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                    boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+                  }}
+                  onClick={() => handleSelectIngredient(ingredient)}
+                >
                   Update
                 </button>
-                <button onClick={() => handleDeleteIngredient(ingredient.id)}>
+                <button
+                  style={{
+                    backgroundColor: "red",
+                    color: "white",
+                    fontWeight: "bold",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                    boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+                  }}
+                  onClick={() => handleDeleteIngredient(ingredient.id)}
+                >
                   Delete
                 </button>
               </td>
@@ -318,7 +343,20 @@ const MyIngredients = () => {
               />
             </td>
             <td className="border px-4 py-2">
-              <button onClick={handleAddIngredient}>Add</button>
+              <button
+                style={{
+                  backgroundColor: "#3B82F6",
+                  color: "white",
+                  fontWeight: "bold",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.25rem",
+                  outline: "none",
+                  boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+                }}
+                onClick={handleAddIngredient}
+              >
+                Add
+              </button>
             </td>
           </tr>
         </tbody>
@@ -382,8 +420,34 @@ const MyIngredients = () => {
               })
             }
           />
-          <button onClick={handleUpdateIngredient}>Update</button>
-          <button onClick={() => setSelectedIngredient(null)}>Cancel</button>
+          <button
+            style={{
+              backgroundColor: "#3B82F6",
+              color: "white",
+              fontWeight: "bold",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.25rem",
+              outline: "none",
+              boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+            }}
+            onClick={handleUpdateIngredient}
+          >
+            Update
+          </button>
+          <button
+            style={{
+              backgroundColor: "grey",
+              color: "white",
+              fontWeight: "bold",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.25rem",
+              outline: "none",
+              boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+            }}
+            onClick={() => setSelectedIngredient(null)}
+          >
+            Cancel
+          </button>
         </div>
       )}
     </div>

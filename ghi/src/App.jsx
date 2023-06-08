@@ -25,7 +25,7 @@ function App(props) {
     const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isLoading, setLoading] = useState(true);
+    // const [isLoading, setLoading] = useState(true);
 
   const handleSearch = (query) => {
     setSearchQuery(query);

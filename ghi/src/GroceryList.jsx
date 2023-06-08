@@ -238,8 +238,11 @@ const GroceryList = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item.id}>
+          {items.map((item, index) => (
+            <tr
+              key={item.id}
+              className={index % 2 === 0 ? "bg-white" : "bg-gray-100"}
+            >
               <td className="border px-4 py-2">{item.ingredient_name}</td>
               <td className="border px-4 py-2">
                 {item.measurement_qty_description}
@@ -249,10 +252,32 @@ const GroceryList = () => {
               </td>
               <td className="border px-4 py-2">{item.notes}</td>
               <td className="border px-4 py-2">
-                <button onClick={() => handleSelectIngredient(item)}>
+                <button
+                  style={{
+                    backgroundColor: "#3B82F6",
+                    color: "white",
+                    fontWeight: "bold",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                    boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+                  }}
+                  onClick={() => handleSelectIngredient(item)}
+                >
                   Update
                 </button>
-                <button onClick={() => handleDeleteItem(item.id)}>
+                <button
+                  style={{
+                    backgroundColor: "red",
+                    color: "white",
+                    fontWeight: "bold",
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.25rem",
+                    outline: "none",
+                    boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+                  }}
+                  onClick={() => handleDeleteItem(item.id)}
+                >
                   Delete
                 </button>
               </td>
@@ -304,7 +329,20 @@ const GroceryList = () => {
               />
             </td>
             <td className="border px-4 py-2">
-              <button onClick={handleAddItem}>Add</button>
+              <button
+                style={{
+                  backgroundColor: "#3B82F6",
+                  color: "white",
+                  fontWeight: "bold",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "0.25rem",
+                  outline: "none",
+                  boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+                }}
+                onClick={handleAddItem}
+              >
+                Add
+              </button>
             </td>
           </tr>
         </tbody>
@@ -368,8 +406,34 @@ const GroceryList = () => {
               })
             }
           />
-          <button onClick={handleUpdateIngredient}>Update</button>
-          <button onClick={() => setSelectedIngredient(null)}>Cancel</button>
+          <button
+            style={{
+              backgroundColor: "#3B82F6",
+              color: "white",
+              fontWeight: "bold",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.25rem",
+              outline: "none",
+              boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+            }}
+            onClick={handleUpdateIngredient}
+          >
+            Update
+          </button>
+          <button
+            style={{
+              backgroundColor: "grey",
+              color: "white",
+              fontWeight: "bold",
+              padding: "0.5rem 1rem",
+              borderRadius: "0.25rem",
+              outline: "none",
+              boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.5)",
+            }}
+            onClick={() => setSelectedIngredient(null)}
+          >
+            Cancel
+          </button>
         </div>
       )}
     </div>
