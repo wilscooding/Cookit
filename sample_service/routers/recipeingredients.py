@@ -13,21 +13,14 @@ def create_recipe_ingredient(
     # ingredient_queries: IngredientQueries = Depends(),
     recipe_ingredient_queries: RecipeIngredientQueries = Depends(),
 ) -> RecipeIngredientOut:
-    existing_recipe_ingredient = (
-        recipe_ingredient_queries.get_recipe_ingredient(
-            recipe_ingredient.recipe_id,
-            recipe_ingredient.ingredient_id,
-            recipe_ingredient.measurement_id,
-            recipe_ingredient.ingredient_id,
-        )
+    existing_recipe_ingredient = recipe_ingredient_queries.get_recipe_ingredient_by_recipe_and_ingredient(
+        recipe_ingredient.recipe_id, recipe_ingredient.ingredient_id
     )
     if existing_recipe_ingredient:
         raise HTTPException(
             status_code=400,
             detail="Recipe ingredient already exists",
         )
-
-    # ingredient = ingredient_queries.create_ingredients(recipe_ingredient.ingredient)
 
     new_recipe_ingredient = recipe_ingredient_queries.create_recipe_ingredient(
         recipe_ingredient.recipe_id,

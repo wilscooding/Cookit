@@ -21,23 +21,7 @@ function CreateMyRecipeForm() {
     unit: "",
   });
 
-  const [recipeIngredients, setRecipeIngredients] = useState([
-    {
-      id: 1,
-      qty: 1,
-      unit: 1,
-    },
-    {
-      id: 2,
-      qty: 1,
-      unit: 3,
-    },
-    {
-      id: 3,
-      qty: 2,
-      unit: 4,
-    },
-  ]);
+  const [recipeIngredients, setRecipeIngredients] = useState([]);
 
   const [ingredients, setIngredients] = useState({});
   const [qtys, setQtys] = useState({});
@@ -119,28 +103,6 @@ function CreateMyRecipeForm() {
     }
   };
 
-  async function handleSaveRecipeIngredients(recipeId) {
-    const saveIngredients = recipeIngredients.map((ingredient) => {
-      console.log({
-        recipe_id: recipeId,
-        ingredient_id: ingredient.id,
-        measurement_id: ingredient.unit,
-        measurement_qty_id: ingredient.qty,
-      });
-      //   return axios.post(
-      //     `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe-ingredients/`,
-      //     {
-      //       recipe_id: recipeId,
-      //       measurement_id: ingredient.measurementId,
-      //       measurement_qty_id: ingredient.qtyId,
-      //       ingredient_id: ingredient.id,
-      //     }
-      //   );
-    });
-
-    // await Promise.all(saveIngredients);
-  }
-
   async function handleNewRecipeIngredient(event) {
     const clonedNewRecipeIngredient = JSON.parse(
       JSON.stringify(newRecipeIngredient)
@@ -200,6 +162,22 @@ function CreateMyRecipeForm() {
     });
   }
 
+  async function handleSaveRecipeIngredients(recipeId) {
+    const saveIngredients = recipeIngredients.map((ingredient) => {
+      return axios.post(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe-ingredients/`,
+        {
+          recipe_id: recipeId,
+          measurement_id: ingredient.unit,
+          measurement_qty_id: ingredient.qty,
+          ingredient_id: ingredient.id,
+        }
+      );
+    });
+
+    await Promise.all(saveIngredients);
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
     const response = await axios.post(
@@ -215,9 +193,9 @@ function CreateMyRecipeForm() {
     );
 
     if (response.statusText === "OK") {
-      await handleSaveRecipeIngredients();
+      await handleSaveRecipeIngredients(response.data.id);
 
-      //   navigate("/myrecipes");
+      navigate("/myrecipes");
     }
   }
 
@@ -289,7 +267,7 @@ function CreateMyRecipeForm() {
             <Card className="p-4">
               <div className="flex-col">
                 <div>
-                  <div className="mb-6 block">
+                  <div className="mb-6 block text-center">
                     <h1 className="text-4xl">Create A Recipe</h1>
                   </div>
                 </div>
