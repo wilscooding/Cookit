@@ -61,7 +61,7 @@ async def search_recipes(query: str):
     api_url = "https://api.spoonacular.com/recipes/complexSearch"
     api_key = SPOONACULAR_API_KEY
     headers = {"Content-Type": "application/json"}
-    params = {"apiKey": api_key, "query": query}
+    params = {"apiKey": api_key, "query": query, "number": 16}
     response = requests.get(api_url, params=params, headers=headers)
     data = response.json()
     recipes = data.get("results")

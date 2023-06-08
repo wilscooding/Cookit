@@ -25,7 +25,6 @@ function App(props) {
     const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    const [isLoading, setLoading] = useState(true);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -36,7 +35,7 @@ function App(props) {
     };
 
   return (
-    <div className="bg-amber-400/50 min-h-screen pb-10">
+    <div className="bg-amber-400/50 h-screen w-screen overflow-hidden">
       <BrowserRouter>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
