@@ -148,3 +148,4 @@ SELECT setval('measurement_qty_id_seq', (SELECT MAX(id) + 1 FROM measurement_qty
 SELECT setval('ingredients_id_seq', (SELECT MAX(id) + 1 FROM ingredients));
 SELECT setval('my_ingredients_id_seq', (SELECT MAX(id) + 1 FROM my_ingredients));
 SELECT setval('grocery_list_id_seq', (SELECT MAX(id) + 1 FROM grocery_list));
+SELECT setval('recipe_ingredients_id_seq', (SELECT MAX(id) + 1 FROM recipe_ingredients));

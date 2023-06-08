@@ -68,33 +68,41 @@ class UserForm(BaseModel):
 class HttpError(BaseModel):
     detail: str
 
+
 class IngredientIn(BaseModel):
     ingredient_name: str
+
 
 class IngredientOut(BaseModel):
     id: int
     ingredient_name: str
 
+
 class MeasurementQtyIn(BaseModel):
     qty_amount: Union[float, str]
+
 
 class MeasurementQtyOut(BaseModel):
     id: int
     qty_amount: Union[float, str]
 
+
 class MeasurementUnitIn(BaseModel):
     measurement_description: str
+
 
 class MeasurementUnitOut(BaseModel):
     id: int
     measurement_description: str
+
 
 class RecipeIngredientIn(BaseModel):
     recipe_id: int
     measurement_id: int
     measurement_qty_id: int
     ingredient_id: int
-    
+
+
 class RecipeIngredientOut(BaseModel):
     id: int
     recipe_id: int
@@ -102,12 +110,14 @@ class RecipeIngredientOut(BaseModel):
     measurement_qty_id: int
     ingredient_id: int
 
+
 class MyIngredientIn(BaseModel):
     user_id: int
     ingredient_name: str
     measurement_id: int
     measurement_qty_id: int
     notes: Optional[str] = None
+
 
 class MyIngredientOut(BaseModel):
     id: int
@@ -124,6 +134,7 @@ class GroceryListItemIn(BaseModel):
     measurement_id: int
     measurement_qty_id: int
     notes: Optional[str] = None
+
 
 class GroceryListItemOut(BaseModel):
     id: int
