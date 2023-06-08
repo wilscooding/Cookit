@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Button } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 import axios from "axios";
 
 const MyRecipeDetails = ({ currentUser }) => {
@@ -33,18 +33,35 @@ const MyRecipeDetails = ({ currentUser }) => {
   }
 
   return (
-    <div>
-      <h2>{recipe.recipe_name}</h2>
-      <img src={recipe.img} alt={recipe.title} width="300px" />
-      <h3>Diet</h3>
-      <div>{recipe.diet}</div>
-      <h3>Description</h3>
-      <div dangerouslySetInnerHTML={{ __html: recipe.description }} />
-      <h3>Steps</h3>
-      <div>{recipe.steps}</div>
-      <Link to={`/myrecipes/${id}/edit`}>
-        <Button color="light">Edit Recipe</Button>
-      </Link>
+    <div className="flex w-full">
+      <div className="w-full flex items-center justify-center">
+        <div className="w-full flex-col">
+          <div className="w-full flex items-center justify-end">
+            <Link to={`/myrecipes/${id}/edit`} className="mr-10">
+              <Button className="mt-5" color="light">
+                Edit Recipe
+              </Button>
+            </Link>
+          </div>
+          <div className="w-full flex items-center justify-center">
+            <div className="flex-col text-center">
+              <Card>
+                <h1 className="border-b border-slate-300 pb-2">
+                  <strong>{recipe.recipe_name}</strong>
+                </h1>
+                <img src={recipe.img} alt={recipe.title} width="300px" />
+                <div className="border-b border-slate-300 pb-3">
+                  dangerouslySetInnerHTML={{ __html: recipe.description }}
+                </div>
+                <div className="border-b border-slate-300 pb-3">
+                  {recipe.steps}
+                </div>
+                <div>{recipe.diet}</div>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

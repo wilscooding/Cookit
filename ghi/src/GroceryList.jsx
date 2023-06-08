@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  getMeasurementQtyDescription,
-  getMeasurementUnitDescription,
+	getMeasurementQtyDescription,
+	getMeasurementUnitDescription,
 } from "./MyIngredients";
+import useToken from "@galvanize-inc/jwtdown-for-react";
 
-const GroceryList = ({ currentUser }) => {
-  const [groceryItems, setGroceryItems] = useState([]);
-  const [newItem, setNewItem] = useState({
-    ingredient_name: "",
-    measurement_qty_id: "",
-    measurement_id: "",
-    notes: "",
-  });
+const GroceryList = () => {
+	const { fetchWithCookie } = useToken();
+  	const { token } = useToken();
+  	const [ currentUser, setUser] = useState();
+	const [items, setItems] = useState([]);
+	const [newItem, setNewItem] = useState({
+		ingredient_name: "",
+		measurement_qty_id: "",
+		measurement_id: "",
+		notes: "",
+	});
   const [selectedIngredient, setSelectedIngredient] = useState(null);
   const [updatedIngredient, setUpdatedIngredient] = useState({
     ingredient_name: "",
@@ -20,79 +24,51 @@ const GroceryList = ({ currentUser }) => {
     measurement_id: "",
     notes: "",
   });
+	const [measurementQtys, setMeasurementQtys] = useState([]);
+	const [measurementUnits, setMeasurementUnits] = useState([]);
 
-  const [measurementQtys, setMeasurementQtys] = useState([]);
-  const [measurementUnits, setMeasurementUnits] = useState([]);
-
-  useEffect(() => {
-    fetchGroceryList();
-    fetchMeasurementQtys();
-    fetchMeasurementUnits();
-  }, [currentUser]);
-
-  const fetchGroceryList = async () => {
-    if (currentUser && currentUser.id) {
-      try {
-        const response = await axios.get(
-          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
-          {
-            params: {
-              user_id: currentUser.id,
-            },
-          }
+	const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
         );
-        const groceryListData = response.data;
-        const itemsWithDescriptions = await Promise.all(
-          groceryListData.map(async (item) => {
-            const measurementQty = await getMeasurementQtyDescription(
-              item.measurement_qty_id
-            );
-            const measurementUnit = await getMeasurementUnitDescription(
-              item.measurement_id
-            );
-            return {
-              ...item,
-              measurement_qty_description: measurementQty,
-              measurement_unit_description: measurementUnit,
-            };
-          })
-        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        }
+  }
 
-        setGroceryItems(itemsWithDescriptions);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
+    useEffect(() => {
+      handleFetchWithCookie();
+    }, [token]);
 
-  const fetchMeasurementQtys = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`
-      );
-      setMeasurementQtys(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+	const fetchMeasurementQtys = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty`
+			);
+			setMeasurementQtys(response.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  const fetchMeasurementUnits = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`
-      );
-      setMeasurementUnits(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+	const fetchMeasurementUnits = async () => {
+		try {
+			const response = await axios.get(
+				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units`
+			);
+			setMeasurementUnits(response.data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 
-  const handleInputChange = (event) => {
-    setNewItem({
-      ...newItem,
-      [event.target.name]: event.target.value,
-    });
-  };
+	const handleInputChange = (event) => {
+		setNewItem({
+			...newItem,
+			[event.target.name]: event.target.value,
+		});
+	};
 
   const handleAddItem = async () => {
     try {
@@ -202,13 +178,56 @@ const GroceryList = ({ currentUser }) => {
     }
   };
 
-  return (
+	// console.log(items);
+	useEffect(() => {
+		const fetchItems = async () => {
+			if (currentUser && currentUser.id) {
+				try {
+					const response = await axios.get(
+						`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
+						{
+							params: {
+								user_id: currentUser.id,
+							},
+						}
+					);
+					const data = response.data;
+					const processeditems = await Promise.all(
+						data.map(async (item) => {
+							const measurementQtyDescription =
+								await getMeasurementQtyDescription(item.measurement_qty_id);
+							const measurementUnitDescription =
+								await getMeasurementUnitDescription(item.measurement_id);
+							return {
+								...item,
+								measurement_qty_description: measurementQtyDescription,
+								measurement_unit_description: measurementUnitDescription,
+							};
+						})
+					);
+					setItems(processeditems);
+					// console.log("processeditems:", processeditems);
+				} catch (error) {
+					console.log(error);
+				}
+			}
+		};
+		fetchItems();
+		fetchMeasurementQtys();
+		fetchMeasurementUnits();
+	}, [currentUser]);
+
+	if (!items) {
+		return <div>Loading...</div>;
+	}
+
+	return (
     <div>
-      <h2 className="text-2xl font-semibold mb-4">Grocery List</h2>
+      <h2 className="text-2xl font-semibold mb-4">Inventory</h2>
       <table className="table-auto w-full">
         <thead>
           <tr>
-            <th className="px-4 py-2">Ingredient</th>
+            <th className="px-4 py-2">Item</th>
             <th className="px-4 py-2">Quantity</th>
             <th className="px-4 py-2">Unit</th>
             <th className="px-4 py-2">Notes</th>
@@ -287,71 +306,7 @@ const GroceryList = ({ currentUser }) => {
           </tr>
         </tbody>
       </table>
-      {selectedIngredient && (
-        <div>
-          <h3>Update Ingredient</h3>
-          <input
-            type="text"
-            name="ingredient_name"
-            value={updatedIngredient.ingredient_name}
-            onChange={(event) =>
-              setUpdatedIngredient({
-                ...updatedIngredient,
-                ingredient_name: event.target.value,
-              })
-            }
-          />
-          <select
-            name="measurement_qty_id"
-            value={updatedIngredient.measurement_qty_id}
-            onChange={(event) =>
-              setUpdatedIngredient({
-                ...updatedIngredient,
-                measurement_qty_id: event.target.value,
-              })
-            }
-          >
-            <option value="">Select Quantity</option>
-            {measurementQtys.map((qty) => (
-              <option key={qty.id} value={qty.id}>
-                {qty.qty_amount}
-              </option>
-            ))}
-          </select>
-          <select
-            name="measurement_id"
-            value={updatedIngredient.measurement_id}
-            onChange={(event) =>
-              setUpdatedIngredient({
-                ...updatedIngredient,
-                measurement_id: event.target.value,
-              })
-            }
-          >
-            <option value="">Select Unit</option>
-            {measurementUnits.map((unit) => (
-              <option key={unit.id} value={unit.id}>
-                {unit.measurement_description}
-              </option>
-            ))}
-          </select>
-          <input
-            type="text"
-            name="notes"
-            value={updatedIngredient.notes}
-            onChange={(event) =>
-              setUpdatedIngredient({
-                ...updatedIngredient,
-                notes: event.target.value,
-              })
-            }
-          />
-          <button onClick={handleUpdateIngredient}>Update</button>
-          <button onClick={() => setSelectedIngredient(null)}>Cancel</button>
-        </div>
-      )}
     </div>
   );
 };
-
 export default GroceryList;

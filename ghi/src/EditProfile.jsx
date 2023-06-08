@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Card, Label, TextInput, Button } from "flowbite-react";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import { useNavigate } from "react-router-dom";
+
 
 const EditProfile = () => {
     const { fetchWithCookie } = useToken();
@@ -9,7 +11,7 @@ const EditProfile = () => {
     const [ currentUser, setUser] = useState();
     const [ userDetails, setUserDetails] = useState();
     const [isLoading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
 
     const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
@@ -21,9 +23,9 @@ const EditProfile = () => {
         }
     }
 
-    useEffect(() => {
-            handleFetchWithCookie();
-    }, [token]);
+  useEffect(() => {
+    handleFetchWithCookie();
+  }, [token]);
 
     const fetchUserDetails = async () => {
         if (currentUser !== undefined){
@@ -39,12 +41,36 @@ const EditProfile = () => {
         }
     }
 
-
     useEffect(() => {
             fetchUserDetails();
     }, [currentUser]);
-    // adding a comment
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        try {
+        axios.put(`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`, userDetails)
+        .then(res => {navigate('/profile')})
+        // .catch(err => console.log(err))
+        } catch(error) {
+            console.log("Unable to perform task.")
+        }
+    }
+
+    const handleFirst = (event) => {
+        setUserDetails({...userDetails, first: event.target.value})
+    }
+
+    const handleLast = (event) => {
+        setUserDetails({...userDetails, last: event.target.value})
+    }
+
+    const handleEmail = (event) => {
+        setUserDetails({...userDetails, email: event.target.value})
+    }
+
+    const handleUsername = (event) => {
+        setUserDetails({...userDetails, username: event.target.value})
+    }
 
     return (
             <>
@@ -76,30 +102,30 @@ const EditProfile = () => {
                 <div className="flex w-full h-screen">
                 <div className="flex w-full items-center justify-center">
                     <Card>
-                        <form className="flex flex-col gap-4">
+                        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                             <div>
                                 <div className="mb-2 block">
                                     <Label htmlFor="first" value="First Name"/>
                                 </div>
-                                <TextInput id="first" placeholder={userDetails.first}  type="text"/>
+                                <TextInput id="first" value={userDetails.first} onChange={handleFirst}  type="text"/>
                             </div>
                             <div>
                                 <div className="mb-2 block">
                                     <Label htmlFor="last" value="Last Name"/>
                                 </div>
-                                <TextInput id="last" placeholder={userDetails.last} type="text"/>
+                                <TextInput id="last" value={userDetails.last} onChange={handleLast} type="text"/>
                             </div>
                             <div>
                                 <div className="mb-2 block">
                                     <Label htmlFor="email1" value="Your email"/>
                                 </div>
-                                <TextInput id="email1" placeholder={userDetails.email} type="email"/>
+                                <TextInput id="email1" value={userDetails.email} onChange={handleEmail} type="email"/>
                             </div>
                             <div>
                                 <div className="mb-2 block">
                                     <Label htmlFor="username" value="User Name"/>
                                 </div>
-                                <TextInput id="username" placeholder={userDetails.username} required type="text"/>
+                                <TextInput id="username" value={userDetails.username} onChange={handleUsername} type="text"/>
                             </div>
                             <div>
                                 <div className="mb-2 block">
@@ -120,61 +146,10 @@ const EditProfile = () => {
                     </Card>
                 </div>
             </div>
-
-            )
-            }
-
-        </>
-    )
-}
+        )
+    }
+    </>
+  );
+};
 
 export default EditProfile;
-
-
-{/* <div className="flex w-full h-screen">
-                <div className="flex w-full items-center justify-center">
-                    <Card>
-                        <form className="flex flex-col gap-4">
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="first" value="First Name"/>
-                                </div>
-                                <TextInput id="first" placeholder={userDetails ? userDetails.first : null}  type="text"/>
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="last" value="Last Name"/>
-                                </div>
-                                <TextInput id="last" placeholder={userDetails ? userDetails.last : null} type="text"/>
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="email1" value="Your email"/>
-                                </div>
-                                <TextInput id="email1" placeholder={userDetails ? userDetails.email : null} type="email"/>
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="username" value="User Name"/>
-                                </div>
-                                <TextInput id="username" placeholder={userDetails ? userDetails.username : null} required type="text"/>
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="password" value="Change Password"/>
-                                </div>
-                                <TextInput id="password1" type="password"/>
-                            </div>
-                            <div>
-                                <div className="mb-2 block">
-                                    <Label htmlFor="password2" value="Re-enter New Password"/>
-                                </div>
-                                <TextInput id="password2" type="password"/>
-                            </div>
-                                <Button type="submit">
-                                    Submit
-                                </Button>
-                        </form>
-                    </Card>
-                </div>
-            </div> */}
