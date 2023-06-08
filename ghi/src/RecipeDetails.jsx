@@ -10,7 +10,7 @@ const RecipeDetails = () => {
 
   const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -30,7 +30,7 @@ const RecipeDetails = () => {
 		const fetchRecipe = async () => {
 			try {
 				const response = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes/${id}`
+					`${process.env.REACT_APP_COOKIT_API_HOST}/recipes/${id}`
 				);
 				const data = response.data;
 				console.log("Recipe Info Response:", data);
@@ -59,7 +59,7 @@ const RecipeDetails = () => {
 
 			// Send a request to your backend API to save the recipe
 			const response = await axios.post(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/`,
 				{
 					creator_id: currentUser.id,
 					recipe_name: title,

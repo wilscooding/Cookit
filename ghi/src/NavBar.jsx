@@ -13,7 +13,7 @@ const Nav = () => {
     const { logout } = useToken();
     const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -26,7 +26,7 @@ const Nav = () => {
 
     const fetchUserDetails = async () => {
         if (currentUser !== undefined){
-            const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`
+            const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
       if (userResponse.ok) {
         const userDetails = await userResponse.json();

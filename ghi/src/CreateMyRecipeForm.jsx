@@ -31,7 +31,7 @@ function CreateMyRecipeForm() {
 
   const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -47,7 +47,7 @@ function CreateMyRecipeForm() {
   async function handleSubmit(event) {
     event.preventDefault();
     const response = await axios.post(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/`,
       {
         creator_id: currentUser.id,
         recipe_name: recipeName,

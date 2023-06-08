@@ -11,7 +11,7 @@ const MyRecipeDetails = ({ currentUser }) => {
   const fetchRecipe = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${id}`
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`
       );
       const data = response.data;
       setRecipe(data);

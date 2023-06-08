@@ -22,7 +22,7 @@ const GroceryList = () => {
 
 	const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -37,7 +37,7 @@ const GroceryList = () => {
 	const fetchMeasurementQtys = async () => {
 		try {
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty`
 			);
 			setMeasurementQtys(response.data);
 		} catch (error) {
@@ -48,7 +48,7 @@ const GroceryList = () => {
 	const fetchMeasurementUnits = async () => {
 		try {
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units`
 			);
 			setMeasurementUnits(response.data);
 		} catch (error) {
@@ -66,7 +66,7 @@ const GroceryList = () => {
 	const handleAddItem = async () => {
 		try {
 			const response = await axios.post(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/grocerylist/`,
 				{
 					user_id: currentUser.id,
 					...newItem,
@@ -99,7 +99,7 @@ const GroceryList = () => {
 	const handleDeleteItem = async (id) => {
 		try {
 			await axios.delete(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/${id}`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/grocerylist/${id}`
 			);
 			setItems(items.filter((item) => item.id !== id));
 		} catch (error) {
@@ -113,7 +113,7 @@ const GroceryList = () => {
 			if (currentUser && currentUser.id) {
 				try {
 					const response = await axios.get(
-						`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/grocerylist/`,
+						`${process.env.REACT_APP_COOKIT_API_HOST}/api/grocerylist/`,
 						{
 							params: {
 								user_id: currentUser.id,
