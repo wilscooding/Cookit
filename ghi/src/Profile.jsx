@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from "flowbite-react";
 import useToken from "@galvanize-inc/jwtdown-for-react";
-
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -11,6 +11,7 @@ const Profile = () => {
     const [ currentUser, setUser] = useState();
     const [ userDetails, setUserDetails] = useState();
     const [isLoading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
 
     const handleFetchWithCookie = async() => {

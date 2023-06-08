@@ -15,3 +15,7 @@ Jun 1st- Added full nav bar with userDetail data being pulled from the token.
 Jun 2nd- Merged with main to get changes others had made and pushed (Danielle's recipe form and app styling) and other smaller updated.
 
 Jun 5th- Merged with main to get new components, MyIndgredients, MyRecipes, GroceryList, updated my recipes tables. Updated navigation so when token not found it takes you to the signup page, added login link to sign up card for those who already have an account, added redirect to signup upon logging out, added redirect to recipe search upon logging in.
+
+Jun 6th- I added a profile detail page and started on a edit page for the profile details. Nolan and I worked on resolving the issue where when the page loaded, it was loading null or undefined when pulling user information first.
+
+Jun 7th- Continued work on the edit profile page and spent most of the afternoon resolving merge conflicts. Some pushes to main weren't taking or weren't pulling properly, leaving out junks of code. Once that was resolved, I finished refactoring the pages I didn't have to load it's own currentUser data.

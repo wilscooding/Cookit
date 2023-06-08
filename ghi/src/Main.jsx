@@ -5,6 +5,7 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import RecipeSearch from "./RecipeSearch.jsx";
 import { useState } from "react";
 import SignupForm from "./SignUpForm";
+import Dashboard from "./Dashboard.jsx";
 
 export const Main = () => {
   const { token } = useToken();
@@ -24,11 +25,7 @@ export const Main = () => {
   return (
     <div>
       {!token && <SignupForm />}
-      {token && <RecipeSearch
-                  onSearch={handleSearch}
-                  onSelectRecipe={handleRecipeSelect}
-                  searchQuery={searchQuery}
-                />}
+      {token && <Dashboard />}
     </div>
   );
 };
