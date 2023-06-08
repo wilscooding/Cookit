@@ -5,6 +5,7 @@ import { Button, Label, Card } from "flowbite-react";
 import { Link } from "react-router-dom";
 import icons from "./constants/icons";
 
+
 const SignupForm = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");

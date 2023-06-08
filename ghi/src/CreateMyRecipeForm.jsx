@@ -29,20 +29,19 @@ function CreateMyRecipeForm() {
     "whole30",
   ];
 
-  const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const currentUser = data.user
-            setUser(currentUser);
-            setLoading(false);
-        }
-    }
-
   useEffect(() => {
-    handleFetchWithCookie();
-  }, [token]);
+		const handleFetchWithCookie = async() => {
+			const data = await fetchWithCookie(
+				`${process.env.REACT_APP_COOKIT_API_HOST}/token`
+			);
+			if (data !== undefined){
+				const currentUser = data.user
+                setLoading(false);
+				setUser(currentUser);
+			}
+  		}
+    	handleFetchWithCookie();
+    }, [token]);
 
   async function handleSubmit(event) {
     event.preventDefault();

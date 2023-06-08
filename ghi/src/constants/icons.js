@@ -1,11 +1,19 @@
-import CookIt_dark from "../icons/CookIt_dark.png";
-import CookIt_icon_dark from "../icons/CookIt_icon_dark.png";
-import CookIt_icon from "../icons/CookIt_icon.png";
-import CookIt from "../icons/CookIt.png";
+import cookIt_dark from "../icons/CookIt_dark.png";
+import cookIt_icon_dark from "../icons/CookIt_icon_dark.png";
+import cookIt_icon from "../icons/CookIt_icon.png";
+import cookIt from "../icons/CookIt.png";
 
-export default {
+const CookIt = cookIt;
+const CookIt_icon_dark = cookIt_icon_dark
+const CookIt_dark = cookIt_dark
+const CookIt_icon = cookIt_icon
+
+const images = {
   CookIt_dark,
   CookIt_icon_dark,
   CookIt_icon,
   CookIt,
 };
+
+
+export default images;

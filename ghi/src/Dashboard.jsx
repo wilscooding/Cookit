@@ -4,13 +4,13 @@ import { useState, useEffect } from 'react';
 
 const Dashboard = () => {
 	const { fetchWithCookie } = useToken();
-  const { token } = useToken();
-  const [ currentUser, setUser] = useState();
-  const [ userDetails, setUserDetails] = useState();
-const [isLoading, setLoading] = useState(true);
+  	const { token } = useToken();
+  	const [ currentUser, setUser] = useState();
+  	const [ userDetails, setUserDetails] = useState();
+	const [isLoading, setLoading] = useState(true);
 
-
-  const handleFetchWithCookie = async() => {
+	useEffect(() => {
+        const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
             `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
@@ -18,13 +18,13 @@ const [isLoading, setLoading] = useState(true);
             const currentUser = data.user
             setUser(currentUser);
         }
-  }
+    }
+        handleFetchWithCookie();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
     useEffect(() => {
-      handleFetchWithCookie();
-    }, [token]);
-
-	const fetchUserDetails = async () => {
+        const fetchUserDetails = async () => {
         if (currentUser !== undefined){
             const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
@@ -37,11 +37,9 @@ const [isLoading, setLoading] = useState(true);
             }
         }
     }
-
-
-    useEffect(() => {
-            fetchUserDetails();
+        fetchUserDetails();
     }, [currentUser]);
+
 
 	return (
 		<>

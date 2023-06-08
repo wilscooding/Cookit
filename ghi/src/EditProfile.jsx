@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
     const { fetchWithCookie } = useToken();
-    const { token } = useToken();
     const [ currentUser, setUser] = useState();
     const [ userDetails, setUserDetails] = useState();
     const [isLoading, setLoading] = useState(true);
     const navigate = useNavigate();
 
-    const handleFetchWithCookie = async() => {
+    useEffect(() => {
+        const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
             `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
@@ -22,12 +22,12 @@ const EditProfile = () => {
             setUser(currentUser);
         }
     }
+        handleFetchWithCookie();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
-  useEffect(() => {
-    handleFetchWithCookie();
-  }, [token]);
-
-    const fetchUserDetails = async () => {
+    useEffect(() => {
+        const fetchUserDetails = async () => {
         if (currentUser !== undefined){
             const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`
             const userResponse = await fetch(userUrl);
@@ -35,13 +35,12 @@ const EditProfile = () => {
             if (userResponse.ok){
                 const userDetails = await userResponse.json();
                 setLoading(false);
+
                 setUserDetails(userDetails);
             }
         }
     }
-
-    useEffect(() => {
-            fetchUserDetails();
+        fetchUserDetails();
     }, [currentUser]);
 
     const handleSubmit = (event) => {

@@ -8,18 +8,17 @@ const RecipeDetails = () => {
   const { token } = useToken();
   const [ currentUser, setUser] = useState();
 
-  const handleFetchWithCookie = async() => {
-        const data = await fetchWithCookie(
-            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
-        );
-        if (data !== undefined){
-            const currentUser = data.user
-            setUser(currentUser);
-        }
-  }
-
-    useEffect(() => {
-      handleFetchWithCookie();
+ useEffect(() => {
+		const handleFetchWithCookie = async() => {
+			const data = await fetchWithCookie(
+				`${process.env.REACT_APP_COOKIT_API_HOST}/token`
+			);
+			if (data !== undefined){
+				const currentUser = data.user
+				setUser(currentUser);
+			}
+  		}
+    	handleFetchWithCookie();
     }, [token]);
 
   const [recipe, setRecipe] = useState("");
