@@ -6,6 +6,7 @@ import axios from "axios";
 
 const MyRecipeDetails = ({ currentUser }) => {
   const [recipe, setRecipe] = useState("");
+  const [recipeIngredients, setRecipeIngredients] = useState([]);
   const { id } = useParams();
 
   const fetchRecipe = async () => {
@@ -20,8 +21,48 @@ const MyRecipeDetails = ({ currentUser }) => {
     }
   };
 
+  const fetchRecipeIngredients = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe_ingredients/recipe/${id}`
+      );
+      const data = response.data;
+      setRecipeIngredients(data);
+
+      // Fetch additional details for each ingredient
+      const ingredientPromises = data.map(async (ingredient) => {
+        const ingredientResponse = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/${ingredient.ingredient_id}`
+        );
+        const ingredientData = ingredientResponse.data;
+        ingredient.ingredient_name = ingredientData.ingredient_name;
+
+        const qtyAmountResponse = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/${ingredient.measurement_qty_id}`
+        );
+        const qtyAmountData = qtyAmountResponse.data;
+        ingredient.qty_amount = qtyAmountData.qty_amount;
+
+        const measurementResponse = await axios.get(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/${ingredient.measurement_id}`
+        );
+        const measurementData = measurementResponse.data;
+        ingredient.measurement_description =
+          measurementData.measurement_description;
+
+        return ingredient;
+      });
+
+      const updatedIngredients = await Promise.all(ingredientPromises);
+      setRecipeIngredients(updatedIngredients);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     fetchRecipe();
+    fetchRecipeIngredients();
   }, [id]);
 
   if (!recipe) {
@@ -32,7 +73,7 @@ const MyRecipeDetails = ({ currentUser }) => {
     return <div>This recipe does not belong to you!</div>;
   }
 
- return (
+  return (
     <div className="flex w-full">
       <div className="w-full flex items-center justify-center">
         <div className="w-full flex-col">
@@ -51,7 +92,17 @@ const MyRecipeDetails = ({ currentUser }) => {
                 </h1>
                 <img src={recipe.img} alt={recipe.title} width="300px" />
                 <div className="border-b border-slate-300 pb-3">
-                  <div dangerouslySetInnerHTML={{ __html: recipe.description }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: recipe.description }}
+                  />
+                </div>
+                <div className="border-b border-slate-300 pb-3">
+                  {recipeIngredients.map((ingredient) => (
+                    <div key={ingredient.id}>
+                      {ingredient.ingredient_name}: {ingredient.qty_amount}{" "}
+                      {ingredient.measurement_description}
+                    </div>
+                  ))}
                 </div>
                 <div className="border-b border-slate-300 pb-3">
                   {recipe.steps}

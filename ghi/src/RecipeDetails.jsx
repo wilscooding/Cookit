@@ -57,9 +57,9 @@ const RecipeDetails = () => {
         extendedIngredients,
       } = recipe;
 
-      const stepsText = recipe.analyzedInstructions
-        .map((step) => step.step)
-        .join("\n");
+      const stepsText = recipe.analyzedInstructions[0].steps.map((step) => step.step).join("\n");
+      console.log("steps text", stepsText);
+      console.log("analized inst", recipe.analyzedInstructions);
       const response = await axios.post(
         `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
         {
@@ -71,13 +71,12 @@ const RecipeDetails = () => {
           steps: stepsText,
         }
       );
-      console.log("creator_id:", currentUser.id);
+      // console.log("creator_id:", currentUser.id);
       // Handle the response as needed
-      console.log("Save Recipe Response:", response.data);
+      // console.log("Save Recipe Response:", response.data);
       const savedRecipeId = response.data.id;
-      console.log("Saved Recipe ID:", savedRecipeId);
-      const ingredientPromises = [];
-
+      // console.log("Saved Recipe ID:", savedRecipeId);
+      let ingredientId;
       for (const ingredient of extendedIngredients) {
         const { name, measures } = ingredient;
 
@@ -94,9 +93,9 @@ const RecipeDetails = () => {
           const existingIngredient = existingIngredientResponse.data.find(
             (ingredient) => ingredient.ingredient_name === name
           );
-          const ingredientId = existingIngredient.id;
-          console.log("Ingredient already exists:", name);
-          console.log("Ingredient ID:", ingredientId);
+          ingredientId = existingIngredient.id;
+          // console.log("Ingredient already exists:", name);
+          // console.log("Ingredient ID:", ingredientId);
           // Associate the existing ingredient with the saved recipe
         } else {
           const newIngredientResponse = await axios.post(
@@ -107,15 +106,15 @@ const RecipeDetails = () => {
           );
 
           const newIngredient = newIngredientResponse.data;
-          const ingredientId = newIngredient.id;
-          console.log("New Ingredient created:", name);
-          console.log("Ingredient ID:", ingredientId);
+          ingredientId = newIngredient.id;
+          // console.log("New Ingredient created:", name);
+          // console.log("Ingredient ID:", ingredientId);
           // Associate the new ingredient with the saved recipe
         }
 
         const amount = measures.us.amount;
         let measurementQtyId;
-        console.log("Amount from frontend:", amount);
+        // console.log("Amount from frontend:", amount);
 
         const existingMeasurementQtyResponse = await axios.get(
           `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
@@ -125,10 +124,10 @@ const RecipeDetails = () => {
             },
           }
         );
-        console.log(
-          "Existing qty_amounts from backend:",
-          existingMeasurementQtyResponse.data.map((item) => item.qty_amount)
-        );
+        // console.log(
+        //   "Existing qty_amounts from backend:",
+        //   existingMeasurementQtyResponse.data.map((item) => item.qty_amount)
+        // );
 
         if (
           existingMeasurementQtyResponse.data &&
@@ -141,10 +140,10 @@ const RecipeDetails = () => {
 
           if (existingMeasurementQty) {
             measurementQtyId = existingMeasurementQty.id;
-            console.log(
-              "Measurement quantity already exists:",
-              measurementQtyId
-            );
+            // console.log(
+            //   "Measurement quantity already exists:",
+            //   measurementQtyId
+            // );
           } else {
             const newMeasurementQtyResponse = await axios.post(
               `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
@@ -153,13 +152,13 @@ const RecipeDetails = () => {
               }
             );
             measurementQtyId = newMeasurementQtyResponse.data.id;
-            console.log("New Measurement quantity created:", amount);
+            // console.log("New Measurement quantity created:", amount);
           }
         }
 
         const unit = measures.us.unitLong;
         let measurementUnitId;
-        console.log("Unit from frontend:", unit);
+        // console.log("Unit from frontend:", unit);
 
         const existingMeasurementUnitResponse = await axios.get(
           `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
@@ -169,12 +168,12 @@ const RecipeDetails = () => {
             },
           }
         );
-        console.log(
-          "Existing measurement units from backend:",
-          existingMeasurementUnitResponse.data.map(
-            (item) => item.measurement_description
-          )
-        );
+        // console.log(
+        //   "Existing measurement units from backend:",
+        //   existingMeasurementUnitResponse.data.map(
+        //     (item) => item.measurement_description
+        //   )
+        // );
 
         if (
           existingMeasurementUnitResponse.data &&
@@ -188,7 +187,7 @@ const RecipeDetails = () => {
 
           if (existingMeasurementUnit) {
             measurementUnitId = existingMeasurementUnit.id;
-            console.log("Measurement unit already exists:", unit);
+            // console.log("Measurement unit already exists:", unit);
           } else {
             const newMeasurementUnitResponse = await axios.post(
               `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
@@ -197,20 +196,31 @@ const RecipeDetails = () => {
               }
             );
             measurementUnitId = newMeasurementUnitResponse.data.id;
-            console.log("New Measurement unit created:", unit);
+            // console.log("New Measurement unit created:", unit);
           }
         }
 
+        // console.log("Ingredient:", name);
+        // console.log("Measurement Quantity ID:", measurementQtyId);
+        // console.log("Measurement Unit ID:", measurementUnitId);
+        // console.log("---------------------------");
 
-        console.log("Ingredient:", name);
-        console.log("Measurement Quantity ID:", measurementQtyId);
-        console.log("Measurement Unit ID:", measurementUnitId);
-        console.log("---------------------------");
+        const ingredientData = {
+          recipe_id: savedRecipeId,
+          measurement_id: measurementUnitId,
+          measurement_qty_id: measurementQtyId,
+          ingredient_id: ingredientId,
+        };
+        // console.log("before recipe ingredients", ingredientData);
+
+        const recipeIngredientResponse = await axios.post(
+          `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe_ingredients/`,
+          ingredientData
+        );
+
+        // console.log("Saved Recipe Ingredient:", recipeIngredientResponse.data);
       }
 
-      console.log("Ingredients saved successfully!");
-
-      await Promise.all(ingredientPromises);
       console.log("Ingredients saved successfully!");
     } catch (error) {
       console.error(error);

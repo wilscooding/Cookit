@@ -8,7 +8,7 @@ router = APIRouter()
 queries = RecipeIngredientQueries()
 
 
-@router.post("/recipe_ingredients/", response_model=RecipeIngredientOut)
+@router.post("/api/recipe_ingredients/", response_model=RecipeIngredientOut)
 def create_recipe_ingredient(
     recipe_ingredient: RecipeIngredientIn
 ) -> RecipeIngredientOut:
@@ -23,7 +23,7 @@ def create_recipe_ingredient(
     raise HTTPException(status_code=500, detail="Failed to create recipe ingredient")
 
 
-@router.get("/recipe_ingredients/{id}", response_model=RecipeIngredientOut)
+@router.get("/api/recipe_ingredients/{id}", response_model=RecipeIngredientOut)
 def get_recipe_ingredient(id: int) -> RecipeIngredientOut:
     ingredient = queries.get_recipe_ingredient_by_id(id)
     if ingredient:
@@ -31,7 +31,7 @@ def get_recipe_ingredient(id: int) -> RecipeIngredientOut:
     raise HTTPException(status_code=404, detail="Recipe ingredient not found")
 
 
-@router.get("/recipe_ingredients/recipe/{recipe_id}", response_model=List[RecipeIngredientOut])
+@router.get("/api/recipe_ingredients/recipe/{recipe_id}", response_model=List[RecipeIngredientOut])
 def get_recipe_ingredients(recipe_id: int) -> List[RecipeIngredientOut]:
     ingredients = queries.get_recipe_ingredients_by_recipe_id(recipe_id)
     if ingredients:
@@ -39,7 +39,7 @@ def get_recipe_ingredients(recipe_id: int) -> List[RecipeIngredientOut]:
     raise HTTPException(status_code=404, detail="No recipe ingredients found for the recipe")
 
 
-@router.delete("/recipe_ingredients/{id}")
+@router.delete("/api/recipe_ingredients/{id}")
 def delete_recipe_ingredient(id: int) -> None:
     ingredient = queries.get_recipe_ingredient_by_id(id)
     if ingredient:
@@ -48,7 +48,7 @@ def delete_recipe_ingredient(id: int) -> None:
     raise HTTPException(status_code=404, detail="Recipe ingredient not found")
 
 
-@router.put("/recipe_ingredients/{id}", response_model=RecipeIngredientOut)
+@router.put("/api/recipe_ingredients/{id}", response_model=RecipeIngredientOut)
 def update_recipe_ingredient(
     id: int, recipe_ingredient: RecipeIngredientIn
 ) -> RecipeIngredientOut:
