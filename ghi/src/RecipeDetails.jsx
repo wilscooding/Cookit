@@ -11,7 +11,7 @@ const RecipeDetails = () => {
 
 	const handleFetchWithCookie = async () => {
 		const data = await fetchWithCookie(
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+			`${process.env.REACT_APP_COOKIT_API_HOST}/token`
 		);
 		if (data !== undefined) {
 			const currentUser = data.user;
@@ -31,7 +31,7 @@ const RecipeDetails = () => {
 		const fetchRecipe = async () => {
 			try {
 				const response = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes/${id}`
+					`${process.env.REACT_APP_COOKIT_API_HOST}/recipes/${id}`
 				);
 				const data = response.data;
 				console.log("Recipe Info Response:", data);
@@ -64,7 +64,7 @@ const RecipeDetails = () => {
 			console.log("steps text", stepsText);
 			console.log("analized inst", recipe.analyzedInstructions);
 			const response = await axios.post(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/`,
 				{
 					creator_id: currentUser.id,
 					recipe_name: title,
@@ -84,7 +84,7 @@ const RecipeDetails = () => {
 				const { name, measures } = ingredient;
 
 				const existingIngredientResponse = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/`,
 					{
 						params: {
 							ingredient_name: name,
@@ -102,7 +102,7 @@ const RecipeDetails = () => {
 					// Associate the existing ingredient with the saved recipe
 				} else {
 					const newIngredientResponse = await axios.post(
-						`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/`,
+						`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/`,
 						{
 							ingredient_name: name,
 						}
@@ -120,7 +120,7 @@ const RecipeDetails = () => {
 				// console.log("Amount from frontend:", amount);
 
 				const existingMeasurementQtyResponse = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/`,
 					{
 						params: {
 							qty_amount: amount,
@@ -149,7 +149,7 @@ const RecipeDetails = () => {
 						// );
 					} else {
 						const newMeasurementQtyResponse = await axios.post(
-							`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/`,
+							`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/`,
 							{
 								qty_amount: amount,
 							}
@@ -164,7 +164,7 @@ const RecipeDetails = () => {
 				// console.log("Unit from frontend:", unit);
 
 				const existingMeasurementUnitResponse = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/`,
 					{
 						params: {
 							measurement_description: unit,
@@ -193,7 +193,7 @@ const RecipeDetails = () => {
 						// console.log("Measurement unit already exists:", unit);
 					} else {
 						const newMeasurementUnitResponse = await axios.post(
-							`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/`,
+							`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/`,
 							{
 								measurement_description: unit,
 							}
@@ -217,7 +217,7 @@ const RecipeDetails = () => {
 				// console.log("before recipe ingredients", ingredientData);
 
 				const recipeIngredientResponse = await axios.post(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe_ingredients/`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
 					ingredientData
 				);
 

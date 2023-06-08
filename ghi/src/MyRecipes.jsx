@@ -13,7 +13,7 @@ const MyRecipes = () => {
 
 	const handleFetchWithCookie = async () => {
 		const data = await fetchWithCookie(
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+			`${process.env.REACT_APP_COOKIT_API_HOST}/token`
 		);
 		if (data !== undefined) {
 			const currentUser = data.user;
@@ -29,7 +29,7 @@ const MyRecipes = () => {
 		if (currentUser && currentUser.id) {
 			try {
 				const response = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes`,
 					{
 						params: {
 							user_id: currentUser.id,
@@ -47,7 +47,7 @@ const MyRecipes = () => {
   const handleDeleteRecipe = async (recipe_id) => {
 		try {
 			await axios.delete(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${recipe_id}`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${recipe_id}`
 			);
 			fetchRecipes();
 		} catch (error) {

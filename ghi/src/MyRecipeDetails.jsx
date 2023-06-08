@@ -13,7 +13,7 @@ const MyRecipeDetails = ({ currentUser }) => {
 	const fetchRecipe = async () => {
 		try {
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${id}`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`
 			);
 			const data = response.data;
 			setRecipe(data);
@@ -25,7 +25,7 @@ const MyRecipeDetails = ({ currentUser }) => {
 	const fetchRecipeIngredients = async () => {
 		try {
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/recipe_ingredients/recipe/${id}`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/recipe/${id}`
 			);
 			const data = response.data;
 			setRecipeIngredients(data);
@@ -33,19 +33,19 @@ const MyRecipeDetails = ({ currentUser }) => {
 			// Fetch additional details for each ingredient
 			const ingredientPromises = data.map(async (ingredient) => {
 				const ingredientResponse = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/ingredients/${ingredient.ingredient_id}`
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/${ingredient.ingredient_id}`
 				);
 				const ingredientData = ingredientResponse.data;
 				ingredient.ingredient_name = ingredientData.ingredient_name;
 
 				const qtyAmountResponse = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/${ingredient.measurement_qty_id}`
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/${ingredient.measurement_qty_id}`
 				);
 				const qtyAmountData = qtyAmountResponse.data;
 				ingredient.qty_amount = qtyAmountData.qty_amount;
 
 				const measurementResponse = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/${ingredient.measurement_id}`
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/${ingredient.measurement_id}`
 				);
 				const measurementData = measurementResponse.data;
 				ingredient.measurement_description =

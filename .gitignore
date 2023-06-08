@@ -83,7 +83,7 @@ target/
 # IPython
 profile_default/
 ipython_config.py
-sample_services/keys.py
+cookit/keys.py
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is

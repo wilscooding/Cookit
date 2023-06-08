@@ -13,7 +13,7 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 		try {
 			setLoadingRecipes(true);
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/recipes`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/recipes`,
 				{
 					params: {
 						query: query,

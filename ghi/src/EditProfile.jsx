@@ -14,7 +14,7 @@ const navigate = useNavigate();
 
 const handleFetchWithCookie = async () => {
     const data = await fetchWithCookie(
-    `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+    `${process.env.REACT_APP_COOKIT_API_HOST}/token`
     );
     if (data !== undefined) {
     const currentUser = data.user;
@@ -28,7 +28,7 @@ useEffect(() => {
 
 const fetchUserDetails = async () => {
     if (currentUser !== undefined) {
-        const userUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`;
+        const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`;
         const userResponse = await fetch(userUrl);
 
     if (userResponse.ok) {
@@ -49,7 +49,7 @@ const handleSubmit = (event) => {
     try {
     axios
         .put(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users/${currentUser.id}`,
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`,
         userDetails
         )
         .then((res) => {

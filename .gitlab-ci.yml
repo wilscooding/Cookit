@@ -9,7 +9,7 @@ lint-test-job:
   stage: test
   script:
     - pip install flake8
-    - flake8 sample_service
+    - flake8 cookit
 #
 # # Run the unit tests
 # api-unit-tests-job:
@@ -18,7 +18,7 @@ lint-test-job:
 #   needs:
 #     - lint-test-job
 #   script:
-#     - cd sample_service
+#     - cd cookit
 #     - pip install -r requirements.txt
 #     - python -m pytest
 
@@ -34,7 +34,7 @@ lint-test-job:
 #     # You need to substitute in your real values for
 #     # GROUP_NAME, PROJECT_NAME, & WEBSERVICE_NAME below.
 #     PUBLIC_URL: https://GROUP_NAME.gitlab.io/PROJECT_NAME/
-#     REACT_APP_SAMPLE_SERVICE_API_HOST: https://sample-service.WEBSERVICE_NAME.mod3projects.com
+#     REACT_APP_COOKIT_API_HOST: https://sample-service.WEBSERVICE_NAME.mod3projects.com
 #   script:
 #     - cd ghi
 #     - npm install
@@ -73,11 +73,11 @@ lint-test-job:
 #     - export IMAGE_NAME_WITH_REGISTRY_PREFIX=$CI_REGISTRY_IMAGE # Your repository prefixed with GitLab Registry URL
 #     - docker login -u "$DOCKER_REGISTRY_USER" -p "$DOCKER_REGISTRY_PASSWORD" $DOCKER_REGISTRY_URL # Instructs GitLab to login to its registry
 #   script:
-#     - cd sample_service
+#     - cd cookit
 #     - echo "Building... " # MAKE SURE NO SPACE ON EITHER SIDE OF = IN THE FOLLOWING LINE
-#     - export CONTAINER_FULL_IMAGE_NAME_WITH_TAG=$IMAGE_NAME_WITH_REGISTRY_PREFIX/sample_service_image:$COMMIT_HASH
-#     - docker build -f ./Dockerfile --pull -t built-sample_service .
-#     - docker tag built-sample_service "$CONTAINER_FULL_IMAGE_NAME_WITH_TAG"
+#     - export CONTAINER_FULL_IMAGE_NAME_WITH_TAG=$IMAGE_NAME_WITH_REGISTRY_PREFIX/cookit_image:$COMMIT_HASH
+#     - docker build -f ./Dockerfile --pull -t built-cookit .
+#     - docker tag built-cookit "$CONTAINER_FULL_IMAGE_NAME_WITH_TAG"
 #     - docker push "$CONTAINER_FULL_IMAGE_NAME_WITH_TAG"
 #     - echo $CONTAINER_FULL_IMAGE_NAME_WITH_TAG
 #     - echo "Deploying on CapRover..."

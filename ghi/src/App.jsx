@@ -22,7 +22,7 @@ import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
 
 function App(props) {
-    const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
+    const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
 

@@ -5,7 +5,7 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 const getMeasurementQtyDescription = async (id) => {
 	try {
 		const response = await axios.get(
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty/${id}`
+			`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/${id}`
 		);
 		return response.data.qty_amount;
 	} catch (error) {
@@ -17,7 +17,7 @@ const getMeasurementQtyDescription = async (id) => {
 const getMeasurementUnitDescription = async (id) => {
 	try {
 		const response = await axios.get(
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units/${id}`
+			`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/${id}`
 		);
 		return response.data.measurement_description;
 	} catch (error) {
@@ -34,7 +34,7 @@ const MyIngredients = () => {
 
 	const handleFetchWithCookie = async () => {
 		const data = await fetchWithCookie(
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+			`${process.env.REACT_APP_COOKIT_API_HOST}/token`
 		);
 		if (data !== undefined) {
 			const currentUser = data.user;
@@ -76,7 +76,7 @@ const MyIngredients = () => {
 		if (currentUser && currentUser.id) {
 			try {
 				const response = await axios.get(
-					`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/myingredients/`,
 					{
 						params: {
 							user_id: currentUser.id,
@@ -107,7 +107,7 @@ const MyIngredients = () => {
 	const fetchMeasurementQtys = async () => {
 		try {
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_qty`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty`
 			);
 			setMeasurementQtys(response.data);
 		} catch (error) {
@@ -118,7 +118,7 @@ const MyIngredients = () => {
 	const fetchMeasurementUnits = async () => {
 		try {
 			const response = await axios.get(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/measurement_units`
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units`
 			);
 			setMeasurementUnits(response.data);
 		} catch (error) {
@@ -136,7 +136,7 @@ const MyIngredients = () => {
 	const handleAddIngredient = async () => {
 		try {
 			const response = await axios.post(
-				`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/`,
+				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myingredients/`,
 				{
 					user_id: currentUser.id,
 					...newIngredient,
@@ -194,7 +194,7 @@ const MyIngredients = () => {
       };
 
       const response = await axios.put(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${selectedIngredient.id}`,
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/myingredients/${selectedIngredient.id}`,
         updatedData
       );
 
@@ -233,7 +233,7 @@ const MyIngredients = () => {
   const handleDeleteIngredient = async (id) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myingredients/${id}`
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/myingredients/${id}`
       );
       setIngredients(ingredients.filter((ingredient) => ingredient.id !== id));
     } catch (error) {
