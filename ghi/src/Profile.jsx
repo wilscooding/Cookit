@@ -39,7 +39,6 @@ const Profile = () => {
         }
     }
 
-
     useEffect(() => {
             fetchUserDetails();
     }, [currentUser]);
