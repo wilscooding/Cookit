@@ -333,7 +333,9 @@ class IngredientQueries:
                     }
                     return IngredientOut(**ingredient_dict)
 
-    def get_ingredients(self, ingredient_name: Optional[str] = None) -> List[IngredientOut]:
+    def get_ingredients(
+        self, ingredient_name: Optional[str] = None
+    ) -> List[IngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 query = """
@@ -359,6 +361,7 @@ class IngredientQueries:
                         ingredients.append(IngredientOut(**ingredient_dict))
                     return ingredients
         return []
+
     def get_ingredient_by_id(self, id: int) -> IngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
@@ -680,7 +683,12 @@ class RecipeIngredientQueries:
                     VALUES (%s, %s, %s, %s)
                     RETURNING id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
                     """,
-                    (recipe_id, measurement_id, measurement_qty_id, ingredient_id),
+                    (
+                        recipe_id,
+                        measurement_id,
+                        measurement_qty_id,
+                        ingredient_id,
+                    ),
                 )
                 record = cur.fetchone()
                 if record:
@@ -692,7 +700,9 @@ class RecipeIngredientQueries:
                         ingredient_id=record[4],
                     )
 
-    def get_recipe_ingredient_by_id(self, id: int) -> Optional[RecipeIngredientOut]:
+    def get_recipe_ingredient_by_id(
+        self, id: int
+    ) -> Optional[RecipeIngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
