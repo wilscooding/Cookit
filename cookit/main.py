@@ -21,7 +21,6 @@ router = APIRouter()
 origins = [
     "http://localhost:3000",
     os.environ.get("CORS_HOST", None),
-    os.environ.get("REACT_APP_COOKIT_API_HOST", None),
 ]
 
 app.add_middleware(

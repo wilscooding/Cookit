@@ -10,59 +10,57 @@ const MyRecipeDetails = ({ currentUser }) => {
 	const { id } = useParams();
 	const [isLoading, setLoading] = useState(true);
 
-	const fetchRecipe = async () => {
-		try {
-			const response = await axios.get(
-				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`
-			);
-			const data = response.data;
-			setRecipe(data);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
-	const fetchRecipeIngredients = async () => {
-		try {
-			const response = await axios.get(
-				`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/recipe/${id}`
-			);
-			const data = response.data;
-			setRecipeIngredients(data);
-
-			// Fetch additional details for each ingredient
-			const ingredientPromises = data.map(async (ingredient) => {
-				const ingredientResponse = await axios.get(
-					`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/${ingredient.ingredient_id}`
-				);
-				const ingredientData = ingredientResponse.data;
-				ingredient.ingredient_name = ingredientData.ingredient_name;
-
-				const qtyAmountResponse = await axios.get(
-					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/${ingredient.measurement_qty_id}`
-				);
-				const qtyAmountData = qtyAmountResponse.data;
-				ingredient.qty_amount = qtyAmountData.qty_amount;
-
-				const measurementResponse = await axios.get(
-					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/${ingredient.measurement_id}`
-				);
-				const measurementData = measurementResponse.data;
-				ingredient.measurement_description =
-					measurementData.measurement_description;
-
-				return ingredient;
-			});
-
-			const updatedIngredients = await Promise.all(ingredientPromises);
-			setRecipeIngredients(updatedIngredients);
-		} catch (error) {
-			console.error(error);
-		}
-	};
-
 	useEffect(() => {
+    const fetchRecipe = async () => {
+			try {
+				const response = await axios.get(
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`
+				);
+				const data = response.data;
+				setRecipe(data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
 		fetchRecipe();
+    const fetchRecipeIngredients = async () => {
+			try {
+				const response = await axios.get(
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/recipe/${id}`
+				);
+				const data = response.data;
+				setRecipeIngredients(data);
+
+				// Fetch additional details for each ingredient
+				const ingredientPromises = data.map(async (ingredient) => {
+					const ingredientResponse = await axios.get(
+						`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/${ingredient.ingredient_id}`
+					);
+					const ingredientData = ingredientResponse.data;
+					ingredient.ingredient_name = ingredientData.ingredient_name;
+
+					const qtyAmountResponse = await axios.get(
+						`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/${ingredient.measurement_qty_id}`
+					);
+					const qtyAmountData = qtyAmountResponse.data;
+					ingredient.qty_amount = qtyAmountData.qty_amount;
+
+					const measurementResponse = await axios.get(
+						`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/${ingredient.measurement_id}`
+					);
+					const measurementData = measurementResponse.data;
+					ingredient.measurement_description =
+						measurementData.measurement_description;
+
+					return ingredient;
+				});
+
+				const updatedIngredients = await Promise.all(ingredientPromises);
+				setRecipeIngredients(updatedIngredients);
+			} catch (error) {
+				console.error(error);
+			}
+		};
 		fetchRecipeIngredients();
 		setLoading(false);
 	}, [id]);
