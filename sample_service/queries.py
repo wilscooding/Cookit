@@ -987,6 +987,8 @@ class GroceryListQueries:
                     }
 
                     return GroceryListItemOut(**item_dict)
+                else:
+                    return None
 
     def get_grocery_list_item_by_id(
         self, item_id: int

@@ -6,7 +6,6 @@ from typing import List
 router = APIRouter()
 
 
-
 @router.get("/api/grocerylist/", response_model=List[GroceryListItemOut])
 def grocery_list(user_id: int, queries: GroceryListQueries = Depends()):
     return queries.get_grocery_list(user_id)
@@ -19,7 +18,6 @@ def add_to_grocery_list(
 ) -> GroceryListItemOut:
     new_item = queries.add_to_grocery_list(info)
     return GroceryListItemOut(**new_item.dict())
-
 
 
 @router.delete("/api/grocerylist/{item_id}", response_model=bool)
@@ -38,7 +36,12 @@ def update_grocery_list_item(
     queries: GroceryListQueries = Depends(),
 ) -> GroceryListItemOut:
     updated_item = queries.update_grocery_list_item(item_id, info)
-    return GroceryListItemOut(**updated_item.dict())
+    if updated_item:
+        return GroceryListItemOut(**updated_item.dict())
+    else:
+        raise HTTPException(
+            status_code=404, detail="Grocery list item not found"
+        )
 
 
 @router.get("/api/grocerylist/{item_id}", response_model=GroceryListItemOut)
@@ -51,4 +54,5 @@ def get_grocery_list_item(
         return GroceryListItemOut(**item.dict())
     else:
         raise HTTPException(
-            status_code=404, detail="Grocery list item not found")
+            status_code=404, detail="Grocery list item not found"
+        )
