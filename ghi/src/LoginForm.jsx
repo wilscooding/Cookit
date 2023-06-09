@@ -15,7 +15,7 @@ const LoginForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     login(username, password);
-    navigate("/recipes");
+    navigate("/");
   };
 
   useEffect(() => {

@@ -21,6 +21,8 @@ const Nav = () => {
         if (data !== undefined){
             const currentUser = data.user
             setUser(currentUser);
+        } else {
+            navigate("/login")
         }
     }
         handleFetchWithCookie();
@@ -45,7 +47,7 @@ const Nav = () => {
 
     const handleLogout = (event) => {
         logout();
-        navigate("/");
+        navigate("/login");
     }
     if (token) {
         return (
