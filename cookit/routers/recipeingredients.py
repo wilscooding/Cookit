@@ -10,7 +10,7 @@ queries = RecipeIngredientQueries()
 
 @router.post("/api/recipe_ingredients/", response_model=RecipeIngredientOut)
 def create_recipe_ingredient(
-    recipe_ingredient: RecipeIngredientIn
+    recipe_ingredient: RecipeIngredientIn,
 ) -> RecipeIngredientOut:
     created_ingredient = queries.create_recipe_ingredient(
         recipe_ingredient.recipe_id,
@@ -20,7 +20,9 @@ def create_recipe_ingredient(
     )
     if created_ingredient:
         return created_ingredient
-    raise HTTPException(status_code=500, detail="Failed to create recipe ingredient")
+    raise HTTPException(
+        status_code=500, detail="Failed to create recipe ingredient"
+    )
 
 
 @router.get("/api/recipe_ingredients/{id}", response_model=RecipeIngredientOut)
@@ -31,12 +33,17 @@ def get_recipe_ingredient(id: int) -> RecipeIngredientOut:
     raise HTTPException(status_code=404, detail="Recipe ingredient not found")
 
 
-@router.get("/api/recipe_ingredients/recipe/{recipe_id}", response_model=List[RecipeIngredientOut])
+@router.get(
+    "/api/recipe_ingredients/recipe/{recipe_id}",
+    response_model=List[RecipeIngredientOut],
+)
 def get_recipe_ingredients(recipe_id: int) -> List[RecipeIngredientOut]:
     ingredients = queries.get_recipe_ingredients_by_recipe_id(recipe_id)
     if ingredients:
         return ingredients
-    raise HTTPException(status_code=404, detail="No recipe ingredients found for the recipe")
+    raise HTTPException(
+        status_code=404, detail="No recipe ingredients found for the recipe"
+    )
 
 
 @router.delete("/api/recipe_ingredients/{id}")

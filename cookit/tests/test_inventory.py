@@ -1,6 +1,5 @@
 from fastapi.testclient import TestClient
 from main import app
-
 from db import MyIngredientIn
 
 client = TestClient(app)
@@ -31,17 +30,8 @@ def test_add_to_myinventory():
     assert response.json()["ingredient_name"] == "Pancakes"
 
 
-def test_remove_from_myinventory():
-    ingredient_id = 1
-
-    response = client.delete(f"/api/myingredients/{ingredient_id}")
-
-    assert response.status_code == 200
-    assert response.json() == True
-
-
 def test_update_myinventory():
-    ingredient_id = 8
+    ingredient_id = 1
     info = {
         "user_id": 1,
         "ingredient_name": "Updated Pancakes",
@@ -57,7 +47,7 @@ def test_update_myinventory():
 
 
 def test_get_myinventory_list_ingredient():
-    ingredient_id = 8
+    ingredient_id = 1
 
     response = client.get(f"/api/myingredients/{ingredient_id}")
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Button, Card } from "flowbite-react";
@@ -8,6 +8,7 @@ const RecipeDetails = () => {
 	const { fetchWithCookie } = useToken();
 	const { token } = useToken();
 	const [currentUser, setUser] = useState();
+	const navigate = useNavigate();
 
 	const handleFetchWithCookie = async () => {
 		const data = await fetchWithCookie(
@@ -28,14 +29,12 @@ const RecipeDetails = () => {
 	const { id } = useParams();
 
 	useEffect(() => {
-		console.log("RecipeDetails - id:", id);
 		const fetchRecipe = async () => {
 			try {
 				const response = await axios.get(
 					`${process.env.REACT_APP_COOKIT_API_HOST}/recipes/${id}`
 				);
 				const data = response.data;
-				console.log("Recipe Info Response:", data);
 				setRecipe(data.recipe);
 			} catch (error) {
 				console.error(error);
@@ -47,7 +46,6 @@ const RecipeDetails = () => {
 	const handleSaveRecipe = async () => {
 		try {
 			if (!currentUser) {
-				console.log("No current user found");
 				return;
 			}
 
@@ -56,8 +54,6 @@ const RecipeDetails = () => {
 			const stepsText = recipe.analyzedInstructions[0].steps
 				.map((step) => step.step)
 				.join("\n");
-			console.log("steps text", stepsText);
-			console.log("analized inst", recipe.analyzedInstructions);
 			const response = await axios.post(
 				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/`,
 				{
@@ -69,7 +65,6 @@ const RecipeDetails = () => {
 					steps: stepsText,
 				}
 			);
-
 			const savedRecipeId = response.data.id;
 			let ingredientId;
 			for (const ingredient of extendedIngredients) {
@@ -85,11 +80,11 @@ const RecipeDetails = () => {
 				);
 
 				if (existingIngredientResponse.data.length > 0) {
-					const existingIngredient = existingIngredientResponse.data.find(
-						(ingredient) => ingredient.ingredient_name === name
-					);
+					const existingIngredient =
+						existingIngredientResponse.data.find(
+							(ingredient) => ingredient.ingredient_name === name
+						);
 					ingredientId = existingIngredient.id;
-
 				} else {
 					const newIngredientResponse = await axios.post(
 						`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/`,
@@ -100,12 +95,10 @@ const RecipeDetails = () => {
 
 					const newIngredient = newIngredientResponse.data;
 					ingredientId = newIngredient.id;
-
 				}
 
 				const amount = measures.us.amount;
 				let measurementQtyId;
-
 
 				const existingMeasurementQtyResponse = await axios.get(
 					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/`,
@@ -116,19 +109,18 @@ const RecipeDetails = () => {
 					}
 				);
 
-
 				if (
 					existingMeasurementQtyResponse.data &&
 					existingMeasurementQtyResponse.data.length > 0
 				) {
 					const existingMeasurementQty =
 						existingMeasurementQtyResponse.data.find(
-							(measurementQty) => measurementQty.qty_amount === amount
+							(measurementQty) =>
+								measurementQty.qty_amount === amount
 						);
 
 					if (existingMeasurementQty) {
 						measurementQtyId = existingMeasurementQty.id;
-
 					} else {
 						const newMeasurementQtyResponse = await axios.post(
 							`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty/`,
@@ -137,13 +129,11 @@ const RecipeDetails = () => {
 							}
 						);
 						measurementQtyId = newMeasurementQtyResponse.data.id;
-
 					}
 				}
 
 				const unit = measures.us.unitLong;
 				let measurementUnitId;
-
 
 				const existingMeasurementUnitResponse = await axios.get(
 					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/`,
@@ -154,7 +144,6 @@ const RecipeDetails = () => {
 					}
 				);
 
-
 				if (
 					existingMeasurementUnitResponse.data &&
 					existingMeasurementUnitResponse.data.length > 0
@@ -162,12 +151,12 @@ const RecipeDetails = () => {
 					const existingMeasurementUnit =
 						existingMeasurementUnitResponse.data.find(
 							(measurementUnit) =>
-								measurementUnit.measurement_description === unit
+								measurementUnit.measurement_description ===
+								unit
 						);
 
 					if (existingMeasurementUnit) {
 						measurementUnitId = existingMeasurementUnit.id;
-
 					} else {
 						const newMeasurementUnitResponse = await axios.post(
 							`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units/`,
@@ -176,11 +165,8 @@ const RecipeDetails = () => {
 							}
 						);
 						measurementUnitId = newMeasurementUnitResponse.data.id;
-
 					}
 				}
-
-
 
 				const ingredientData = {
 					recipe_id: savedRecipeId,
@@ -189,17 +175,15 @@ const RecipeDetails = () => {
 					ingredient_id: ingredientId,
 				};
 
-
 				const recipeIngredientResponse = await axios.post(
-          `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
 					ingredientData
-          );
+				);
 
-
-
+				if (recipeIngredientResponse) {
+					navigate("/myrecipes");
+				}
 			}
-
-			console.log("Ingredients saved successfully!");
 		} catch (error) {
 			console.error(error);
 		}
@@ -237,24 +221,33 @@ const RecipeDetails = () => {
 		original: ingredient.original,
 	}));
 
-	if (recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0) {
-		const instructions = recipe.analyzedInstructions[0].steps.map((step) => ({
-			number: step.number,
-			step: step.step,
-		}));
+	if (
+		recipe.analyzedInstructions &&
+		recipe.analyzedInstructions.length > 0
+	) {
+		const instructions = recipe.analyzedInstructions[0].steps.map(
+			(step) => ({
+				number: step.number,
+				step: step.step,
+			})
+		);
 
 		return (
 			<div className="relative w-full bg-gray-100">
 				<div className="flex p-4 justify-center">
 					<div className="container justify-center">
-						<h2 className="p-4 pl-0 pb-0 text-3xl font-bold">{recipe.title}</h2>
+						<h2 className="p-4 pl-0 pb-0 text-3xl font-bold">
+							{recipe.title}
+						</h2>
 						<img
 							className="rounded-md shadow m-2 ml-0"
 							src={recipe.image}
 							alt={recipe.title}
 						/>
 						<div className="flex">
-							<Button onClick={handleSaveRecipe}>Save Recipe</Button>
+							<Button onClick={handleSaveRecipe}>
+								Save Recipe
+							</Button>
 							<h3 className="flex pl-2 text-xs justify-center">
 								Created By: {recipe.creditsText}
 							</h3>
@@ -266,7 +259,9 @@ const RecipeDetails = () => {
 								</h3>
 								<div
 									className="font-normal"
-									dangerouslySetInnerHTML={{ __html: recipe.summary }}
+									dangerouslySetInnerHTML={{
+										__html: recipe.summary,
+									}}
 								/>
 							</div>
 						</Card>
@@ -277,7 +272,9 @@ const RecipeDetails = () => {
 							{ingredientNames.map((ingredient, index) => (
 								<li key={index}>
 									<div className="row">
-										<div className="col-sm-8">{ingredient.original}</div>
+										<div className="col-sm-8">
+											{ingredient.original}
+										</div>
 									</div>
 								</li>
 							))}

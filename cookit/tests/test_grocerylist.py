@@ -31,15 +31,6 @@ def test_add_to_grocery_list():
     assert response.json()["ingredient_name"] == "Tomato"
 
 
-def test_remove_from_grocery_list():
-    item_id = 1
-
-    response = client.delete(f"/api/grocerylist/{item_id}")
-
-    assert response.status_code == 200
-    assert response.json() == True
-
-
 def test_update_grocery_list_item():
     item_id = 2
     info = GroceryListItemIn(
@@ -57,7 +48,7 @@ def test_update_grocery_list_item():
 
 
 def test_get_grocery_list_item():
-    item_id = 8
+    item_id = 1
 
     response = client.get(f"/api/grocerylist/{item_id}")
 

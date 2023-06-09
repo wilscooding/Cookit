@@ -69,18 +69,6 @@ CREATE TABLE grocery_list (
     notes TEXT
 );
 
-INSERT INTO users (id, first, last, avatar, email, username, hashed_password) VALUES
-  (1, 'John', 'Smith', '1780000.jpeg', 'John@gmail.com', 'Jsmith', null),
-  (2, 'Dave', 'Jones', '178030988.jpeg', 'Dave@gmail.com', 'Djones', null),
-  (3, 'Patrick', 'Lacquer', '17800.jpeg', 'Patrick@gmail.com', 'Placquer', null),
-  (4, 'Abbie', 'Schmabbie', '10000.jpeg', 'Abbie@gmail.com', 'Aschabbie', null),
-  (5, 'David', 'Agarwal', '170000.jpeg', 'David@gmail.com', 'Dagarwal', null),
-  (6, 'Susie', 'Chen', '60000.jpeg', 'Susie@gmail.com', 'Schen', null),
-  (7, 'Matt', 'Gvido', '14780000.jpeg', 'Matt@gmail.com', 'Mvido', null),
-  (8, 'Zuirch', 'Hernández', '1780320948.jpeg', 'Zurich@gmail.com', 'Zhernandez', null),
-  (9, 'Will', 'Smith', '17800000089.jpeg', 'Will@gmail.com', 'Wsmith', null),
-  (10, 'Yuri', 'Mikhailov', '17800000293908.jpeg', 'Yuri@gmail.com', 'Ymikhailov', null)
-  ;
 
 INSERT INTO ingredients (id, ingredient_name) VALUES
   (1, 'Tomato'),
@@ -106,38 +94,6 @@ INSERT INTO measurement_units (id, measurement_description) VALUES
   (5, 'Pound'),
   (6, 'Gram');
 
-INSERT INTO recipes (id, creator_id, recipe_name, diet, img, description, steps) VALUES
-  (1, 1, 'Pancakes', 'Keto', null, 'Yummy Pancakes', '1. Mix batter, 2. Cook on pan 3. Enjoy'),
-  (2, 2, 'Spaghetti Bolognese', 'Classic', null, 'Good meat sauce', '1. Boil Pasta'),
-  (3, 3, 'Chicken Curry', 'Indian', null, 'Curry sauce', '1. Order takeout'),
-  (4, 4, 'Caesar Salad', 'Vegetarian', null, 'Healthy salad', 'Mix vegetables and add sauce'),
-  (5, 5, 'Chocolate Chip Cookies', 'Dessert', null, 'Best cookies ever', 'Place on baking sheet in oven');
-  ;
-
-INSERT INTO recipe_ingredients (id, recipe_id, measurement_id, measurement_qty_id, ingredient_id) VALUES
-  (1, 1, 1, 1, 1),
-  (2, 1, 2, 2, 2),
-  (3, 2, 3, 3, 4),
-  (4, 3, 4, 4, 5),
-  (5, 4, 5, 1, 1),
-  (6, 5, 1, 2, 2);
-
-
-INSERT INTO my_ingredients (id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes) VALUES
-  (1, 1, 'Lemon', 1, 1, null),
-  (2, 1, 'Chicken', 3, 4, 'Free-range'),
-  (3, 2, 'Sugar', 4, 2, null),
-  (4, 2, 'Garlic', 2, 3, 'Fresh'),
-  (5, 3, 'Broccoli', 3, 1, 'Organic'),
-  (6, 4, 'Avocado', 5, 4, null);
-
-INSERT INTO grocery_list (id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes) VALUES
-  (1, 1, 'Lettuce', 1, 1, 'Notes for my lettuce'),
-  (2, 2, 'Milk', 3, 4, null),
-  (3, 3, 'Eggs', 2, 3, 'Large'),
-  (4, 4, 'Bread', 1, 2, 'Whole wheat'),
-  (5, 5, 'Apples', 4, 5, null),
-  (6, 6, 'Yogurt', 3, 2, 'Greek');
 
 
 
