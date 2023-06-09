@@ -45,7 +45,7 @@ class RecipeIn(BaseModel):
 class RecipeOut(BaseModel):
     id: int
     recipe_name: str
-    diet: str
+    diet: str | None
     img: str | None
     description: str
     steps: str
