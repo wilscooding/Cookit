@@ -41,20 +41,10 @@ function App(props) {
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
           <Routes>
-            <Route path="/" element={<Main />} />
+            <Route path="/" element={<RecipeSearch />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/userdata" element={<UserDataCard />} />
-            <Route
-              path="/recipes"
-              element={
-                <RecipeSearch
-                  onSearch={handleSearch}
-                  onSelectRecipe={handleRecipeSelect}
-                  searchQuery={searchQuery}
-                />
-              }
-            />
             <Route path="/recipes/:id" element={<RecipeDetails />} />
             <Route path="/myrecipes/new" element={<CreateMyRecipeForm />} />
             <Route path="/myrecipes/:id/edit" element={<EditMyRecipeForm />} />

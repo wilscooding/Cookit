@@ -85,7 +85,7 @@ const Nav = () => {
                     <Navbar.Toggle />
                 </div>
                 <Navbar.Collapse>
-                    <Navbar.Link active href="/home">
+                    <Navbar.Link active href="/">
                         Home
                     </Navbar.Link>
                     <Navbar.Link href="/myrecipes">

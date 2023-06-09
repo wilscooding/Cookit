@@ -103,7 +103,7 @@ const MyRecipes = () => {
 					<div className="w-full flex items-center justify-center">
 						<div className="w-full flex-col">
 							<div className="w-full flex items-center justify-end">
-								<Link to={"new"} className="">
+								<Link to={"new"} className="mr-10">
 									<Button className="mt-4" color="light">
 										Create New Recipe
 									</Button>
@@ -112,7 +112,7 @@ const MyRecipes = () => {
 							<div className="w-full flex items-center justify-center">
 								<div className="flex-col text-center">
 									{recipes.map((recipe) => (
-										<Card key={recipe.id} className=" w-fit my-5 p-2">
+										<Card key={recipe.id} className=" w-full my-5 p-2">
 											<Link to={recipe.id.toString()}>
 												<p className="text-blue-600 text-2xl font-bold capitalize">{recipe.recipe_name}</p>
 											</Link>

@@ -77,9 +77,13 @@ function EditMyRecipeForm() {
 
   async function fetchRecipeIngredients() {
     const response = await axios.get(
-      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/?recipe_id=${id}`,
-      { withCredentials: true }
-    );
+			`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
+			{
+				params: {
+					recipe_id: id,
+				},
+			}
+		);
 
     if (response.statusText === "OK") {
       const data = response.data;
@@ -352,7 +356,7 @@ function EditMyRecipeForm() {
               <div className="flex-col">
                 <div>
                   <div className="mb-6 block text-center">
-                    <h1 className="text-4xl">Create A Recipe</h1>
+                    <h1 className="text-4xl">Edit this recipe</h1>
                   </div>
                 </div>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

@@ -38,7 +38,10 @@ def update_grocery_list_item(
     queries: GroceryListQueries = Depends(),
 ) -> GroceryListItemOut:
     updated_item = queries.update_grocery_list_item(item_id, info)
-    return GroceryListItemOut(**updated_item.dict())
+    if updated_item:
+      return GroceryListItemOut(**updated_item.dict())
+    else:
+      raise HTTPException(status_code=404, detail="Grocery list item not found")
 
 
 @router.get("/api/grocerylist/{item_id}", response_model=GroceryListItemOut)
