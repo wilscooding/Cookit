@@ -11,18 +11,18 @@ const MyRecipes = () => {
 	const [currentUser, setUser] = useState();
 	const [isLoading, setLoading] = useState(false);
 
-	const handleFetchWithCookie = async () => {
-		const data = await fetchWithCookie(
-			`${process.env.REACT_APP_COOKIT_API_HOST}/token`
-		);
-		if (data !== undefined) {
-			const currentUser = data.user;
-			setUser(currentUser);
-		}
-	};
-
 	useEffect(() => {
+		const handleFetchWithCookie = async () => {
+			const data = await fetchWithCookie(
+				`${process.env.REACT_APP_COOKIT_API_HOST}/token`
+			);
+			if (data !== undefined) {
+				const currentUser = data.user;
+				setUser(currentUser);
+			}
+		};
 		handleFetchWithCookie();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
 	const fetchRecipes = async () => {
@@ -56,7 +56,26 @@ const MyRecipes = () => {
 	};
 
 	useEffect(() => {
+    const fetchRecipes = async () => {
+			if (currentUser && currentUser.id) {
+				try {
+					const response = await axios.get(
+						`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes`,
+						{
+							params: {
+								user_id: currentUser.id,
+							},
+						}
+					);
+					const data = response.data;
+					setRecipes(data.recipes);
+				} catch (error) {
+					console.error(error);
+				}
+			}
+		};
 		fetchRecipes();
+
 	}, [currentUser]);
 
 	useEffect(() => {
@@ -70,7 +89,7 @@ const MyRecipes = () => {
 			window.addEventListener("load", onPageLoad);
 			return () => window.removeEventListener("load", onPageLoad);
 		}
-	}, []);
+	}, [recipes]);
 
 	return (
 		<>

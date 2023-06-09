@@ -28,22 +28,22 @@ const GroceryList = () => {
 	const [measurementUnits, setMeasurementUnits] = useState([]);
 	const [isLoading, setLoading] = useState(true);
 
-	const handleFetchWithCookie = async () => {
-	try {
-		const data = await fetchWithCookie(
-		`${process.env.REACT_APP_COOKIT_API_HOST}/token`
-		);
-		if (data !== undefined) {
-		const currentUser = data.user;
-		setUser(currentUser);
-		}
-	} catch (error) {
-		console.error(error);
-	}
-	};
-
 	useEffect(() => {
-	handleFetchWithCookie();
+		const handleFetchWithCookie = async () => {
+			try {
+				const data = await fetchWithCookie(
+					`${process.env.REACT_APP_COOKIT_API_HOST}/token`
+				);
+				if (data !== undefined) {
+					const currentUser = data.user;
+					setUser(currentUser);
+				}
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		handleFetchWithCookie();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
 	const fetchMeasurementQtys = async () => {

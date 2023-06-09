@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { Main } from "./Main.jsx";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignUpForm.jsx";
 import "./App.css";
@@ -21,19 +19,9 @@ import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
 function App(props) {
     const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
-    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
 
     const domain = /https:\/\/[^/]+/;
     const basename = process.env.PUBLIC_URL.replace(domain, '');
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
-  const handleRecipeSelect = (id) => {
-    setSelectedRecipeId(id);
-  };
 
   return (
     <div className="bg-amber-400/50 h-screen w-screen">
