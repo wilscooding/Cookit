@@ -1,17 +1,17 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import icons from "./constants/icons";
 
 const Nav = () => {
-    const { fetchWithCookie } = useToken();
-    const { token } = useToken();
-    const [ currentUser, setUser] = useState();
-    const [ userDetails, setUserDetails] = useState();
-    const navigate = useNavigate();
-    const { logout } = useToken();
+	const { fetchWithCookie } = useToken();
+	const { token } = useToken();
+	const [currentUser, setUser] = useState();
+	const [userDetails, setUserDetails] = useState();
+	const navigate = useNavigate();
+	const { logout } = useToken();
 
     useEffect(() => {
         const handleFetchWithCookie = async() => {
@@ -29,21 +29,21 @@ const Nav = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-        if (currentUser !== undefined){
-            const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`
-            const userResponse = await fetch(userUrl);
+	useEffect(() => {
+		const fetchUserDetails = async () => {
+			if (currentUser !== undefined) {
+				const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`;
+				const userResponse = await fetch(userUrl);
 
-            if (userResponse.ok){
-                const userDetails = await userResponse.json();
+				if (userResponse.ok) {
+					const userDetails = await userResponse.json();
 
-                setUserDetails(userDetails);
-            }
-        }
-    }
-        fetchUserDetails();
-    }, [currentUser]);
+					setUserDetails(userDetails);
+				}
+			}
+		};
+		fetchUserDetails();
+	}, [currentUser]);
 
     const handleLogout = (event) => {
         logout();

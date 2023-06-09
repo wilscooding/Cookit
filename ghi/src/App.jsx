@@ -6,7 +6,6 @@ import { AuthProvider } from "@galvanize-inc/jwtdown-for-react";
 import RecipeDetails from "./RecipeDetails.jsx";
 import RecipeSearch from "./RecipeSearch.jsx";
 import Nav from "./NavBar.jsx";
-import UserDataCard from "./UserDataCard.jsx";
 import Dashboard from "./Dashboard.jsx";
 import MyRecipes from "./MyRecipes.jsx";
 import MyIngredients from "./MyIngredients.jsx";
@@ -17,11 +16,11 @@ import CreateMyRecipeForm from "./CreateMyRecipeForm.jsx";
 import EditMyRecipeForm from "./EditMyRecipeForm.jsx";
 import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
-function App(props) {
-    const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
+function App() {
+  const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
 
-    const domain = /https:\/\/[^/]+/;
-    const basename = process.env.PUBLIC_URL.replace(domain, '');
+  const domain = /https:\/\/[^/]+/;
+  const basename = process.env.PUBLIC_URL.replace(domain, "");
 
   return (
     <div className="bg-amber-400/50 h-screen w-screen">
@@ -32,7 +31,6 @@ function App(props) {
             <Route path="/" element={<RecipeSearch />} />
             <Route path="/signup" element={<SignupForm />} />
             <Route path="/login" element={<LoginForm />} />
-            <Route path="/userdata" element={<UserDataCard />} />
             <Route path="/recipes/:id" element={<RecipeDetails />} />
             <Route path="/myrecipes/new" element={<CreateMyRecipeForm />} />
             <Route path="/myrecipes/:id/edit" element={<EditMyRecipeForm />} />

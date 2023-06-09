@@ -31,7 +31,7 @@ def delete__my_recipe(
     recipe_id: int,
     accounts: RecipeQueries = Depends(),
 ):
-    record = accounts.delete_recipe(recipe_id)
+    accounts.delete_recipe(recipe_id)
     return True
 
 
