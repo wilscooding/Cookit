@@ -21,6 +21,7 @@ const RecipeDetails = () => {
 
 	useEffect(() => {
 		handleFetchWithCookie();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
 	const [recipe, setRecipe] = useState("");
@@ -53,8 +54,6 @@ const RecipeDetails = () => {
 			const {
 				title,
 				image,
-				summary,
-				analyzedInstructions,
 				extendedIngredients,
 			} = recipe;
 
