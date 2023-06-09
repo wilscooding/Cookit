@@ -59,6 +59,48 @@ function EditMyRecipeForm() {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token]);
 
+  async function fetchRecipe() {
+    const response = await axios.get(
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
+      { withCredentials: true }
+    );
+
+    if (response.statusText === "OK") {
+      const data = response.data;
+      setCreatorId(data.creator_id);
+      setRecipeName(data.recipe_name);
+      setDiet(data.diet);
+      setImage(data.img);
+      setDescription(data.description);
+      setSteps(data.steps);
+    }
+  }
+
+  async function fetchRecipeIngredients() {
+    const response = await axios.get(
+			`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
+			{
+				params: {
+					recipe_id: id,
+				},
+			}
+		);
+
+    if (response.statusText === "OK") {
+      const data = response.data;
+      setRecipeIngredients(
+        data.map((ingredient) => {
+          return {
+            id: ingredient.ingredient_id,
+            unit: ingredient.measurement_id,
+            qty: ingredient.measurement_qty_id,
+            recipeIngredientId: ingredient.id,
+          };
+        })
+      );
+    }
+  }
+
   const fetchIngredients = async () => {
     try {
         const response = await axios.get(
@@ -335,7 +377,7 @@ function EditMyRecipeForm() {
               <div className="flex-col">
                 <div>
                   <div className="mb-6 block text-center">
-                    <h1 className="text-4xl">Create A Recipe</h1>
+                    <h1 className="text-4xl">Edit this recipe</h1>
                   </div>
                 </div>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>

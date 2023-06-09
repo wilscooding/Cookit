@@ -255,7 +255,7 @@ const GroceryList = () => {
 			) : (
 
 				<div>
-				<h2 className="text-2xl font-semibold mb-4">Inventory</h2>
+				<h2 className="text-2xl font-semibold mb-4">Grocery List</h2>
 				<table className="table-auto w-full">
 					<thead>
 					<tr>

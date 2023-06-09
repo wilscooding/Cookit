@@ -16,7 +16,7 @@ def test_get_grocery_list():
     assert response.status_code == 200
     response_data = response.json()
     assert isinstance(response_data, list)
-  
+
 
 def test_add_to_grocery_list():
     # Arrange
@@ -50,7 +50,7 @@ def test_remove_from_grocery_list():
 
 def test_update_grocery_list_item():
     # Arrange
-    item_id = 1
+    item_id = 2
     info = GroceryListItemIn(
         user_id = 1,
         ingredient_name = "Updated Tomato",
@@ -69,7 +69,7 @@ def test_update_grocery_list_item():
 
 def test_get_grocery_list_item():
     # Arrange
-    item_id = 1
+    item_id = 8
 
     # Act
     response = client.get(f"/api/grocerylist/{item_id}")
