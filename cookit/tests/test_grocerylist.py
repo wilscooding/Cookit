@@ -32,7 +32,7 @@ def test_add_to_grocery_list():
 
 
 def test_update_grocery_list_item():
-    item_id = 2
+    item_id = 1
     info = GroceryListItemIn(
         user_id=1,
         ingredient_name="Updated Tomato",
