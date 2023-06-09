@@ -418,7 +418,6 @@ class IngredientQueries:
                     return True
                 return False
 
-    # class MeasurementUnitQueries:
     def get_measurement_units(self):
         with pool.connection() as conn:
             with conn.cursor() as cur:
@@ -679,9 +678,11 @@ class RecipeIngredientQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    INSERT INTO recipe_ingredients (recipe_id, measurement_id, measurement_qty_id, ingredient_id)
+                    INSERT INTO recipe_ingredients (recipe_id, measurement_id,
+                    measurement_qty_id, ingredient_id)
                     VALUES (%s, %s, %s, %s)
-                    RETURNING id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                    RETURNING id, recipe_id, measurement_id,
+                    measurement_qty_id, ingredient_id
                     """,
                     (
                         recipe_id,
@@ -707,7 +708,8 @@ class RecipeIngredientQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                    SELECT (id, recipe_id, measurement_id,
+                    measurement_qty_id, ingredient_id)
                     FROM recipe_ingredients
                     WHERE id = %s
                     """,
@@ -731,7 +733,8 @@ class RecipeIngredientQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                    SELECT (id, recipe_id, measurement_id, measurement_qty_id,
+                    ingredient_id)
                     FROM recipe_ingredients
                     WHERE recipe_id = %s
                     """,

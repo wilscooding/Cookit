@@ -1,10 +1,11 @@
 from typing import Optional
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from db import IngredientIn, IngredientOut
 from queries import IngredientQueries
 
 
 router = APIRouter()
+
 
 @router.post("/api/ingredients/", response_model=IngredientOut)
 def create_ingredient(
@@ -54,4 +55,3 @@ def delete_ingredient_by_id(
     queries: IngredientQueries = Depends(),
     ):
     return queries.delete_ingredient(id)
-

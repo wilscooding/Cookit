@@ -1,7 +1,7 @@
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
-from db import RecipeIngredientIn, RecipeIngredientOut, IngredientIn
-from queries import IngredientQueries, RecipeIngredientQueries
+from fastapi import APIRouter, HTTPException
+from db import RecipeIngredientIn, RecipeIngredientOut
+from queries import RecipeIngredientQueries
 
 
 router = APIRouter()

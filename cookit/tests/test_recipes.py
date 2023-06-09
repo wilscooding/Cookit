@@ -3,8 +3,6 @@ from main import app
 from queries import RecipeQueries
 from db import RecipeOut
 
-# Run tests with:
-# docker exec module3-project-gamma-fastapi-1 python -m pytest
 client = TestClient(app)
 
 
