@@ -54,9 +54,9 @@ def update_my_ingredient(
 ) -> MyIngredientOut:
     updated_ingredient = accounts.update_my_ingredient(ingredient_id, info)
     if updated_ingredient:
-      return MyIngredientOut(**updated_ingredient.dict())
+        return MyIngredientOut(**updated_ingredient.dict())
     else:
-      raise HTTPException(status_code=404, detail="Ingredient not found")
+        raise HTTPException(status_code=404, detail="Ingredient not found")
 
 
 @router.get(

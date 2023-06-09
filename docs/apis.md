@@ -4,12 +4,14 @@
 - **Path**: `/api/users`, `/api/user/{user_id}`
 
 Input: (for POST)
+
 ```
 "email": string,
 "password": string,
 ```
 
 Input: (for PUT)
+
 ```
 "id": int,
 "first": string,
@@ -20,6 +22,7 @@ Input: (for PUT)
 ```
 
 Output: (for GET all)
+
 ```
     "user": {
         "id": int,
@@ -28,6 +31,7 @@ Output: (for GET all)
 ```
 
 Output: (for GET one)
+
 ```
     "id": int,
     "first": string,
