@@ -20,10 +20,9 @@ import EditMyRecipeForm from "./EditMyRecipeForm.jsx";
 import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
 function App(props) {
-  const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
-  const [selectedRecipeId, setSelectedRecipeId] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setLoading] = useState(true);
+    const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
+    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
 
     const domain = /https:\/\/[^/]+/;
     const basename = process.env.PUBLIC_URL.replace(domain, '');
@@ -37,7 +36,7 @@ function App(props) {
   };
 
   return (
-    <div className="bg-amber-400/50 min-h-screen pb-10">
+    <div className="bg-amber-400/50 h-screen w-screen">
       <BrowserRouter basename={basename}>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />

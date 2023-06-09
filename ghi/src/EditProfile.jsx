@@ -150,18 +150,6 @@ const EditProfile = () => {
                                         </div>
                                         <TextInput id="username" value={userDetails.username} onChange={handleUsername} type="text"/>
                                     </div>
-                                    {/* <div>
-                                        <div className="mb-2 block">
-                                            <Label htmlFor="password" value="Change Password"/>
-                                        </div>
-                                        <TextInput id="password1" type="password"/>
-                                    </div>
-                                    <div>
-                                        <div className="mb-2 block">
-                                            <Label htmlFor="password2" value="Re-enter New Password"/>
-                                        </div>
-                                        <TextInput id="password2" type="password"/>
-                                    </div> */}
                                     <Button type="submit">
                                         Submit
                                     </Button>

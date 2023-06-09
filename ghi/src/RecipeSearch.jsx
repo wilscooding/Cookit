@@ -69,24 +69,32 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 					</div>
 				</div>
 			) : (
-				<div className="flex w-full h-screen">
-					<div className="w-full flex justify-center">
-						<div className="bg-yellow-200 p-4">
-							<input
-								type="text"
-								value={query}
-								onChange={(e) => setQuery(e.target.value)}
-								className="mb-2 px-2 py-1 border border-gray-300"
-							/>
-							<button
-								onClick={searchRecipes}
-								className="px-4 py-2 bg-orange-500 text-white"
-							>
-								Search
-							</button>
+				<div className="relative">
+					<h1 className="flex w-full h-fit justify-center my-3 font-bold text-5xl text-orange-500">
+						Welcome to CookIt!
+					</h1>
+					<h2 className="flex w-full h-fit justify-center my-3 font-bold text-lg italic text-gray-900">
+						Searching for a recipe?
+					</h2>
+					<div className="flex w-full h-fit justify-center my-3 mt-1">
+						<input
+							type="text"
+							value={query}
+							onChange={(e) => setQuery(e.target.value)}
+							className="flex shadow w-1/2 px-2 py-1 rounded-l-md border border-gray-200 border-r-0"
+						/>
+						<button
+							onClick={searchRecipes}
+							className="px-4 py-2 rounded-r-md shadow border border-orange-600 border-l-0 bg-orange-500 text-white"
+						>
+							Search
+						</button>
+					</div>
+					<div className="flex mx-auto mt-2 justify-center">
+						<div className="container w-screen p-2 items-center">
 							{isLoadingRecipes ? (
 								<div className="flex w-full h-screen">
-									<div className="w-full flex items-center justify-center">
+									<div className="w-full flex justify-center">
 										<div role="status">
 											<svg
 												aria-hidden="true"
@@ -109,23 +117,27 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 									</div>
 								</div>
 							) : (
-								<ul className="mt-4">
-									{recipes.map((recipe) => (
-										<li key={recipe.id} className="mb-4">
-											<Link
-												to={`/recipes/${recipe.id}`}
-												className="text-blue-600 hover:underline"
-											>
-												{recipe.title}
+								<div className="flex m-2 h-full w-full">
+									<div className="grid grid-rows-1 grid-flow-col gap-4 overflow-auto">
+										{recipes.map((recipe) => (
+											<Link to={`/recipes/${recipe.id}`} className="">
+												<div
+													key={recipe.id}
+													className="shadow-md mb-2 grid w-56 h-64 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 hover:border-4 hover:border-orange-400"
+												>
+													<img
+														src={recipe.image}
+														alt={recipe.title}
+														className="w-full max-h-lg max-w-lg rounded-t-lg border-b-2 border-gray-100"
+													/>
+													<p className="capitalize text-xl text-center justify-center font-bold tracking-tight text-gray-900 dark:text-white">
+														{recipe.title}
+													</p>
+												</div>
 											</Link>
-											<img
-												src={recipe.image}
-												alt={recipe.title}
-												className="mt-2"
-											/>
-										</li>
-									))}
-								</ul>
+										))}
+									</div>
+								</div>
 							)}
 						</div>
 					</div>

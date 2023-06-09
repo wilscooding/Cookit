@@ -168,7 +168,7 @@ function CreateMyRecipeForm() {
   async function handleSaveRecipeIngredients(recipeId) {
     const saveIngredients = recipeIngredients.map((ingredient) => {
       return axios.post(
-        `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe-ingredients/`,
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
         {
           recipe_id: recipeId,
           measurement_id: ingredient.unit,

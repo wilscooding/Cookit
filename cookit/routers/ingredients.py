@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends
+from typing import Optional
+from fastapi import APIRouter, Depends, HTTPException
 from db import IngredientIn, IngredientOut
 from queries import IngredientQueries
 
@@ -15,9 +16,22 @@ def create_ingredient(
 
 @router.get("/api/ingredients/", response_model=list[IngredientOut])
 def get_ingredients(
+    ingredient_name: Optional[str] = None,
     queries: IngredientQueries = Depends(),
-    ) -> list[IngredientOut]:
-    return queries.get_ingredients()
+) -> list[IngredientOut]:
+    ingredients = queries.get_ingredients(ingredient_name)
+    if ingredient_name:
+        filtered_ingredients = [
+            IngredientOut(**ingredient.dict()) for ingredient in ingredients
+            if ingredient.ingredient_name == ingredient_name
+        ]
+    else:
+        filtered_ingredients = [
+            IngredientOut(**ingredient.dict()) for ingredient in ingredients
+        ]
+    return filtered_ingredients
+
+
 
 @router.get("/api/ingredients/{id}", response_model=IngredientOut)
 def get_ingredient_by_id(
@@ -41,17 +55,3 @@ def delete_ingredient_by_id(
     ):
     return queries.delete_ingredient(id)
 
-# @router.get("/api/ingredients/{id}/recipes", response_model=list[IngredientOut])
-# def get_ingredient_by_id_recipes(
-#     id: int,
-#     queries: IngredientQueries = Depends(),
-#     ) -> list[IngredientOut]:
-#     return queries.get_ingredient_by_id_recipes(id)
-
-# @router.get("/api/ingredients/{id}/recipes/{recipe_id}", response_model=IngredientOut)
-# def get_ingredient_by_id_recipes_by_id(
-#     id: int,
-#     recipe_id: int,
-#     queries: IngredientQueries = Depends(),
-#     ) -> IngredientOut:
-#     return queries.get_ingredient_by_id_recipes_by_id(id, recipe_id)

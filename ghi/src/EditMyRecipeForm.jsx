@@ -77,7 +77,7 @@ function EditMyRecipeForm() {
 
   async function fetchRecipeIngredients() {
     const response = await axios.get(
-      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe-ingredients/?recipe_id=${id}`,
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/?recipe_id=${id}`,
       { withCredentials: true }
     );
 
@@ -181,7 +181,7 @@ function EditMyRecipeForm() {
     let clonedRecipeIngredients = JSON.parse(JSON.stringify(recipeIngredients));
 
     const response = await axios.delete(
-      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe-ingredients/${recipeIngredientId}`
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/${recipeIngredientId}`
     );
 
     if (response.statusText === "OK") {
@@ -212,7 +212,7 @@ function EditMyRecipeForm() {
     }
 
     const response = await axios.post(
-      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe-ingredients/`,
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
       {
         recipe_id: id,
         measurement_id: newRecipeIngredient.unit,
@@ -275,6 +275,23 @@ function EditMyRecipeForm() {
   function handleStepsChange(event) {
     const value = event.target.value;
     setSteps(value);
+  }
+
+  async function fetchRecipe() {
+    const response = await axios.get(
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
+      { withCredentials: true }
+    );
+
+    if (response.statusText === "OK") {
+      const data = response.data;
+      setCreatorId(data.creator_id);
+      setRecipeName(data.recipe_name);
+      setDiet(data.diet);
+      setImage(data.img);
+      setDescription(data.description);
+      setSteps(data.steps);
+    }
   }
 
   useEffect(() => {
