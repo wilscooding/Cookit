@@ -22,7 +22,7 @@ const Nav = () => {
             const currentUser = data.user
             setUser(currentUser);
         } else {
-            navigate("/login")
+            navigate("/signup")
         }
     }
         handleFetchWithCookie();
