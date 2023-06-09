@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Main } from "./Main.jsx";
 import LoginForm from "./LoginForm.jsx";
 import SignupForm from "./SignUpForm.jsx";
@@ -19,82 +19,42 @@ import CreateMyRecipeForm from "./CreateMyRecipeForm.jsx";
 import EditMyRecipeForm from "./EditMyRecipeForm.jsx";
 import MyRecipeDetails from "./MyRecipeDetails.jsx";
 
-
-
 function App(props) {
-    const baseUrl = `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}`;
+    const baseUrl = `${process.env.REACT_APP_COOKIT_API_HOST}`;
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
-    // const [isLoading, setLoading] = useState(true);
+
+    const domain = /https:\/\/[^/]+/;
+    const basename = process.env.PUBLIC_URL.replace(domain, '');
 
   const handleSearch = (query) => {
     setSearchQuery(query);
-    };
+  };
 
-    const handleRecipeSelect = (id) => {
+  const handleRecipeSelect = (id) => {
     setSelectedRecipeId(id);
-    };
+  };
 
   return (
-    <div className="bg-amber-400/50 min-h-screen pb-10">
-      <BrowserRouter>
+    <div className="bg-amber-400/50 h-screen w-screen">
+      <BrowserRouter basename={basename}>
         <AuthProvider baseUrl={baseUrl}>
           <Nav />
           <Routes>
-            <Route path="/" element={<Main />}></Route>
-            <Route path="/signup" element={<SignupForm />}></Route>
-            <Route path="/login" element={<LoginForm />}></Route>
-            <Route path="/userdata" element={<UserDataCard />}></Route>
-            <Route
-              path="/recipes"
-              element={
-                <RecipeSearch
-                  onSearch={handleSearch}
-                  onSelectRecipe={handleRecipeSelect}
-                  searchQuery={searchQuery}
-                />
-              }
-            />
-            <Route
-              path="/recipes/:id"
-              element={<RecipeDetails />}
-            />
-            <Route
-              path="/myrecipes/new"
-              element={<CreateMyRecipeForm />}
-            />
-            <Route
-              path="/myrecipes/:id/edit"
-              element={<EditMyRecipeForm />}
-            />
-            <Route
-              path="/home"
-              element={<Dashboard />}
-            />
-            <Route
-              path="/grocerylist"
-              element={<GroceryList />}
-            />
-            <Route
-              path="/myrecipes"
-              element={<MyRecipes />}
-            />
-            <Route
-              path="/myrecipes/:id"
-              element={<MyRecipeDetails />}
-            />
-            <Route
-              path="/myingredients"
-              element={<MyIngredients />}
-            />
-            <Route
-              path="/profile"
-              element={<Profile />}
-            />
-            <Route
-              path="/profile/edit"
-              element={<EditProfile />}
-            />
+            <Route path="/" element={<RecipeSearch />} />
+            <Route path="/signup" element={<SignupForm />} />
+            <Route path="/login" element={<LoginForm />} />
+            <Route path="/userdata" element={<UserDataCard />} />
+            <Route path="/recipes/:id" element={<RecipeDetails />} />
+            <Route path="/myrecipes/new" element={<CreateMyRecipeForm />} />
+            <Route path="/myrecipes/:id/edit" element={<EditMyRecipeForm />} />
+            <Route path="/home" element={<Dashboard />} />
+            <Route path="/grocerylist" element={<GroceryList />} />
+            <Route path="/myrecipes" element={<MyRecipes />} />
+            <Route path="/myrecipes/:id" element={<MyRecipeDetails />} />
+            <Route path="/myingredients" element={<MyIngredients />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/edit" element={<EditProfile />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>

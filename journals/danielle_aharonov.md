@@ -8,4 +8,5 @@
 6/2: create unit test for get recipe, update model for create new recipe, fix create new recipe, start on list my recipes
 6/5: worked on edit recipe page and fixed backend
 6/6: finished edit recipe page, added my recipe details page and fixed a lot of styling and backend
-6/7: add styling to pages and merge to main
+6/7: add styling to pages and merge to main, fix database,queries.py, and db.py for adding ingredients to create recipe page. Fix nolan branch and merge with main
+6/8: add recipe ingredients to create recipe form, add recipe ingredients to edit recipe form, misc. backend fixes for recipe ingredients routes

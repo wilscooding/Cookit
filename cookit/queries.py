@@ -867,6 +867,8 @@ class MyIngredientQueries:
                     }
 
                     return MyIngredientOut(**ingredient_dict)
+                else:
+                    return None
 
     def get_my_ingredient_by_id(
         self, ingredient_id: int

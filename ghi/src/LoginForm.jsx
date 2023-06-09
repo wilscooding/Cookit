@@ -39,7 +39,7 @@ const LoginForm = () => {
             <div role="status">
               <svg
                 aria-hidden="true"
-                class="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
+                className="inline w-24 h-24 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-orange-400 dark:fill-gray-300"
                 viewBox="0 0 100 101"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@ const LoginForm = () => {
                   fill="currentFill"
                 />
               </svg>
-              <span class="sr-only">Loading...</span>
+              <span className="sr-only">Loading...</span>
             </div>
           </div>
         </div>
@@ -62,7 +62,7 @@ const LoginForm = () => {
           <div className="w-full flex items-center justify-center">
             <Card className="shadow-lg">
               <div className="flex max-w-md justify-center">
-                <img className="w-24 h-24" src={icons.CookIt} />
+                <img className="w-24 h-24" alt="A stylized CI with an icon of a knife and fork" src={icons.CookIt} />
               </div>
               <h1 className="text-2xl text-gray-900 font-bold leading-none tracking-tight">
                 Sign In

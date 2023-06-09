@@ -11,13 +11,17 @@ from routers import (
     recipeingredients,
     my_ingredients,
 )
-
+import os
 from authenticator import authenticator
 
 
 app = FastAPI()
 router = APIRouter()
 
+origins = [
+    "http://localhost:3000",
+    os.environ.get("CORS_HOST", None),
+]
 
 app.add_middleware(
     CORSMiddleware,

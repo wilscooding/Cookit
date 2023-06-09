@@ -50,15 +50,14 @@ def test_remove_from_grocery_list():
 
 def test_update_grocery_list_item():
     # Arrange
-    item_id = 1
-    info = {
-        "user_id": 1,
-        "ingredient_name": "Updated Tomato",
-        "measurement_id": 2,
-        "measurement_qty_id": 3,
-        "notes": "Updated notes"
-}
-
+    item_id = 2
+    info = GroceryListItemIn(
+        user_id = 1,
+        ingredient_name = "Updated Tomato",
+        measurement_id = 2,
+        measurement_qty_id = 3,
+        notes = "Updated notes"
+)
 
 
     # Act
@@ -70,7 +69,7 @@ def test_update_grocery_list_item():
 
 def test_get_grocery_list_item():
     # Arrange
-    item_id = 1
+    item_id = 8
 
     # Act
     response = client.get(f"/api/grocerylist/{item_id}")
