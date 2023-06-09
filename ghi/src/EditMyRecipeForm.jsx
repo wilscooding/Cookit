@@ -35,7 +35,7 @@ function EditMyRecipeForm() {
 
   const handleFetchWithCookie = async() => {
         const data = await fetchWithCookie(
-            `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/token`
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
         );
         if (data !== undefined){
             const currentUser = data.user
@@ -50,7 +50,7 @@ function EditMyRecipeForm() {
   async function handleSubmit(event) {
     event.preventDefault();
     const response = await axios.put(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${id}`,
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
       {
         creator_id: creatorId,
         recipe_name: recipeName,
@@ -93,7 +93,7 @@ function EditMyRecipeForm() {
 
   async function fetchRecipe() {
     const response = await axios.get(
-      `${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/myrecipes/${id}`,
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
       { withCredentials: true }
     );
 

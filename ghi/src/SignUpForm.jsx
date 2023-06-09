@@ -29,7 +29,7 @@ const SignupForm = () => {
 
 		register(
 			userData,
-			`${process.env.REACT_APP_SAMPLE_SERVICE_API_HOST}/api/users`
+			`${process.env.REACT_APP_COOKIT_API_HOST}/api/users`
 		);
 
 		event.target.reset();
