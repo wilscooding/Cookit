@@ -6,7 +6,8 @@
 5/31: started working on "create recipe form" and helped others with their code for the day
 6/1: created the "create recipe form" and styled the background color for all of the pages
 6/2: create unit test for get recipe, update model for create new recipe, fix create new recipe, start on list my recipes
-6/5: worked on edit recipe page and fixed backend
+6/5: worked on edit recipe page and fixed backend, rewatched deployment lectures to prepare for deployment 
 6/6: finished edit recipe page, added my recipe details page and fixed a lot of styling and backend
 6/7: add styling to pages and merge to main, fix database,queries.py, and db.py for adding ingredients to create recipe page. Fix nolan branch and merge with main
 6/8: add recipe ingredients to create recipe form, add recipe ingredients to edit recipe form, misc. backend fixes for recipe ingredients routes
+6/9: edit recipe and create recipe got messed up with the merge so fixed those errors and help other teammates fix other console errors in the code and work on deployment
