@@ -1,3 +1,7 @@
+I drove, made the sql database skeleton 5/15
+
+I drove, made the fastapi integration with the database 5/17
+
 made the grocery list, completed and bug fixed sign up page, worked on personal inventory and styling of pages. 6/5/2023
 
 made loading functionality, and syled more pages. 6/6/2023

@@ -122,10 +122,10 @@ class UserQueries:
                     """
                     UPDATE users
                     SET first = %s
-                      , last = %s
-                      , avatar = %s
-                      , email = %s
-                      , username = %s
+                        , last = %s
+                        , avatar = %s
+                        , email = %s
+                        , username = %s
                     WHERE id = %s
                     RETURNING id, first, last, avatar, email, username
                     """,
@@ -188,9 +188,11 @@ class RecipeQueries:
                 ]
                 cur.execute(
                     """
-                    INSERT INTO recipes (creator_id, recipe_name, diet, img, description, steps)
+                    INSERT INTO recipes (creator_id, recipe_name, diet, img,
+                    description, steps)
                     VALUES (%s, %s, %s, %s, %s, %s)
-                    RETURNING id, recipe_name, diet, img, description, steps, creator_id
+                    RETURNING id, recipe_name, diet, img, description, steps,
+                    creator_id
                     """,
                     params,
                 )
@@ -234,9 +236,12 @@ class RecipeQueries:
                 cur.execute(
                     """
                     UPDATE recipes
-                    SET recipe_name = %s, diet = %s, img = %s, description = %s, steps = %s
+                    SET recipe_name = %s, diet = %s, img = %s,
+                    description = %s,
+                    steps = %s
                     WHERE id = %s
-                    RETURNING id, recipe_name, diet, img, description, steps, creator_id
+                    RETURNING id, recipe_name, diet, img, description, steps,
+                    creator_id
                     """,
                     params,
                 )
@@ -259,7 +264,8 @@ class RecipeQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_name, diet, img, description, steps, creator_id
+                    SELECT id, recipe_name, diet, img, description, steps,
+                    creator_id
                     FROM recipes
                     WHERE id = %s
                     """,
@@ -333,7 +339,9 @@ class IngredientQueries:
                     }
                     return IngredientOut(**ingredient_dict)
 
-    def get_ingredients(self, ingredient_name: Optional[str] = None) -> List[IngredientOut]:
+    def get_ingredients(
+        self, ingredient_name: Optional[str] = None
+    ) -> List[IngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 query = """
@@ -359,6 +367,7 @@ class IngredientQueries:
                         ingredients.append(IngredientOut(**ingredient_dict))
                     return ingredients
         return []
+
     def get_ingredient_by_id(self, id: int) -> IngredientOut:
         with pool.connection() as conn:
             with conn.cursor() as cur:
@@ -415,7 +424,6 @@ class IngredientQueries:
                     return True
                 return False
 
-    # class MeasurementUnitQueries:
     def get_measurement_units(self):
         with pool.connection() as conn:
             with conn.cursor() as cur:
@@ -676,11 +684,18 @@ class RecipeIngredientQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    INSERT INTO recipe_ingredients (recipe_id, measurement_id, measurement_qty_id, ingredient_id)
+                    INSERT INTO recipe_ingredients (recipe_id, measurement_id,
+                    measurement_qty_id, ingredient_id)
                     VALUES (%s, %s, %s, %s)
-                    RETURNING id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                    RETURNING id, recipe_id, measurement_id,
+                    measurement_qty_id, ingredient_id
                     """,
-                    (recipe_id, measurement_id, measurement_qty_id, ingredient_id),
+                    (
+                        recipe_id,
+                        measurement_id,
+                        measurement_qty_id,
+                        ingredient_id,
+                    ),
                 )
                 record = cur.fetchone()
                 if record:
@@ -692,12 +707,15 @@ class RecipeIngredientQueries:
                         ingredient_id=record[4],
                     )
 
-    def get_recipe_ingredient_by_id(self, id: int) -> Optional[RecipeIngredientOut]:
+    def get_recipe_ingredient_by_id(
+        self, id: int
+    ) -> Optional[RecipeIngredientOut]:
         with pool.connection() as conn:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                    SELECT id, recipe_id, measurement_id, measurement_qty_id,
+                    ingredient_id
                     FROM recipe_ingredients
                     WHERE id = %s
                     """,
@@ -721,7 +739,8 @@ class RecipeIngredientQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, recipe_id, measurement_id, measurement_qty_id, ingredient_id
+                    SELECT id, recipe_id, measurement_id, measurement_qty_id,
+                    ingredient_id
                     FROM recipe_ingredients
                     WHERE recipe_id = %s
                     """,
@@ -792,9 +811,11 @@ class MyIngredientQueries:
                 ]
                 cur.execute(
                     """
-                    INSERT INTO my_ingredients (user_id, ingredient_name, measurement_id, measurement_qty_id, notes)
+                    INSERT INTO my_ingredients (user_id, ingredient_name,
+                    measurement_id, measurement_qty_id, notes)
                     VALUES (%s, %s, %s, %s, %s)
-                    RETURNING id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes
+                    RETURNING id, user_id, ingredient_name, measurement_id,
+                    measurement_qty_id, notes
                     """,
                     params,
                 )
@@ -839,9 +860,11 @@ class MyIngredientQueries:
                 cur.execute(
                     """
                     UPDATE my_ingredients
-                    SET user_id = %s, ingredient_name = %s, measurement_id = %s, measurement_qty_id = %s, notes = %s
+                    SET user_id = %s, ingredient_name = %s,
+                    measurement_id = %s, measurement_qty_id = %s, notes = %s
                     WHERE id = %s
-                    RETURNING id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes
+                    RETURNING id, user_id, ingredient_name, measurement_id,
+                    measurement_qty_id, notes
                     """,
                     params,
                 )
@@ -857,6 +880,8 @@ class MyIngredientQueries:
                     }
 
                     return MyIngredientOut(**ingredient_dict)
+                else:
+                    return None
 
     def get_my_ingredient_by_id(
         self, ingredient_id: int
@@ -865,7 +890,8 @@ class MyIngredientQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes
+                    SELECT id, user_id, ingredient_name, measurement_id,
+                    measurement_qty_id, notes
                     FROM my_ingredients
                     WHERE id = %s
                     """,
@@ -922,9 +948,11 @@ class GroceryListQueries:
                 ]
                 cur.execute(
                     """
-                    INSERT INTO grocery_list (user_id, ingredient_name, measurement_id, measurement_qty_id, notes)
+                    INSERT INTO grocery_list (user_id, ingredient_name,
+                    measurement_id, measurement_qty_id, notes)
                     VALUES (%s, %s, %s, %s, %s)
-                    RETURNING id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes
+                    RETURNING id, user_id, ingredient_name, measurement_id,
+                    measurement_qty_id, notes
                     """,
                     params,
                 )
@@ -969,9 +997,11 @@ class GroceryListQueries:
                 cur.execute(
                     """
                     UPDATE grocery_list
-                    SET user_id = %s, ingredient_name = %s, measurement_id = %s, measurement_qty_id = %s, notes = %s
+                    SET user_id = %s, ingredient_name = %s,
+                    measurement_id = %s, measurement_qty_id = %s, notes = %s
                     WHERE id = %s
-                    RETURNING id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes
+                    RETURNING id, user_id, ingredient_name, measurement_id,
+                        measurement_qty_id, notes
                     """,
                     params,
                 )
@@ -987,6 +1017,8 @@ class GroceryListQueries:
                     }
 
                     return GroceryListItemOut(**item_dict)
+                else:
+                    return None
 
     def get_grocery_list_item_by_id(
         self, item_id: int
@@ -995,7 +1027,8 @@ class GroceryListQueries:
             with conn.cursor() as cur:
                 cur.execute(
                     """
-                    SELECT id, user_id, ingredient_name, measurement_id, measurement_qty_id, notes
+                    SELECT id, user_id, ingredient_name, measurement_id,
+                    measurement_qty_id, notes
                     FROM grocery_list
                     WHERE id = %s
                     """,

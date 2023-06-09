@@ -112,7 +112,9 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 													fill="currentFill"
 												/>
 											</svg>
-											<span className="sr-only">Loading...</span>
+											<span className="sr-only">
+												Loading...
+											</span>
 										</div>
 									</div>
 								</div>
@@ -120,11 +122,12 @@ const RecipeSearch = ({ onRecipeSelect }) => {
 								<div className="flex m-2 h-full w-full">
 									<div className="grid grid-rows-1 grid-flow-col gap-4 overflow-auto">
 										{recipes.map((recipe) => (
-											<Link to={`/recipes/${recipe.id}`} className="">
-												<div
-													key={recipe.id}
-													className="shadow-md mb-2 grid w-56 h-64 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 hover:border-4 hover:border-orange-400"
-												>
+											<Link
+												key={recipe.id}
+												to={`/recipes/${recipe.id}`}
+												className=""
+											>
+												<div className="shadow-md mb-2 grid w-56 h-64 bg-white border border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 hover:border-4 hover:border-orange-400">
 													<img
 														src={recipe.image}
 														alt={recipe.title}

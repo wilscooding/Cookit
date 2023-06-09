@@ -42,18 +42,19 @@ function CreateMyRecipeForm() {
   ];
 
   useEffect(() => {
-		const handleFetchWithCookie = async() => {
-			const data = await fetchWithCookie(
-				`${process.env.REACT_APP_COOKIT_API_HOST}/token`
-			);
-			if (data !== undefined){
-				const currentUser = data.user
-                setLoading(false);
-				setUser(currentUser);
-			}
-  		}
-    	handleFetchWithCookie();
-    }, [token]);
+    const handleFetchWithCookie = async () => {
+      const data = await fetchWithCookie(
+        `${process.env.REACT_APP_COOKIT_API_HOST}/token`
+      );
+      if (data !== undefined) {
+        const currentUser = data.user;
+        setLoading(false);
+        setUser(currentUser);
+      }
+    };
+    handleFetchWithCookie();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const fetchIngredients = async () => {
     try {
@@ -354,6 +355,7 @@ function CreateMyRecipeForm() {
                           className="mt-5 m-auto"
                           width="100px"
                           src={image}
+                          alt={recipeName}
                         ></img>
                       )}
                     </div>
