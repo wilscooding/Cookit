@@ -6,43 +6,43 @@ import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useNavigate } from "react-router-dom";
 
 function EditMyRecipeForm() {
-    const { id } = useParams();
-    const [currentUser, setUser] = useState();
-    const [isLoading, setLoading] = useState(true);
-    const { fetchWithCookie } = useToken();
-    const { token } = useToken();
-    const navigate = useNavigate();
-    const [creatorId, setCreatorId] = useState(null);
-    const [recipeName, setRecipeName] = useState("");
-    const [description, setDescription] = useState("");
-    const [steps, setSteps] = useState("");
-    const [diet, setDiet] = useState("");
-    const [image, setImage] = useState("");
-    const [newRecipeIngredient, setNewRecipeIngredient] = useState({
-        id: "",
-        qty: "",
-        unit: "",
-    });
+  const { id } = useParams();
+  const [currentUser, setUser] = useState();
+  const [isLoading, setLoading] = useState(true);
+  const { fetchWithCookie } = useToken();
+  const { token } = useToken();
+  const navigate = useNavigate();
+  const [creatorId, setCreatorId] = useState(null);
+  const [recipeName, setRecipeName] = useState("");
+  const [description, setDescription] = useState("");
+  const [steps, setSteps] = useState("");
+  const [diet, setDiet] = useState("");
+  const [image, setImage] = useState("");
+  const [newRecipeIngredient, setNewRecipeIngredient] = useState({
+    id: "",
+    qty: "",
+    unit: "",
+  });
 
-    const [recipeIngredients, setRecipeIngredients] = useState([]);
+  const [recipeIngredients, setRecipeIngredients] = useState([]);
 
-    const [ingredients, setIngredients] = useState({});
-    const [qtys, setQtys] = useState({});
-    const [units, setUnits] = useState({});
+  const [ingredients, setIngredients] = useState({});
+  const [qtys, setQtys] = useState({});
+  const [units, setUnits] = useState({});
 
-    const dietOptions = [
-        "glutenFree",
-        "ketogenic",
-        "lactoVegetarian",
-        "lowFodmap",
-        "ovoVegetarian",
-        "pescetarian",
-        "paleo",
-        "primal",
-        "vegan",
-        "vegetarian",
-        "whole30",
-    ];
+  const dietOptions = [
+    "glutenFree",
+    "ketogenic",
+    "lactoVegetarian",
+    "lowFodmap",
+    "ovoVegetarian",
+    "pescetarian",
+    "paleo",
+    "primal",
+    "vegan",
+    "vegetarian",
+    "whole30",
+  ];
 
   useEffect(() => {
     const handleFetchWithCookie = async () => {
@@ -97,63 +97,63 @@ function EditMyRecipeForm() {
 
   const fetchIngredients = async () => {
     try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/`
-        );
+      const response = await axios.get(
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/`
+      );
 
-        const ingredientsMap = {};
-        response.data.forEach((ingredient) => {
-            ingredientsMap[ingredient.id] = ingredient;
-        });
+      const ingredientsMap = {};
+      response.data.forEach((ingredient) => {
+        ingredientsMap[ingredient.id] = ingredient;
+      });
 
-        setIngredients(ingredientsMap);
+      setIngredients(ingredientsMap);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   };
 
   const fetchQtys = async () => {
     try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty`
-        );
+      const response = await axios.get(
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty`
+      );
 
-        const qtyMap = {};
-        response.data.forEach((qty) => {
-            qtyMap[qty.id] = qty;
-        });
+      const qtyMap = {};
+      response.data.forEach((qty) => {
+        qtyMap[qty.id] = qty;
+      });
 
-        setQtys(qtyMap);
+      setQtys(qtyMap);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   };
 
   const fetchUnits = async () => {
     try {
-        const response = await axios.get(
-            `${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units`
-        );
+      const response = await axios.get(
+        `${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units`
+      );
 
-        const unitsMap = {};
-        response.data.forEach((unit) => {
-            unitsMap[unit.id] = unit;
-        });
+      const unitsMap = {};
+      response.data.forEach((unit) => {
+        unitsMap[unit.id] = unit;
+      });
 
-        setUnits(unitsMap);
+      setUnits(unitsMap);
     } catch (error) {
-        console.error(error);
+      console.error(error);
     }
   };
 
   async function handleNewRecipeIngredient(event) {
     const clonedNewRecipeIngredient = JSON.parse(
-        JSON.stringify(newRecipeIngredient)
+      JSON.stringify(newRecipeIngredient)
     );
     clonedNewRecipeIngredient.id = event.target.value;
 
     setNewRecipeIngredient(clonedNewRecipeIngredient);
-    }
+  }
 
   async function handleNewRecipeIngredientQty(event) {
     const clonedNewRecipeIngredient = JSON.parse(
@@ -176,7 +176,7 @@ function EditMyRecipeForm() {
   async function handleRemoveRecipeIngredient(
     ingredientId,
     recipeIngredientId
-  ){
+  ) {
     let clonedRecipeIngredients = JSON.parse(JSON.stringify(recipeIngredients));
 
     const response = await axios.delete(
@@ -247,41 +247,40 @@ function EditMyRecipeForm() {
     );
 
     if (response.statusText === "OK") {
-        navigate("/myrecipes");
+      navigate("/myrecipes");
     }
   }
 
-    function handleRecipeNameChange(event) {
-        const value = event.target.value;
-        setRecipeName(value);
-    }
+  function handleRecipeNameChange(event) {
+    const value = event.target.value;
+    setRecipeName(value);
+  }
 
-    function handleDietChange(event) {
-        const value = event.target.value;
-        setDiet(value);
-    }
+  function handleDietChange(event) {
+    const value = event.target.value;
+    setDiet(value);
+  }
 
-    function handleImageChange(event) {
-        const value = event.target.value;
-        setImage(value);
-    }
+  function handleImageChange(event) {
+    const value = event.target.value;
+    setImage(value);
+  }
 
-    function handleDescriptionChange(event) {
-        const value = event.target.value;
-        setDescription(value);
-    }
+  function handleDescriptionChange(event) {
+    const value = event.target.value;
+    setDescription(value);
+  }
 
-    function handleStepsChange(event) {
-        const value = event.target.value;
-        setSteps(value);
-}
+  function handleStepsChange(event) {
+    const value = event.target.value;
+    setSteps(value);
+  }
 
-    useEffect(() => {
-        async function fetchRecipe() {
-        const response = await axios.get(
-            `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
-            { withCredentials: true }
-);
+  async function fetchRecipe() {
+    const response = await axios.get(
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
+      { withCredentials: true }
+    );
 
     if (response.statusText === "OK") {
       const data = response.data;
@@ -292,51 +291,32 @@ function EditMyRecipeForm() {
       setDescription(data.description);
       setSteps(data.steps);
     }
-    }
-    fetchRecipe();
+  }
 
+  useEffect(() => {
+    fetchRecipe();
     fetchIngredients();
     fetchQtys();
     fetchUnits();
-    }, [token, id]);
+  }, [token]);
 
-    useEffect(() => {
-        if (
-            Object.keys(qtys).length &&
-            Object.keys(units).length &&
-            Object.keys(ingredients).length
-        ) {
-            async function fetchRecipeIngredients() {
-                const response = await axios.get(
-                `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/?recipe_id=${id}`,
-                { withCredentials: true }
-                );
-
-                if (response.statusText === "OK") {
-                    const data = response.data;
-                    setRecipeIngredients(
-                        data.map((ingredient) => {
-                            return {
-                                id: ingredient.ingredient_id,
-                                unit: ingredient.measurement_id,
-                                qty: ingredient.measurement_qty_id,
-                                recipeIngredientId: ingredient.id,
-                            };
-                        })
-                    );
-                }
-            }
-            fetchRecipeIngredients();
-        }
-  }, [qtys, units, ingredients, id]);
-
-    if (!currentUser) {
-        return <div>Must be signed in!</div>;
+  useEffect(() => {
+    if (
+      Object.keys(qtys).length &&
+      Object.keys(units).length &&
+      Object.keys(ingredients).length
+    ) {
+      fetchRecipeIngredients();
     }
+  }, [qtys, units, ingredients]);
 
-    if (creatorId !== currentUser.id) {
-        return <div>You are not allowed to edit this recipe!</div>;
-}
+  if (!currentUser) {
+    return <div>Must be signed in!</div>;
+  }
+
+  if (creatorId !== currentUser.id) {
+    return <div>You are not allowed to edit this recipe!</div>;
+  }
 
   return (
     <>
@@ -452,7 +432,6 @@ function EditMyRecipeForm() {
                     <div className="w-full items-center">
                       {image && (
                         <img
-                          alt="food of recipe"
                           className="mt-5 m-auto"
                           width="100px"
                           src={image}
