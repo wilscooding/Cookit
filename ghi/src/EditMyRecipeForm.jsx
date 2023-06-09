@@ -56,7 +56,7 @@ function EditMyRecipeForm() {
 			}
 		};
 		handleFetchWithCookie();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
 	}, [token]);
 
 	async function handleNewRecipeIngredient(event) {
@@ -190,7 +190,7 @@ function EditMyRecipeForm() {
 	}
 
 	useEffect(() => {
-		async function fetchRecipe() {
+    async function fetchRecipe() {
 			const response = await axios.get(
 				`${process.env.REACT_APP_COOKIT_API_HOST}/api/myrecipes/${id}`,
 				{ withCredentials: true }
@@ -200,14 +200,14 @@ function EditMyRecipeForm() {
 				const data = response.data;
 				setCreatorId(data.creator_id);
 				setRecipeName(data.recipe_name);
-				setDiet(data.diet);
-				setImage(data.img);
+				setDiet(data.diet || "");
+				setImage(data.img || "");
 				setDescription(data.description);
 				setSteps(data.steps);
 			}
 		}
 		fetchRecipe();
-		const fetchIngredients = async () => {
+    const fetchIngredients = async () => {
 			try {
 				const response = await axios.get(
 					`${process.env.REACT_APP_COOKIT_API_HOST}/api/ingredients/`
@@ -224,7 +224,7 @@ function EditMyRecipeForm() {
 			}
 		};
 		fetchIngredients();
-		const fetchQtys = async () => {
+    const fetchQtys = async () => {
 			try {
 				const response = await axios.get(
 					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_qty`
@@ -241,7 +241,7 @@ function EditMyRecipeForm() {
 			}
 		};
 		fetchQtys();
-		const fetchUnits = async () => {
+    const fetchUnits = async () => {
 			try {
 				const response = await axios.get(
 					`${process.env.REACT_APP_COOKIT_API_HOST}/api/measurement_units`
@@ -266,15 +266,9 @@ function EditMyRecipeForm() {
 			Object.keys(units).length &&
 			Object.keys(ingredients).length
 		) {
-			async function fetchRecipeIngredients() {
+      async function fetchRecipeIngredients() {
 				const response = await axios.get(
-					`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
-					{
-						withCredentials: true,
-						params: {
-							recipe_id: id,
-						},
-					}
+					`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/recipe/${id}`
 				);
 
 				if (response.statusText === "OK") {
@@ -294,8 +288,6 @@ function EditMyRecipeForm() {
 			fetchRecipeIngredients();
 		}
 	}, [qtys, units, ingredients, id]);
-
-	console.log(recipeIngredients);
 
 	if (!currentUser) {
 		return <div>Must be signed in!</div>;

@@ -21,6 +21,7 @@ const RecipeDetails = () => {
 
 	useEffect(() => {
 		handleFetchWithCookie();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [token]);
 
 	const [recipe, setRecipe] = useState("");
@@ -50,13 +51,7 @@ const RecipeDetails = () => {
 				return;
 			}
 
-			const {
-				title,
-				image,
-				summary,
-				analyzedInstructions,
-				extendedIngredients,
-			} = recipe;
+			const { title, image, extendedIngredients } = recipe;
 
 			const stepsText = recipe.analyzedInstructions[0].steps
 				.map((step) => step.step)
@@ -217,11 +212,10 @@ const RecipeDetails = () => {
 				// console.log("before recipe ingredients", ingredientData);
 
 				const recipeIngredientResponse = await axios.post(
-					`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
+          `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
 					ingredientData
-				);
+          );
 
-				// console.log("Saved Recipe Ingredient:", recipeIngredientResponse.data);
 			}
 
 			console.log("Ingredients saved successfully!");
@@ -229,8 +223,6 @@ const RecipeDetails = () => {
 			console.error(error);
 		}
 	};
-
-  // comment
 	if (!recipe) {
 		return (
 			<div className="flex w-full h-screen">
@@ -297,7 +289,9 @@ const RecipeDetails = () => {
 								/>
 							</div>
 						</Card>
-						<h3 className="capitalize text-2xl underline font-bold">Ingredients</h3>
+						<h3 className="capitalize text-2xl underline font-bold">
+							Ingredients
+						</h3>
 						<ol className=" indent-3 mb-3">
 							{ingredientNames.map((ingredient, index) => (
 								<li key={index}>
@@ -311,7 +305,9 @@ const RecipeDetails = () => {
 						<ul>
 							{instructions.map((instruction, index) => (
 								<li key={index}>
-									{instruction.number}{": "}{instruction.step}
+									{instruction.number}
+									{": "}
+									{instruction.step}
 								</li>
 							))}
 						</ul>

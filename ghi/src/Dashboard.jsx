@@ -4,9 +4,8 @@ import { useState, useEffect } from 'react';
 
 const Dashboard = () => {
 	const { fetchWithCookie } = useToken();
-  	const { token } = useToken();
-  	const [ currentUser, setUser] = useState();
-  	const [ userDetails, setUserDetails] = useState();
+  const [ currentUser, setUser] = useState();
+  const [ userDetails, setUserDetails] = useState();
 	const [isLoading, setLoading] = useState(true);
 
 	useEffect(() => {
