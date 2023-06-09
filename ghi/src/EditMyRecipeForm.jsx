@@ -45,19 +45,18 @@ function EditMyRecipeForm() {
     ];
 
   useEffect(() => {
-		const handleFetchWithCookie = async() => {
-			const data = await fetchWithCookie(
-				`${process.env.REACT_APP_COOKIT_API_HOST}/token`
-			);
-			if (data !== undefined){
-				const currentUser = data.user
+    const handleFetchWithCookie = async () => {
+      const data = await fetchWithCookie(
+        `${process.env.REACT_APP_COOKIT_API_HOST}/token`
+      );
+      if (data !== undefined) {
+        const currentUser = data.user;
         setLoading(false);
-				setUser(currentUser);
-			}
-  		}
-    	handleFetchWithCookie();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [token]);
+        setUser(currentUser);
+      }
+    };
+    handleFetchWithCookie();
+  }, [token]);
 
   async function fetchRecipe() {
     const response = await axios.get(
@@ -69,8 +68,8 @@ function EditMyRecipeForm() {
       const data = response.data;
       setCreatorId(data.creator_id);
       setRecipeName(data.recipe_name);
-      setDiet(data.diet);
-      setImage(data.img);
+      setDiet(data.diet || "");
+      setImage(data.img || "");
       setDescription(data.description);
       setSteps(data.steps);
     }
@@ -78,13 +77,8 @@ function EditMyRecipeForm() {
 
   async function fetchRecipeIngredients() {
     const response = await axios.get(
-			`${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/`,
-			{
-				params: {
-					recipe_id: id,
-				},
-			}
-		);
+      `${process.env.REACT_APP_COOKIT_API_HOST}/api/recipe_ingredients/recipe/${id}`
+    );
 
     if (response.statusText === "OK") {
       const data = response.data;
@@ -290,13 +284,13 @@ function EditMyRecipeForm() {
 );
 
     if (response.statusText === "OK") {
-        const data = response.data;
-        setCreatorId(data.creator_id);
-        setRecipeName(data.recipe_name);
-        setDiet(data.diet);
-        setImage(data.img);
-        setDescription(data.description);
-        setSteps(data.steps);
+      const data = response.data;
+      setCreatorId(data.creator_id);
+      setRecipeName(data.recipe_name);
+      setDiet(data.diet || "");
+      setImage(data.img || "");
+      setDescription(data.description);
+      setSteps(data.steps);
     }
     }
     fetchRecipe();
