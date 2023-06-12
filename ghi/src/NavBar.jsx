@@ -1,17 +1,17 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import icons from "./constants/icons";
 
 const Nav = () => {
-    const { fetchWithCookie } = useToken();
-    const { token } = useToken();
-    const [ currentUser, setUser] = useState();
-    const [ userDetails, setUserDetails] = useState();
-    const navigate = useNavigate();
-    const { logout } = useToken();
+	const { fetchWithCookie } = useToken();
+	const { token } = useToken();
+	const [currentUser, setUser] = useState();
+	const [userDetails, setUserDetails] = useState();
+	const navigate = useNavigate();
+	const { logout } = useToken();
 
     useEffect(() => {
         const handleFetchWithCookie = async() => {
@@ -21,31 +21,33 @@ const Nav = () => {
         if (data !== undefined){
             const currentUser = data.user
             setUser(currentUser);
+        } else {
+            navigate("/signup")
         }
     }
         handleFetchWithCookie();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
-    useEffect(() => {
-        const fetchUserDetails = async () => {
-        if (currentUser !== undefined){
-            const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`
-            const userResponse = await fetch(userUrl);
+	useEffect(() => {
+		const fetchUserDetails = async () => {
+			if (currentUser !== undefined) {
+				const userUrl = `${process.env.REACT_APP_COOKIT_API_HOST}/api/users/${currentUser.id}`;
+				const userResponse = await fetch(userUrl);
 
-            if (userResponse.ok){
-                const userDetails = await userResponse.json();
+				if (userResponse.ok) {
+					const userDetails = await userResponse.json();
 
-                setUserDetails(userDetails);
-            }
-        }
-    }
-        fetchUserDetails();
-    }, [currentUser]);
+					setUserDetails(userDetails);
+				}
+			}
+		};
+		fetchUserDetails();
+	}, [currentUser]);
 
     const handleLogout = (event) => {
         logout();
-        navigate("/");
+        navigate("/login");
     }
     if (token) {
         return (
@@ -64,14 +66,14 @@ const Nav = () => {
                 <div className="flex md:order-2">
                     <Dropdown
                     inline
-                    label={<Avatar alt="User settings" img={userDetails ? userDetails.avatar : null} rounded/>}
+                    label={<Avatar alt="User settings" img={userDetails.avatar} rounded/>}
                     >
                     <Dropdown.Header>
                         <span className="block text-sm">
-                        {userDetails ? userDetails.first : null} {userDetails ? userDetails.last : null}
+                        {userDetails.first} {userDetails.last}
                         </span>
                         <span className="block truncate text-sm font-medium">
-                        {userDetails ? userDetails.email : null}
+                        {userDetails.email}
                         </span>
                     </Dropdown.Header>
                     <Dropdown.Item>

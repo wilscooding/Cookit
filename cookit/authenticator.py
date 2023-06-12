@@ -21,11 +21,11 @@ class UserAuthenticator(Authenticator):
 
     def get_hashed_password(self, user: UserOutWithPassword):
 
-        return user['hashed_password']
+        return user["hashed_password"]
 
     def get_account_data_for_cookie(self, user: UserOut):
 
-        return user['email'], UserOut(id=user['id'], email=user['email'])
+        return user["email"], UserOut(id=user["id"], email=user["email"])
 
 
 authenticator = UserAuthenticator(os.environ["SIGNING_KEY"])
