@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Card } from "flowbite-react";
 import useToken from "@galvanize-inc/jwtdown-for-react";
+import icons from "./constants/icons";
 
 const Profile = () => {
   const { fetchWithCookie } = useToken();
@@ -75,7 +76,7 @@ const Profile = () => {
                   alt="profile/avatar"
                   className="mb-3 rounded-full shadow-lg my-5"
                   height="96"
-                  src={userDetails.avatar}
+                  src={userDetails.avatar ? userDetails.avatar : icons.Profile}
                   width="96"
                 />
                 <h5 className="mb-1 text-xl font-medium my-4 text-gray-900 dark:text-white">

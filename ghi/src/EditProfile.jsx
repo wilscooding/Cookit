@@ -3,6 +3,7 @@ import { Card, Label, TextInput, Button } from "flowbite-react";
 import axios from "axios";
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { useNavigate } from "react-router-dom";
+import icons from './constants/icons';
 
 const EditProfile = () => {
   const { fetchWithCookie } = useToken();
@@ -66,10 +67,6 @@ const EditProfile = () => {
     setUserDetails({ ...userDetails, last: event.target.value });
   };
 
-  const handleEmail = (event) => {
-    setUserDetails({ ...userDetails, email: event.target.value });
-  };
-
   const handleUsername = (event) => {
     setUserDetails({ ...userDetails, username: event.target.value });
   };
@@ -124,7 +121,7 @@ const EditProfile = () => {
                           alt="profile/avatar"
                           height="96"
                           width="96"
-                          src={userDetails.avatar}
+                          src={userDetails ? userDetails.avatar : icons.Profile}
                         ></img>
                       )}
                     </div>
@@ -134,7 +131,7 @@ const EditProfile = () => {
                       </div>
                       <TextInput
                         id="avatar"
-                        value={userDetails.avatar}
+                        value={userDetails ? userDetails.avatar : null}
                         onChange={handleAvatar}
                         type="text"
                       />
@@ -145,7 +142,7 @@ const EditProfile = () => {
                       </div>
                       <TextInput
                         id="first"
-                        value={userDetails.first}
+                        value={userDetails ? userDetails.first : "First name"}
                         onChange={handleFirst}
                         type="text"
                       />
@@ -156,19 +153,19 @@ const EditProfile = () => {
                       </div>
                       <TextInput
                         id="last"
-                        value={userDetails.last}
+                        value={userDetails ? userDetails.last : "Last name"}
                         onChange={handleLast}
                         type="text"
                       />
                     </div>
                     <div>
                       <div className="mb-2 block">
-                        <Label htmlFor="email1" value="Your email" />
+                        <Label htmlFor="email" value="Your email" />
                       </div>
                       <TextInput
-                        id="email1"
+                        readOnly
+                        id="email"
                         value={userDetails.email}
-                        onChange={handleEmail}
                         type="email"
                       />
                     </div>
@@ -178,7 +175,7 @@ const EditProfile = () => {
                       </div>
                       <TextInput
                         id="username"
-                        value={userDetails.username}
+                        value={userDetails ? userDetails.username : null}
                         onChange={handleUsername}
                         type="text"
                       />
