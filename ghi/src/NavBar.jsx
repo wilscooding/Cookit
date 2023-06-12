@@ -66,14 +66,14 @@ const Nav = () => {
                 <div className="flex md:order-2">
                     <Dropdown
                     inline
-                    label={<Avatar alt="User settings" img={userDetails ? userDetails.avatar : null} rounded/>}
+                    label={<Avatar alt="User settings" img={userDetails.avatar} rounded/>}
                     >
                     <Dropdown.Header>
                         <span className="block text-sm">
-                        {userDetails ? userDetails.first : null} {userDetails ? userDetails.last : null}
+                        {userDetails.first} {userDetails.last}
                         </span>
                         <span className="block truncate text-sm font-medium">
-                        {userDetails ? userDetails.email : null}
+                        {userDetails.email}
                         </span>
                     </Dropdown.Header>
                     <Dropdown.Item>
