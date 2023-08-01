@@ -1,6 +1,6 @@
 # CookIt
 
-![CookIt GIF](.image/Cookit.gif)
+![CookIt GIF](.images/Cookit.gif)
 
 ## Project Documentation
 
