@@ -1,15 +1,15 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import icons from "./constants/icons";
 
 const Nav = () => {
 	const { fetchWithCookie } = useToken();
 	const { token } = useToken();
-	const [currentUser, setUser] = useState();
-	const [userDetails, setUserDetails] = useState();
+	const [currentUser, setUser] = React.useState();
+	const [userDetails, setUserDetails] = React.useState();
 	const navigate = useNavigate();
 	const { logout } = useToken();
 
@@ -49,21 +49,22 @@ const Nav = () => {
 		logout();
 		navigate("/login");
 	};
-	if (token) {
-		return (
-			<>
-				<Navbar fluid rounded>
-					<Navbar.Brand href="https://flowbite-react.com">
-						<img
-							alt="A stylized CI with an icon of a knife and fork"
-							className="mr-3 h-6 sm:h-9"
-							src={icons.CookIt}
-						/>
-						<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-							CookIt
-						</span>
-					</Navbar.Brand>
-					<div className="flex md:order-2">
+	return (
+		<>
+			<Navbar fluid rounded>
+				<Navbar.Brand href="https://flowbite-react.com">
+					<img
+						alt="A stylized CI with an icon of a knife and fork"
+						className="mr-3 h-6 sm:h-9"
+						src={icons.CookIt}
+					/>
+					<span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+						CookIt
+					</span>
+				</Navbar.Brand>
+				<div className="flex md:order-2">
+					{token ? (
+						// If user is logged in, display user avatar and dropdown
 						<Dropdown
 							inline
 							label={
@@ -93,8 +94,27 @@ const Nav = () => {
 								Sign out
 							</Dropdown.Item>
 						</Dropdown>
-						<Navbar.Toggle />
-					</div>
+					) : (
+						// If user is not logged in, display login and signup links
+						<>
+							<Navbar.Link
+								href="/login"
+								className="rounded-lg bg-green-400 px-3 py-2 text-white font-semibold mx-2"
+							>
+								Login
+							</Navbar.Link>
+							<Navbar.Link
+								href="/signup"
+								className="rounded-lg bg-green-400 px-3 py-2 text-white font-semibold mx-2"
+							>
+								Signup
+							</Navbar.Link>
+						</>
+					)}
+					<Navbar.Toggle />
+				</div>
+				{token && (
+					// Only show the Navbar.Collapse if the user is logged in
 					<Navbar.Collapse>
 						<Navbar.Link active href="/">
 							Home
@@ -108,11 +128,10 @@ const Nav = () => {
 						</Navbar.Link>
 						<Navbar.Link href="#">Suggest Recipes</Navbar.Link>
 					</Navbar.Collapse>
-				</Navbar>
-			</>
-		);
-	} else {
-		return <div></div>;
-	}
+				)}
+			</Navbar>
+		</>
+	);
 };
+
 export default Nav;
