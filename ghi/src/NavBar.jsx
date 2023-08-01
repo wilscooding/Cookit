@@ -13,21 +13,21 @@ const Nav = () => {
 	const navigate = useNavigate();
 	const { logout } = useToken();
 
-	useEffect(() => {
-		const handleFetchWithCookie = async () => {
-			const data = await fetchWithCookie(
-				`${process.env.REACT_APP_COOKIT_API_HOST}/token`
-			);
-			if (data !== undefined) {
-				const currentUser = data.user;
-				setUser(currentUser);
-			} else {
-				navigate("/login");
-			}
-		};
-		handleFetchWithCookie();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+    useEffect(() => {
+        const handleFetchWithCookie = async() => {
+        const data = await fetchWithCookie(
+            `${process.env.REACT_APP_COOKIT_API_HOST}/token`
+        );
+        if (data !== undefined){
+            const currentUser = data.user
+            setUser(currentUser);
+        } else {
+            navigate("/signup")
+        }
+    }
+        handleFetchWithCookie();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
 
 	useEffect(() => {
 		const fetchUserDetails = async () => {
