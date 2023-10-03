@@ -1,6 +1,6 @@
 import useToken from "@galvanize-inc/jwtdown-for-react";
 import { Navbar, Dropdown, Avatar } from "flowbite-react";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 // import { Link } from "react-router-dom";
 import icons from "./constants/icons";
