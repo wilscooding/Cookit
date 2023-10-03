@@ -85,7 +85,7 @@ jobs:
           # railway auth:set $RAILWAY_TOKEN
 
           # Deploy to Railway
-          export DATABASE_URL=postgresql://cookit:cookit@db/cookit
+          # export DATABASE_URL=postgresql://cookit:cookit@db/cookit
           railway up
 
         env:
