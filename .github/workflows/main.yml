@@ -1,0 +1,118 @@
+name: Full Stack Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Frontend Deployment Job
+  build-and-deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install frontend dependencies
+        run: |
+          cd ghi
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd ghi
+          npm run build
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy frontend to Railway
+        run: |
+          # Add deployment steps for Railway here (e.g., using Railway CLI)
+          # Example:
+          # Install Railway CLI
+          # npm install -g @railway/cli
+
+          # Authenticate with Railway using your project token
+          # railway auth:set $RAILWAY_TOKEN
+
+          # Deploy to Railway
+          railway up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          
+
+  # Backend Deployment Job
+  build-and-deploy-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install backend dependencies
+        run: |
+          cd cookit
+          pip install -r requirements.txt
+
+      - name: Run database migrations
+        run: |
+          cd cookit
+          python manage.py migrate
+       
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli   
+
+      - name: Deploy backend to Railway
+        run: |
+          # Add deployment steps for Railway here (e.g., using Railway CLI)
+          # Example:
+          # Install Railway CLI
+          # npm install -g @railway/cli
+
+          # Authenticate with Railway using your project token
+          # railway auth:set $RAILWAY_TOKEN
+
+          # Deploy to Railway
+          railway up
+
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+  # Database Deployment Job
+  deploy-database:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: cookit
+          POSTGRES_PASSWORD: cookit
+          POSTGRES_DB: cookit
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Run database provisioning scripts (e.g., using psql)
+        run: |
+          # Add database provisioning steps here (e.g., using psql to execute scripts)
