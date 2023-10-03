@@ -71,11 +71,17 @@ jobs:
             - name: Set SPOONACULAR_API_KEY environment variable
               run: echo "SPOONACULAR_API_KEY=$SPOONACULAR_API_KEY" >> $GITHUB_ENV
 
+            - name: Set SIGNING_KEY environment variable
+              run: echo "SIGNING_KEY=$SIGNING_KEY" >> $GITHUB_ENV
 
             - name: Debug DATABASE_URL
               run: echo "DATABASE_URL is $DATABASE_URL"
+
             - name: Debug SPOONACULAR_API_KEY
               run: echo "SPOONACULAR_API_KEY is $SPOONACULAR_API_KEY"
+
+            - name: Debug SIGNING_KEY
+              run: echo "SIGNING_KEY is $SIGNING_KEY"
 
             - name: Deploy FastAPI application with Uvicorn
               run: |
