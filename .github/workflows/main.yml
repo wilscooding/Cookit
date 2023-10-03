@@ -68,8 +68,14 @@ jobs:
             - name: Set DATABASE_URL environment variable
               run: echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
 
+            - name: Set SPOONACULAR_API_KEY environment variable
+              run: echo "SPOONACULAR_API_KEY=$SPOONACULAR_API_KEY" >> $GITHUB_ENV
+
+
             - name: Debug DATABASE_URL
               run: echo "DATABASE_URL is $DATABASE_URL"
+            - name: Debug SPOONACULAR_API_KEY
+              run: echo "SPOONACULAR_API_KEY is $SPOONACULAR_API_KEY"
 
             - name: Deploy FastAPI application with Uvicorn
               run: |
@@ -96,6 +102,7 @@ jobs:
               env:
                   RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
                   DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                  SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
 
     deploy-database:
         runs-on: ubuntu-latest
