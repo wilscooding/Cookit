@@ -1,123 +1,125 @@
 name: Full Stack Deployment
 
 on:
-  push:
-    branches:
-      - main
+    push:
+        branches:
+            - main
 
 jobs:
-  # Frontend Deployment Job
-  build-and-deploy-frontend:
-    runs-on: ubuntu-latest
+    # Frontend Deployment Job
+    build-and-deploy-frontend:
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: "16"
 
-      - name: Install frontend dependencies
-        run: |
-          cd ghi
-          npm install
+            - name: Install frontend dependencies
+              run: |
+                  cd ghi
+                  npm install
 
-      - name: Build frontend
-        run: |
-          cd ghi
-          npm run build
+            - name: Build frontend
+              run: |
+                  cd ghi
+                  npm run build
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
+            - name: Install Railway CLI
+              run: npm install -g @railway/cli
 
-      - name: Deploy frontend to Railway
-        run: |
-          # Add deployment steps for Railway here (e.g., using Railway CLI)
-          # Example:
-          # Install Railway CLI
-          # npm install -g @railway/cli
+            - name: Deploy frontend to Railway
+              run: |
+                  # Add deployment steps for Railway here (e.g., using Railway CLI)
+                  # Example:
+                  # Install Railway CLI
+                  # npm install -g @railway/cli
 
-          # Authenticate with Railway using your project token
-          # railway auth:set $RAILWAY_TOKEN
+                  # Authenticate with Railway using your project token
+                  # railway auth:set $RAILWAY_TOKEN
 
-          # Deploy to Railway
-          railway up
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+                  # Deploy to Railway
+                  railway up
+              env:
+                  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
+    # Backend Deployment Job
+    build-and-deploy-backend:
+        runs-on: ubuntu-latest
 
-  # Backend Deployment Job
-  build-and-deploy-backend:
-    runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.x"
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+            - name: Install backend dependencies
+              run: |
+                  cd cookit
+                  pip install -r requirements.txt
 
-      - name: Install backend dependencies
-        run: |
-          cd cookit
-          pip install -r requirements.txt
+            - name: Set DATABASE_URL environment variable
+              run: echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
 
-      - name: Debug DATABASE_URL
-        run: echo "DATABASE_URL is $DATABASE_URL"
+            - name: Debug DATABASE_URL
+              run: echo "DATABASE_URL is $DATABASE_URL"
 
-      - name: Deploy FastAPI application with Uvicorn
-        run: |
-          cd cookit
-          uvicorn main:app --host 0.0.0.0 --port 8000
+            - name: Deploy FastAPI application with Uvicorn
+              run: |
+                  cd cookit
+                  uvicorn main:app --host 0.0.0.0 --port 8000
 
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
+            - name: Install Railway CLI
+              run: npm install -g @railway/cli
 
-      - name: Deploy backend to Railway
-        run: |
-          # Add deployment steps for Railway here (e.g., using Railway CLI)
-          # Example:
-          # Install Railway CLI
-          # npm install -g @railway/cli
+            - name: Deploy backend to Railway
+              run: |
+                  # Add deployment steps for Railway here (e.g., using Railway CLI)
+                  # Example:
+                  # Install Railway CLI
+                  # npm install -g @railway/cli
 
-          # Authenticate with Railway using your project token
-          # railway auth:set $RAILWAY_TOKEN
+                  # Authenticate with Railway using your project token
+                  # railway auth:set $RAILWAY_TOKEN
 
-          # Deploy to Railway
-          export DATABASE_URL=$DATABASE_URL
-          railway up
+                  # Deploy to Railway
+                  export DATABASE_URL=$DATABASE_URL
+                  railway up
 
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+              env:
+                  RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-  deploy-database:
-    runs-on: ubuntu-latest
+    deploy-database:
+        runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:14
-        env:
-          POSTGRES_USER: cookit
-          POSTGRES_PASSWORD: cookit
-          POSTGRES_DB: cookit
-        ports:
-          - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        services:
+            postgres:
+                image: postgres:14
+                env:
+                    POSTGRES_USER: cookit
+                    POSTGRES_PASSWORD: cookit
+                    POSTGRES_DB: cookit
+                ports:
+                    - 5432:5432
+                options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.x"
 
-      - name: Run database provisioning scripts (e.g., using psql)
-        run: |
-          # Add database provisioning steps here (e.g., using psql to execute scripts)
+            - name: Run database provisioning scripts (e.g., using psql)
+              run: |
+                  # Add database provisioning steps here (e.g., using psql to execute scripts)
