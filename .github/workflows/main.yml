@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Install frontend dependencies
         run: |
@@ -46,7 +46,7 @@ jobs:
           railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          
+
 
   # Backend Deployment Job
   build-and-deploy-backend:
@@ -70,9 +70,9 @@ jobs:
         run: |
           cd cookit
           python manage.py migrate
-       
+
       - name: Install Railway CLI
-        run: npm install -g @railway/cli   
+        run: npm install -g @railway/cli
 
       - name: Deploy backend to Railway
         run: |
