@@ -14,6 +14,8 @@ from routers import (
 import os
 from authenticator import authenticator
 
+from queries import ConnectionPool
+
 
 app = FastAPI()
 router = APIRouter()
@@ -42,3 +44,5 @@ app.include_router(measurementunits.router)
 app.include_router(recipeingredients.router)
 app.include_router(my_ingredients.router)
 app.include_router(grocerylist.router)
+
+db_pool = ConnectionPool(conninfo=os.environ["DATABASE_URL"])
