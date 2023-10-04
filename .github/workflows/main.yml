@@ -137,6 +137,13 @@ jobs:
             - name: Wait for PostgreSQL to start
               run: sleep 10
 
+            - name: Debug Database Configuration
+              run: |
+                echo "DATABASE_URL: $DATABASE_URL"
+                echo "POSTGRES_USER: $POSTGRES_USER"
+                echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
+                echo "POSTGRES_DB: $POSTGRES_DB"
+
             - name: Run database provisioning scripts (e.g., using psql)
               run: |
                   # Add database provisioning steps here (e.g., using psql to execute scripts)
