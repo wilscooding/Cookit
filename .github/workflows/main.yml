@@ -116,11 +116,6 @@ jobs:
         services:
             postgres:
                 image: postgres:14.2-bullseye
-                env:
-                  POSTGRES_USER: cookit
-                  POSTGRES_PASSWORD: cookit
-                  POSTGRES_DB: cookit
-
                 ports:
                     - 15432:5432
                 options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -129,17 +124,25 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v2
 
-            # - name: Set up Python
-            #   uses: actions/setup-python@v2
-            #   with:
-            #       python-version: "3.x"
+            - name: Set up Python
+              uses: actions/setup-python@v2
+              with:
+                  python-version: "3.x"
 
             - name: Wait for PostgreSQL to start
               run: sleep 10
 
+            - name: Set up environment variables
+              run: |
+                # echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+                echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $GITHUB_ENV
+                echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+                echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
+
+
             - name: Debug Database Configuration
               run: |
-                echo "DATABASE_URL: $DATABASE_URL"
+                # echo "DATABASE_URL: $DATABASE_URL"
                 echo "POSTGRES_USER: $POSTGRES_USER"
                 echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
                 echo "POSTGRES_DB: $POSTGRES_DB"
