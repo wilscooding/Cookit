@@ -60,6 +60,10 @@ jobs:
               with:
                   python-version: "3.x"
 
+            - name: Check Internet Access
+              run: curl -sSfL https://www.github.com -o /dev/null || exit 1
+
+
             - name: Install backend dependencies
               run: |
                   cd cookit
@@ -79,8 +83,10 @@ jobs:
 
             - name: Deploy FastAPI application with Uvicorn
               run: |
-                  cd cookit
-                  uvicorn main:app --host 0.0.0.0 --port 8000
+                cd cookit
+                for _ in {1..5}; do
+                  uvicorn Main:app --host 0.0.0.0 --port 8000 && break || sleep 5
+                done
 
             - name: Install Railway CLI
               run: npm install -g @railway/cli
