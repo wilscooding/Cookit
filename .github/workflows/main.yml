@@ -115,7 +115,7 @@ jobs:
 
         services:
             postgres:
-                image: postgres:14
+                image: postgres:latest
                 env:
                     POSTGRES_USER: cookit
                     POSTGRES_PASSWORD: cookit
@@ -133,7 +133,10 @@ jobs:
               with:
                   python-version: "3.x"
 
+            - name: Wait for PostgreSQL to start
+              run: sleep 10
+
             - name: Run database provisioning scripts (e.g., using psql)
               run: |
                   # Add database provisioning steps here (e.g., using psql to execute scripts)
-                  psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
+                  .\\psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
