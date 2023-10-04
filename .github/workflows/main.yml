@@ -65,23 +65,17 @@ jobs:
                   cd cookit
                   pip install -r requirements.txt
 
-            - name: Set DATABASE_URL environment variable
-              run: echo "DATABASE_URL=$DATABASE_URL" >> $GITHUB_ENV
+            - name: Set environment variables
+              run: |
+                echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+                echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> $GITHUB_ENV
+                echo "SIGNING_KEY=${{ secrets.SIGNING_KEY }}" >> $GITHUB_ENV
 
-            - name: Set SPOONACULAR_API_KEY environment variable
-              run: echo "SPOONACULAR_API_KEY=$SPOONACULAR_API_KEY" >> $GITHUB_ENV
-
-            - name: Set SIGNING_KEY environment variable
-              run: echo "SIGNING_KEY=$SIGNING_KEY" >> $GITHUB_ENV
-
-            - name: Debug DATABASE_URL
-              run: echo "DATABASE_URL is $DATABASE_URL"
-
-            - name: Debug SPOONACULAR_API_KEY
-              run: echo "SPOONACULAR_API_KEY is $SPOONACULAR_API_KEY"
-
-            - name: Debug SIGNING_KEY
-              run: echo "SIGNING_KEY is $SIGNING_KEY"
+            - name: Debug backend keys
+              run: |
+                echo "DATABASE_URL is $DATABASE_URL"
+                echo "SPOONACULAR_API_KEY is $SPOONACULAR_API_KEY"
+                echo "SIGNING_KEY is $SIGNING_KEY"
 
             - name: Deploy FastAPI application with Uvicorn
               run: |
