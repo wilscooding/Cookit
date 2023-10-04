@@ -115,11 +115,12 @@ jobs:
 
         services:
             postgres:
-                image: postgres:latest
+                image: postgres:14.2-bullseye
                 env:
-                    POSTGRES_USER: cookit
-                    POSTGRES_PASSWORD: cookit
-                    POSTGRES_DB: cookit
+                  POSTGRES_USER: cookit
+                  POSTGRES_PASSWORD: cookit
+                  POSTGRES_DB: cookit
+
                 ports:
                     - 15432:5432
                 options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -139,4 +140,4 @@ jobs:
             - name: Run database provisioning scripts (e.g., using psql)
               run: |
                   # Add database provisioning steps here (e.g., using psql to execute scripts)
-                  psql -U $POSTGRES_USER -d cookit -a -f /data/cookit.sql
+                  psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
