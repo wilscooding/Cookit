@@ -151,7 +151,21 @@ jobs:
                 echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
                 echo "POSTGRES_DB: $POSTGRES_DB"
 
-            - name: Run database provisioning scripts (e.g., using psql)
+            # - name: Run database provisioning scripts (e.g., using psql)
+            #   run: |
+            #       # Add database provisioning steps here (e.g., using psql to execute scripts)
+            #       psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
+            - name: Wait for PostgreSQL to start
               run: |
-                  # Add database provisioning steps here (e.g., using psql to execute scripts)
-                  psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
+                for _ in {1..30}; do
+                  if pg_isready -h localhost -p 15432 -U $POSTGRES_USER; then
+                    break
+                  fi
+                  sleep 5
+                done
+
+            - name: Run database provisioning scripts (e.g., using psql to execute scripts)
+              run: |
+                # Add your specific database provisioning steps here
+                # For example:
+                # psql -h localhost -p 15432 -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
