@@ -1,0 +1,70 @@
+name: Heroku Deployment
+
+on:
+    push:
+        branches:
+            - main
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+          node-version: "16"
+
+    - name: Install frontend dependencies
+      run: |
+          cd ghi
+          npm install
+
+    - name: Build frontend
+      run: |
+          cd ghi
+          npm run build
+
+    - name: Set up Heroku CLI
+      run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
+
+    - name: Log in to Heroku
+      run: |
+          echo ${{ secrets.HEROKU_API_KEY }} | heroku login --interactive
+
+    - name: Deploy to Heroku (Frontend)
+      run: |
+          cd ghi
+          git init
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+          git add .
+          git commit -am "Frontend deployment"
+          git push heroku main
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+          python-version: "3.x"
+
+    - name: Install backend dependencies
+      run: |
+          cd cookit
+          pip install -r requirements.txt
+
+    - name: Set environment variables (Backend)
+      run: |
+          heroku config:set DATABASE_URL=${{ secrets.DATABASE_URL }} -a Cookit
+          heroku config:set SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }} -a Cookit
+          heroku config:set SIGNING_KEY=${{ secrets.SIGNING_KEY }} -a Cookit
+
+    - name: Deploy to Heroku (Backend)
+        run: |
+          cd cookit
+          heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
+          git add .
+          git commit -am "Backend deployment"
+          git push heroku main
