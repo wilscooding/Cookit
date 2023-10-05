@@ -1,0 +1,6 @@
+fastapi[all]>=0.78.0
+uvicorn[standard]>=0.17.6
+pytest
+psycopg[binary,pool]>=3.0.14
+jwtdown-fastapi>=0.5.0
+requests>=2.30.0
