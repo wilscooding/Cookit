@@ -20,12 +20,10 @@ steps:
 
     - name: Install frontend dependencies
       run: |
-          cd ghi
           npm install
 
     - name: Build frontend
       run: |
-          cd ghi
           npm run build
 
     - name: Set up Heroku CLI
@@ -38,7 +36,6 @@ steps:
 
     - name: Deploy to Heroku (Frontend)
       run: |
-          cd ghi
           git init
           heroku git:remote -a ${{ secrets.HEROKU_APP_NAME }}
           git add .
