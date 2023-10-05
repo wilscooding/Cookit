@@ -71,13 +71,13 @@ jobs:
 
             - name: Set environment variables
               run: |
-                echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+                # echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
                 echo "SPOONACULAR_API_KEY=${{ secrets.SPOONACULAR_API_KEY }}" >> $GITHUB_ENV
                 echo "SIGNING_KEY=${{ secrets.SIGNING_KEY }}" >> $GITHUB_ENV
 
             - name: Debug backend keys
               run: |
-                echo "DATABASE_URL is $DATABASE_URL"
+                # echo "DATABASE_URL is $DATABASE_URL"
                 echo "SPOONACULAR_API_KEY is $SPOONACULAR_API_KEY"
                 echo "SIGNING_KEY is $SIGNING_KEY"
 
@@ -107,65 +107,65 @@ jobs:
 
               env:
                   RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+                  # DATABASE_URL: ${{ secrets.DATABASE_URL }}
                   SPOONACULAR_API_KEY: ${{ secrets.SPOONACULAR_API_KEY }}
 
-    deploy-database:
-        runs-on: ubuntu-latest
+    # deploy-database:
+    #     runs-on: ubuntu-latest
 
-        services:
-            postgres:
-                image: postgres:14.2-bullseye
-                env:
-                  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-                  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-                  POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-                ports:
-                    - 15432:5432
-                options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    #     services:
+    #         postgres:
+    #             image: postgres:14.2-bullseye
+    #             env:
+    #               POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+    #               POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+    #               POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+    #             ports:
+    #                 - 15432:5432
+    #             options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v2
 
-            - name: Set up Python
-              uses: actions/setup-python@v2
-              with:
-                  python-version: "3.x"
+    #         - name: Set up Python
+    #           uses: actions/setup-python@v2
+    #           with:
+    #               python-version: "3.x"
 
-            - name: Wait for PostgreSQL to start
-              run: sleep 10
+    #         - name: Wait for PostgreSQL to start
+    #           run: sleep 10
 
-            - name: Set up environment variables
-              run: |
-                echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-                echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $GITHUB_ENV
-                echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
-                echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
+    #         - name: Set up environment variables
+    #           run: |
+    #             echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+    #             echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> $GITHUB_ENV
+    #             echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
+    #             echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> $GITHUB_ENV
 
 
-            - name: Debug Database Configuration
-              run: |
-                echo "DATABASE_URL: $DATABASE_URL"
-                echo "POSTGRES_USER: $POSTGRES_USER"
-                echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
-                echo "POSTGRES_DB: $POSTGRES_DB"
+    #         - name: Debug Database Configuration
+    #           run: |
+    #             echo "DATABASE_URL: $DATABASE_URL"
+    #             echo "POSTGRES_USER: $POSTGRES_USER"
+    #             echo "POSTGRES_PASSWORD: $POSTGRES_PASSWORD"
+    #             echo "POSTGRES_DB: $POSTGRES_DB"
 
-            # - name: Run database provisioning scripts (e.g., using psql)
-            #   run: |
-            #       # Add database provisioning steps here (e.g., using psql to execute scripts)
-            #       psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
-            - name: Wait for PostgreSQL to start
-              run: |
-                for _ in {1..30}; do
-                  if pg_isready -h localhost -p 15432 -U $POSTGRES_USER; then
-                    break
-                  fi
-                  sleep 5
-                done
+    #         # - name: Run database provisioning scripts (e.g., using psql)
+    #         #   run: |
+    #         #       # Add database provisioning steps here (e.g., using psql to execute scripts)
+    #         #       psql -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
+    #         - name: Wait for PostgreSQL to start
+    #           run: |
+    #             for _ in {1..30}; do
+    #               if pg_isready -h localhost -p 15432 -U $POSTGRES_USER; then
+    #                 break
+    #               fi
+    #               sleep 5
+    #             done
 
-            - name: Run database provisioning scripts (e.g., using psql to execute scripts)
-              run: |
-                # Add your specific database provisioning steps here
-                # For example:
-                # psql -h localhost -p 15432 -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
+    #         - name: Run database provisioning scripts (e.g., using psql to execute scripts)
+    #           run: |
+    #             # Add your specific database provisioning steps here
+    #             # For example:
+    #             # psql -h localhost -p 15432 -U $POSTGRES_USER -d $POSTGRES_DB -a -f /data/cookit.sql
